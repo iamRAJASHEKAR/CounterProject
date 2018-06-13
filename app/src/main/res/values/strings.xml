@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">CounterApp</string>
+    <string name="fb_login">lOGIN WITH FACEBOOK</string>
+    <string name="google_login">LOGIN WITH GOOGLE</string>
+    <string name="txt_hindu">Hindu</string>
+    <string name="txt_muslim">Muslim</string>
+    <string name="txt_christian">Christian</string>
+    <string name="txt_didntfind_religion">Did\'t find Religion , Let us Know</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="avialble_chants">Available Chants</string>
+    <string name="rate_text">Rate Our App</string>
+    <string name="share_text">Share This App</string>
+    <string name="help_text">Help us</string>
+    <string name="txt_logout">Logout</string>
+    <string name="txt_chant_name">Chant Name</string>
+    <string name="txt_chant">Chant</string>
+    <string name="txt_public">Public</string>
+    <string name="txt_friend">Friends</string>
+    <string name="txt_save">Save</string>
+    <string name="txt_add_chant">Add Chants</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

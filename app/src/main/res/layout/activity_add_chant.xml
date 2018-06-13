@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/activity_toolbar"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/relative_chantName"
+        android:layout_margin="15dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/text_chantname"
+            android:text="@string/txt_chant_name"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:layout_width="match_parent"
+            android:id="@+id/edit_chantName"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/text_chantname"
+            android:background="@drawable/rectangleshape"
+            android:layout_height="50dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/relative_chant"
+        android:layout_margin="15dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/text_chant"
+            android:text="@string/txt_chant"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:layout_width="match_parent"
+            android:id="@+id/edit_chant"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/text_chant"
+            android:background="@drawable/rectangleshape"
+            android:layout_height="100dp" />
+
+    </RelativeLayout>
+
+
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_margin="15dp"
+            android:layout_height="wrap_content">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup"
+                android:layout_height="wrap_content">
+                <RadioButton
+                    android:id="@+id/rdbPublic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/txt_public" />
+                <RadioButton
+                    android:id="@+id/rdbFriends"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="@string/txt_friend" />
+
+            </RadioGroup>
+
+        </RelativeLayout>
+
+
+
+
+ <Button
+     android:layout_width="match_parent"
+     android:id="@+id/btn_save"
+     android:layout_margin="60dp"
+     android:text="@string/txt_save"
+     android:textAllCaps="false"
+     android:textSize="15sp"
+     android:layout_gravity="center_horizontal"
+     android:layout_height="wrap_content" />
+
+
+</LinearLayout>

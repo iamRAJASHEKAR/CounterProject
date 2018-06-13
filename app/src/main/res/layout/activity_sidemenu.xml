@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="150dp"
+    android:background="@android:color/white"
+    android:layout_height="wrap_content">
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:id="@+id/rl_sidemenu_logo"
+       android:layout_height="wrap_content">
+
+       <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="30dp"
+        android:id="@+id/sidemenu_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_height="30dp" />
+   </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/rl_sidemenu_text"
+        android:weightSum="4"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/rl_sidemenu_logo"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/rl_rateour_app"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/image_rateour_app"
+                android:layout_width="20dp"
+                android:layout_weight="1"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/text_rateour_app"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/rate_text" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/rl_share"
+            android:weightSum="2"
+            android:layout_height="50dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_weight="1"
+                android:id="@+id/image_share"
+                android:layout_height="20dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/text_share"
+                android:layout_weight="1"
+                android:text="@string/share_text"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/rl_helpus"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_height="50dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_weight="1"
+                android:id="@+id/image_helpus"
+                android:layout_height="20dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/text_helpus"
+                android:layout_weight="1"
+                android:text="@string/help_text"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/rl_logout"
+            android:weightSum="2"
+            android:layout_height="50dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_weight="1"
+                android:id="@+id/image_logout"
+                android:layout_height="20dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/text_logout"
+               android:layout_weight="1"
+                android:text="@string/txt_logout"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+</RelativeLayout>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:layout_width="150dp"
+        android:id="@+id/image_logo"
+        android:background="@drawable/ic_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:layout_height="170dp" />
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/image_logo"
+        android:id="@+id/recyclerview_religion"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+        <com.example.mypc.counterapp.Fonts.ButtonBold
+            android:layout_width="match_parent"
+            android:id="@+id/btn_no_religion"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:textAllCaps="false"
+           android:layout_marginTop="50dp"
+            android:layout_below="@+id/recyclerview_religion"
+            android:textColor="@android:color/white"
+            android:background="@drawable/ovalshape_orange"
+            android:text="@string/txt_didntfind_religion"
+            android:layout_height="wrap_content" />
+
+       <!-- <Button
+            android:layout_width="100dp"
+            android:id="@+id/btn_hindu"
+            android:text="@string/txt_hindu"
+            android:textAllCaps="false"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content" />
+        <Button
+            android:layout_width="100dp"
+            android:id="@+id/btn_muslim"
+            android:layout_marginTop="5dp"
+            android:textAllCaps="false"
+            android:text="@string/txt_muslim"
+            android:layout_below="@+id/btn_hindu"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content" />
+        <Button
+            android:layout_width="100dp"
+            android:id="@+id/christian"
+            android:layout_marginTop="5dp"
+            android:textAllCaps="false"
+            android:text="@string/txt_christian"
+            android:layout_below="@+id/btn_muslim"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content" />
+-->
+
+
+
+    <!--<RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/rl_no_religion"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+
+        <com.example.mypc.counterapp.Fonts.ButtonBold
+            android:layout_width="match_parent"
+            android:id="@+id/btn_no_religion"
+            android:layout_margin="15dp"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:background="@drawable/ovalshape_orange"
+            android:text="@string/txt_didntfind_religion"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+-->
+
+
+</RelativeLayout>
