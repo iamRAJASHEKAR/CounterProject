@@ -93,7 +93,8 @@
                     android:id="@+id/radiopublic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
+                    android:paddingLeft="15dp"
+                    android:button="@drawable/radio_button_selector"
                     android:text="Public" />
 
                 <RadioButton
@@ -101,6 +102,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="75dp"
+                    android:paddingLeft="15dp"
+                    android:button="@drawable/radio_button_selector"
                     android:text="Friends" />
 
             </RadioGroup>

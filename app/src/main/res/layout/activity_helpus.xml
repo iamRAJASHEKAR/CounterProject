@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        layout="@layout/activity_toolbar"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:layout_height="wrap_content">
+        <com.example.mypc.counterapp.Fonts.EditTextRegular
+            android:layout_width="match_parent"
+            android:id="@+id/edit_name"
+            android:imeOptions="actionNext"
+            android:hint="@string/txt_name"
+            android:textColorHint="@android:color/black"
+            android:paddingLeft="5dp"
+            android:background="@drawable/rectangleshape"
+            android:layout_height="50dp" />
+        <com.example.mypc.counterapp.Fonts.EditTextRegular
+            android:layout_width="match_parent"
+            android:id="@+id/edit_email"
+            android:hint="@string/txt_email"
+            android:imeOptions="actionNext"
+            android:textColorHint="@android:color/black"
+            android:inputType="textEmailAddress"
+            android:layout_below="@+id/edit_name"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/rectangleshape"
+            android:layout_height="50dp" />
+        <com.example.mypc.counterapp.Fonts.EditTextRegular
+            android:layout_width="match_parent"
+            android:id="@+id/edit_phone"
+            android:hint="@string/txt_phone"
+            android:inputType="phone"
+            android:maxLength="10"
+            android:imeOptions="actionNext"
+            android:textColorHint="@android:color/black"
+            android:paddingLeft="5dp"
+            android:layout_below="@id/edit_email"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rectangleshape"
+            android:layout_height="50dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="wrap_content">
+        <com.example.mypc.counterapp.Fonts.TextViewBold
+            android:layout_width="match_parent"
+            android:id="@+id/text_help"
+            android:text="@string/txt_help"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />
+        <com.example.mypc.counterapp.Fonts.EditTextRegular
+            android:layout_width="match_parent"
+            android:id="@+id/edit_help"
+            android:paddingLeft="5dp"
+            android:imeOptions="actionDone"
+            android:gravity="top"
+            android:isScrollContainer="true"
+            android:inputType="textMultiLine"
+            android:layout_below="@+id/text_help"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/rectangleshape"
+            android:overScrollMode="always"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:layout_height="90dp" />
+    </RelativeLayout>
+
+    <com.example.mypc.counterapp.Fonts.ButtonBold
+        android:layout_width="match_parent"
+        android:layout_margin="40dp"
+        android:id="@+id/btn_send"
+        android:text="@string/txt_send"
+        android:textSize="20sp"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:background="@drawable/ovalshape_orange"
+        android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

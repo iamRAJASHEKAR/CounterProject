@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    <LinearLayout android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <include
         layout="@layout/activity_toolbar"/>
+   <!-- <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/relative_chantName"
         android:layout_margin="15dp"
         android:layout_height="wrap_content">
-        <TextView
+        <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
             android:id="@+id/text_chantname"
+            android:textColor="@android:color/black"
             android:text="@string/txt_chant_name"
             android:layout_height="wrap_content" />
-        <EditText
+        <com.example.mypc.counterapp.Fonts.EditTextRegular
             android:layout_width="match_parent"
             android:id="@+id/edit_chantName"
             android:layout_marginTop="5dp"
+            android:textColor="@android:color/white"
             android:layout_below="@+id/text_chantname"
             android:background="@drawable/rectangleshape"
             android:layout_height="50dp" />
@@ -32,12 +42,13 @@
         android:id="@+id/relative_chant"
         android:layout_margin="15dp"
         android:layout_height="wrap_content">
-        <TextView
+        <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
             android:id="@+id/text_chant"
+            android:textColor="@android:color/black"
             android:text="@string/txt_chant"
             android:layout_height="wrap_content" />
-        <EditText
+        <com.example.mypc.counterapp.Fonts.EditTextRegular
             android:layout_width="match_parent"
             android:id="@+id/edit_chant"
             android:layout_marginTop="5dp"
@@ -64,12 +75,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
+                    android:textColor="@android:color/black"
+                    android:button="@drawable/radio_button_selector"
                     android:text="@string/txt_public" />
                 <RadioButton
                     android:id="@+id/rdbFriends"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
+                    android:textColor="@android:color/black"
+                    android:button="@drawable/radio_button_selector"
                     android:layout_marginLeft="30dp"
                     android:text="@string/txt_friend" />
 
@@ -78,17 +93,34 @@
         </RelativeLayout>
 
 
+      <android.support.v7.widget.RecyclerView
+          android:layout_width="match_parent"
+          android:id="@+id/recyclerview_friendsList"
+          android:layout_height="100dp">
+      </android.support.v7.widget.RecyclerView>
 
 
- <Button
+
+
+ <com.example.mypc.counterapp.Fonts.ButtonBold
      android:layout_width="match_parent"
      android:id="@+id/btn_save"
-     android:layout_margin="60dp"
+     android:layout_marginLeft="30dp"
+     android:layout_marginRight="30dp"
      android:text="@string/txt_save"
      android:textAllCaps="false"
-     android:textSize="15sp"
+     android:textSize="20sp"
+     android:layout_marginTop="10dp"
+     android:textColor="@android:color/white"
+     android:background="@drawable/ovalshape_orange"
      android:layout_gravity="center_horizontal"
      android:layout_height="wrap_content" />
 
+    </LinearLayout>
+
+
+   <!-- </ScrollView>-->
+
 
 </LinearLayout>
+

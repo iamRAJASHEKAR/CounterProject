@@ -1,7 +1,6 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="60dp"
-
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v7.widget.CardView
@@ -15,32 +14,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/chant_title"
+            android:textColor="@android:color/black"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:gravity="start"
             android:textSize="15dp"/>
-        <TextView
+        <com.example.mypc.counterapp.Fonts.TextViewRegular
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/chant_title"
             android:id="@+id/chant_text"
+            android:textColor="@android:color/black"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="6dp"
             android:gravity="start"
+            android:paddingBottom="8dp"
             android:textSize="15dp"/>
+            
+            <com.example.mypc.counterapp.Fonts.TextViewRegular
+                android:layout_width="wrap_content"
+                android:id="@+id/text_visiible"
+                android:layout_below="@+id/chant_text"
+                android:text="Visible to Friends"
+                android:paddingBottom="6dp"
+                android:layout_marginLeft="5dp"
+                android:layout_height="wrap_content" />
+            <com.example.mypc.counterapp.Fonts.TextViewRegular
+                android:layout_width="wrap_content"
+                android:id="@+id/text_created"
+                android:text="Created By"
+                android:paddingRight="3dp"
+                android:paddingBottom="3dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_height="wrap_content" />
+
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/ic_rightarrow"
             android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
             />

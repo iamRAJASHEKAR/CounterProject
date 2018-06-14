@@ -21,16 +21,16 @@
             android:layout_height="wrap_content">
         </android.support.v7.widget.RecyclerView>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_dialog_email"
-            android:layout_gravity="bottom|end"
-            app:elevation="6dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            app:pressedTranslationZ="12dp"/>
+     <com.github.clans.fab.FloatingActionButton
+         android:layout_width="10dp"
+         android:id="@+id/fab"
+         android:layout_gravity="bottom|right"
+         android:layout_marginBottom="10dp"
+         app:fab_size="normal"
+         android:layout_marginRight="10dp"
+         android:src="@drawable/ic_add_fab"
+         android:layout_height="10dp"/>
+
 
 
     </FrameLayout>

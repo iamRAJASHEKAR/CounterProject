@@ -1,5 +1,6 @@
 package com.example.mypc.counterapp.Activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,11 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.mypc.counterapp.Fonts.ButtonBold;
+import com.example.mypc.counterapp.Fonts.TextViewRegular;
 import com.example.mypc.counterapp.Model.Religion;
 import com.example.mypc.counterapp.R;
 
@@ -47,7 +50,9 @@ public class ReligionActivity extends AppCompatActivity
         recyclerViewReligion = findViewById(R.id.recyclerview_religion);
         noReligionFound = findViewById(R.id.btn_no_religion);
         noReligionFound.setOnClickListener(NoReligionFound);
-        recyclerViewReligion.setLayoutManager(new LinearLayoutManager(this));
+       LinearLayoutManager layoutManager = new LinearLayoutManager(this); layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+       recyclerViewReligion.setLayoutManager(layoutManager);
+      //  recyclerViewReligion.setLayoutManager(new LinearLayoutManager(this));
         religionAdapter = new ReligionAdapter();
         recyclerViewReligion.setAdapter(religionAdapter);
 
@@ -76,32 +81,37 @@ public class ReligionActivity extends AppCompatActivity
     ////Dialog for entering the religion
   public void showReligiondialog()
   {
-      final AlertDialog.Builder  dialog =  new AlertDialog.Builder(ReligionActivity.this);
-      LayoutInflater inflater = this.getLayoutInflater();
-      View dilogview =  inflater.inflate(R.layout.activity_religion_dialog,null);
-      dialog.setView(dilogview);
-      final EditText religion_edit = dilogview.findViewById(R.id.edit_enter_religion);
+      TextViewRegular save,cancel;
+      final Dialog dialog = new Dialog(ReligionActivity.this);
+      dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+      dialog.setCanceledOnTouchOutside(false);
+      dialog.setCancelable(false);
+      dialog.setContentView(R.layout.activity_religion_dialog);
+      save = dialog.findViewById(R.id.save);
+      cancel = dialog.findViewById(R.id.cancel);
 
-      dialog.setTitle("Add Religion");
-      dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+      dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_background);
+      save.setOnClickListener(new View.OnClickListener() {
           @Override
-          public void onClick(DialogInterface dialogInterface, int i)
+          public void onClick(View view)
           {
-                 String addreligionText = religion_edit.getText().toString();
-                 Log.e("addReligion"," "+addreligionText);
-                 religionarraylist.add(new Religion(addreligionText));
+              Log.e("call","dialog yes");
+             // startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+
+
           }
       });
 
-      dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+      cancel.setOnClickListener(new View.OnClickListener() {
           @Override
-          public void onClick(DialogInterface dialogInterface, int i) {
-
+          public void onClick(View view)
+          {
+              Log.e("call","dialog no");
+              dialog.dismiss();
           }
       });
 
-      AlertDialog aler = dialog.create();
-      aler.show();
+      dialog.show();
 
   }
 

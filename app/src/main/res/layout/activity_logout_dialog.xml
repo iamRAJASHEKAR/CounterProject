@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="250dp"
+    android:layout_height="130dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.example.mypc.counterapp.Fonts.TextViewBold
+            android:layout_width="match_parent"
+            android:id="@+id/dialog_title"
+            android:text="Alert"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.example.mypc.counterapp.Fonts.TextViewRegular
+            android:layout_width="match_parent"
+            android:id="@+id/dialog_text"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:text="Are You sure you want to logout ?"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_height="wrap_content">
+        <com.example.mypc.counterapp.Fonts.TextViewRegular
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/no"
+            android:gravity="end"
+            android:text="@string/txt_no"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />
+        <com.example.mypc.counterapp.Fonts.TextViewRegular
+            android:layout_width="match_parent"
+            android:text="@string/txt_yes"
+            android:id="@+id/yes"
+            android:gravity="center"
+             android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -26,16 +26,16 @@
         <com.example.mypc.counterapp.Fonts.ButtonBold
             android:layout_width="match_parent"
             android:id="@+id/btn_fb"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
             android:textSize="15sp"
             android:background="@drawable/ic_facebook"
             android:layout_height="45dp" />
 
         <com.example.mypc.counterapp.Fonts.ButtonBold
             android:layout_width="match_parent"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
             android:layout_marginTop="20dp"
             android:id="@+id/btn_google"
             android:textSize="15sp"

@@ -1,40 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:weightSum="3"
     android:layout_height="wrap_content">
 
 
     <ImageView
         android:layout_width="150dp"
+        android:layout_weight="1"
         android:id="@+id/image_logo"
         android:background="@drawable/ic_logo"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="60dp"
         android:layout_height="170dp" />
 
 
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/rl_religion"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/image_logo"
+        android:layout_height="wrap_content">
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_below="@+id/image_logo"
+        android:scrollbars="vertical"
+        android:clipToPadding="false"
         android:id="@+id/recyclerview_religion"
-        android:layout_height="wrap_content">
-
+        android:layout_height="250dp">
     </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 
-        <com.example.mypc.counterapp.Fonts.ButtonBold
+
+    <com.example.mypc.counterapp.Fonts.ButtonBold
             android:layout_width="match_parent"
             android:id="@+id/btn_no_religion"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="50dp"
             android:layout_marginRight="15dp"
             android:textAllCaps="false"
-           android:layout_marginTop="50dp"
-            android:layout_below="@+id/recyclerview_religion"
             android:textColor="@android:color/white"
             android:background="@drawable/ovalshape_orange"
             android:text="@string/txt_didntfind_religion"
             android:layout_height="wrap_content" />
+
 
        <!-- <Button
             android:layout_width="100dp"
@@ -85,4 +96,4 @@
 -->
 
 
-</RelativeLayout>
+</LinearLayout>

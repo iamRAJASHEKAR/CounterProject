@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mypc.counterapp.Fonts.TextViewBold;
+import com.example.mypc.counterapp.Fonts.TextViewRegular;
 import com.example.mypc.counterapp.Model.Chants;
 import com.example.mypc.counterapp.R;
 
@@ -34,11 +36,12 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
    public static  boolean checked = false;
    RecyclerView chantRecyclerview;
    Toolbar toolbar;
-   TextView toolbar_text;
+   TextViewBold toolbar_text;
    ImageView toolabr_image;
    ArrayList<Chants> chantsArrayList;
    HomeAdapter homeAdapter;
-   FloatingActionButton addChantBtn;
+   com.github.clans.fab.FloatingActionButton floatingActionButton;
+
 
 
 
@@ -60,12 +63,12 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
        toolbar = findViewById(R.id.toolBar);
        setSupportActionBar(toolbar);
        toolabr_image =findViewById(R.id.toolabar_icon);
-       toolabr_image.setImageResource(R.mipmap.ic_launcher_round);
+       toolabr_image.setImageResource(R.drawable.ic_sidemenu);
        toolbar_text = findViewById(R.id.toolabr_title);
        toolbar_text.setText(R.string.avialble_chants);
        chantsArrayList = new ArrayList<>();
-        addChantBtn = findViewById(R.id.fab_add);
-        addChantBtn.setOnClickListener(AddChantBtn);
+        floatingActionButton =  findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(AddChantBtn);
 
        setData();
         chantRecyclerview = findViewById(R.id.recyclerview_chant);
@@ -135,13 +138,21 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
         public class ViewHolder extends RecyclerView.ViewHolder
         {
 
-            TextView chantTitle,chantText;
+            TextViewBold chantTitle;
+            TextViewRegular chantText;
 
             public ViewHolder(View itemView,Context applicationContext) {
                 super(itemView);
 
                 chantTitle = itemView.findViewById(R.id.chant_title);
                 chantText = itemView.findViewById(R.id.chant_text);
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(getApplicationContext(),ChantsActivity.class));
+                    }
+                });
 
             }
 

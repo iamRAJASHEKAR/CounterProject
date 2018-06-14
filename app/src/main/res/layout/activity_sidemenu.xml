@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="150dp"
+    android:layout_width="wrap_content"
     android:background="@android:color/white"
     android:layout_height="wrap_content">
 
@@ -10,12 +10,22 @@
        android:id="@+id/rl_sidemenu_logo"
        android:layout_height="wrap_content">
 
-       <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="30dp"
-        android:id="@+id/sidemenu_logo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_height="30dp" />
+       <ImageView
+           android:layout_width="70dp"
+           android:id="@+id/image_logo"
+           android:background="@drawable/ic_profile"
+           android:layout_centerHorizontal="true"
+           android:layout_marginTop="60dp"
+           android:layout_height="70dp" />
+       <com.example.mypc.counterapp.Fonts.TextViewRegular
+           android:layout_width="match_parent"
+           android:id="@+id/text_email"
+           android:layout_marginTop="5dp"
+           android:textColor="@android:color/black"
+           android:layout_below="@+id/image_logo"
+           android:gravity="center_horizontal"
+           android:text="xyz@gmail.com"
+           android:layout_height="wrap_content" />
    </RelativeLayout>
 
     <LinearLayout
@@ -27,86 +37,94 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/rl_rateour_app"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:weightSum="2"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:layout_margin="10dp"
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/image_rateour_app"
                 android:layout_width="20dp"
-                android:layout_weight="1"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/ic_star"
                 android:layout_height="20dp" />
 
-            <TextView
+            <com.example.mypc.counterapp.Fonts.TextViewRegular
                 android:id="@+id/text_rateour_app"
+                android:layout_toRightOf="@+id/image_rateour_app"
                 android:layout_width="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginLeft="15dp"
+                android:textColor="@android:color/black"
                 android:layout_height="wrap_content"
                 android:text="@string/rate_text" />
 
-        </LinearLayout>
-        <LinearLayout
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="match_parent"
             android:id="@+id/rl_share"
-            android:weightSum="2"
-            android:layout_height="50dp">
+            android:layout_margin="10dp"
+            android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="20dp"
-                android:layout_weight="1"
+                android:src="@drawable/ic_share"
                 android:id="@+id/image_share"
+                android:layout_marginLeft="8dp"
                 android:layout_height="20dp" />
-            <TextView
+            <com.example.mypc.counterapp.Fonts.TextViewRegular
                 android:layout_width="wrap_content"
                 android:id="@+id/text_share"
-                android:layout_weight="1"
+                android:textColor="@android:color/black"
+                android:layout_toRightOf="@+id/image_share"
+                android:layout_marginLeft="15dp"
                 android:text="@string/share_text"
-                android:layout_centerHorizontal="true"
                 android:layout_height="wrap_content" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:id="@+id/rl_helpus"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_height="50dp">
+            android:layout_margin="10dp"
+            android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="20dp"
-                android:layout_weight="1"
+                android:src="@drawable/ic_help"
+                android:layout_marginLeft="10dp"
                 android:id="@+id/image_helpus"
                 android:layout_height="20dp" />
-            <TextView
+            <com.example.mypc.counterapp.Fonts.TextViewRegular
                 android:layout_width="wrap_content"
                 android:id="@+id/text_helpus"
-                android:layout_weight="1"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/image_helpus"
+                android:textColor="@android:color/black"
                 android:text="@string/help_text"
                 android:layout_height="wrap_content" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:id="@+id/rl_logout"
-            android:weightSum="2"
-            android:layout_height="50dp">
+            android:layout_margin="10dp"
+            android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="20dp"
-                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_logout"
                 android:id="@+id/image_logout"
                 android:layout_height="20dp" />
-            <TextView
+            <com.example.mypc.counterapp.Fonts.TextViewRegular
                 android:layout_width="wrap_content"
                 android:id="@+id/text_logout"
-               android:layout_weight="1"
+                android:textColor="@android:color/black"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/image_logout"
                 android:text="@string/txt_logout"
                 android:layout_height="wrap_content" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
 

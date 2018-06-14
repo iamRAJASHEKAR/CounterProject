@@ -1,5 +1,6 @@
 package com.example.mypc.counterapp.Activities;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.example.mypc.counterapp.Activities.Fragments.AddNewFriend;
 import com.example.mypc.counterapp.Activities.Fragments.Friends;
 import com.example.mypc.counterapp.Activities.Fragments.JoinedFriends;
+import com.example.mypc.counterapp.Counter.CounterActivity;
 import com.example.mypc.counterapp.R;
 
 import java.util.ArrayList;
@@ -39,7 +41,15 @@ public class ChantsActivity extends AppCompatActivity {
         radioButton = findViewById(R.id.radioFriends);
         radioButton_public = findViewById(R.id.radiopublic);
         relativeLayout = findViewById(R.id.relative_appbar);
+
         button = findViewById(R.id.count_public);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                startActivity(new Intent(getApplicationContext(), CounterActivity.class));
+            }
+        });
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
@@ -74,6 +84,8 @@ public class ChantsActivity extends AppCompatActivity {
         // int pos = radioGroup.getCheckedRadioButtonId();
 
     }
+
+
 
 
     private void setupViewPager(ViewPager viewPager) {
