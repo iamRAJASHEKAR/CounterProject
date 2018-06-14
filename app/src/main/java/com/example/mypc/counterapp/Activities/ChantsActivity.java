@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -21,6 +22,7 @@ import com.example.mypc.counterapp.Activities.Fragments.AddNewFriend;
 import com.example.mypc.counterapp.Activities.Fragments.Friends;
 import com.example.mypc.counterapp.Activities.Fragments.JoinedFriends;
 import com.example.mypc.counterapp.Counter.CounterActivity;
+import com.example.mypc.counterapp.Fonts.TextViewBold;
 import com.example.mypc.counterapp.R;
 
 import java.util.ArrayList;
@@ -34,12 +36,19 @@ public class ChantsActivity extends AppCompatActivity {
     RelativeLayout relativeLayout;
     Button button;
     Toolbar toolbar;
+    TextViewBold toolbar_text;
+    ImageView toolbar_icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chants);
         toolbar = findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
+        toolbar_text = findViewById(R.id.toolabr_title);
+        toolbar_icon = findViewById(R.id.toolabar_icon);
+        toolbar_icon.setImageResource(R.drawable.ic_back_arrow);
+        toolbar_text.setText("Chants");
 
         radioGroup = findViewById(R.id.radioprofile);
         radioButton = findViewById(R.id.radioFriends);

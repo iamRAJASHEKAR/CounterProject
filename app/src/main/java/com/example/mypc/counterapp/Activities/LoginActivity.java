@@ -19,7 +19,6 @@ public class LoginActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         init();
     }
 
@@ -48,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-
+//no need to worry about this dude
 
     //Click on google button
     View.OnClickListener ClickOnGoogle = new View.OnClickListener()

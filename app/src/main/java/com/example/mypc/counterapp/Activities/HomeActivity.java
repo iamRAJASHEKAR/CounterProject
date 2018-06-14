@@ -27,29 +27,23 @@ import com.example.mypc.counterapp.R;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity implements SideMenuFragment.FragmentDrawerListner
-{
-   SideMenuFragment sideMenuFragment;
-   DrawerLayout drawerLayout;
+public class HomeActivity extends AppCompatActivity implements SideMenuFragment.FragmentDrawerListner {
+    SideMenuFragment sideMenuFragment;
+    DrawerLayout drawerLayout;
 
-   public static boolean check = true;
-   public static  boolean checked = false;
-   RecyclerView chantRecyclerview;
-   Toolbar toolbar;
-   TextViewBold toolbar_text;
-   ImageView toolabr_image;
-   ArrayList<Chants> chantsArrayList;
-   HomeAdapter homeAdapter;
-   com.github.clans.fab.FloatingActionButton floatingActionButton;
-
-
-
-
+    public static boolean check = true;
+    public static boolean checked = false;
+    RecyclerView chantRecyclerview;
+    Toolbar toolbar;
+    TextViewBold toolbar_text;
+    ImageView toolabr_image;
+    ArrayList<Chants> chantsArrayList;
+    HomeAdapter homeAdapter;
+    com.github.clans.fab.FloatingActionButton floatingActionButton;
 
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitvity_home);
         init();
@@ -58,19 +52,18 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
     }
 
 
-    public void init()
-    {
-       toolbar = findViewById(R.id.toolBar);
-       setSupportActionBar(toolbar);
-       toolabr_image =findViewById(R.id.toolabar_icon);
-       toolabr_image.setImageResource(R.drawable.ic_sidemenu);
-       toolbar_text = findViewById(R.id.toolabr_title);
-       toolbar_text.setText(R.string.avialble_chants);
-       chantsArrayList = new ArrayList<>();
-        floatingActionButton =  findViewById(R.id.fab);
+    public void init() {
+        toolbar = findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
+        toolabr_image = findViewById(R.id.toolabar_icon);
+        toolabr_image.setImageResource(R.drawable.ic_sidemenu);
+        toolbar_text = findViewById(R.id.toolabr_title);
+        toolbar_text.setText(R.string.avialble_chants);
+        chantsArrayList = new ArrayList<>();
+        floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(AddChantBtn);
 
-       setData();
+        setData();
         chantRecyclerview = findViewById(R.id.recyclerview_chant);
         homeAdapter = new HomeAdapter();
         chantRecyclerview.setLayoutManager(new LinearLayoutManager(this));
@@ -78,11 +71,10 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
     }
 
 
-    public void intializeDrawer()
-    {
+    public void intializeDrawer() {
         drawerLayout = findViewById(R.id.drawerLayout);
         sideMenuFragment = (SideMenuFragment) getSupportFragmentManager().findFragmentById(R.id.fragment1);
-        sideMenuFragment.setup(R.id.fragment1,drawerLayout,toolbar);
+        sideMenuFragment.setup(R.id.fragment1, drawerLayout, toolbar);
         sideMenuFragment.setFragmentDrawerListner(this);
         toolabr_image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,25 +86,21 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
 
     }
 
-    public void setData()
-    {
-        for(int i = 0;i<10;i++)
-        {
-            chantsArrayList.add(new Chants("The Gayathri Mantra"," Oṃ bhūr bhuvaḥ svaḥ tát savitúr váreṇyaṃ bhárgo devásya dhīmahi dhíyo yó naḥ pracodáyāt"));
+    public void setData() {
+        for (int i = 0; i < 10; i++) {
+            chantsArrayList.add(new Chants("The Gayathri Mantra", " Oṃ bhūr bhuvaḥ svaḥ tát savitúr váreṇyaṃ bhárgo devásya dhīmahi dhíyo yó naḥ pracodáyāt"));
         }
     }
 
     View.OnClickListener AddChantBtn = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
-            startActivity(new Intent(getApplicationContext(),AddChantActivity.class));
+        public void onClick(View view) {
+            startActivity(new Intent(getApplicationContext(), AddChantActivity.class));
         }
     };
 
 
-    class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
-    {
+    class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         @NonNull
         @Override
@@ -123,8 +111,7 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
         }
 
         @Override
-        public void onBindViewHolder(@NonNull HomeAdapter.ViewHolder holder, int position)
-        {
+        public void onBindViewHolder(@NonNull HomeAdapter.ViewHolder holder, int position) {
             holder.chantTitle.setText(chantsArrayList.get(position).getChantTitle());
             holder.chantText.setText(chantsArrayList.get(position).getChantText());
 
@@ -135,13 +122,12 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
             return chantsArrayList.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder
-        {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             TextViewBold chantTitle;
             TextViewRegular chantText;
 
-            public ViewHolder(View itemView,Context applicationContext) {
+            public ViewHolder(View itemView, Context applicationContext) {
                 super(itemView);
 
                 chantTitle = itemView.findViewById(R.id.chant_title);
@@ -150,7 +136,7 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(getApplicationContext(),ChantsActivity.class));
+                        startActivity(new Intent(getApplicationContext(), ChantsActivity.class));
                     }
                 });
 
