@@ -29,7 +29,6 @@ public class Friends extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,8 +67,7 @@ public class Friends extends Fragment {
         }
 
         @Override
-        public int getItemCount()
-        {
+        public int getItemCount() {
             return userarray.size();
         }
 
@@ -80,7 +78,6 @@ public class Friends extends Fragment {
 
         public ViewHolder(View itemView, Context context) {
             super(itemView);
-
             name = itemView.findViewById(R.id.name);
             user = itemView.findViewById(R.id.user);
 
