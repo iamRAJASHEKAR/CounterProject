@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,11 +33,14 @@ public class ChantsActivity extends AppCompatActivity {
     RadioButton radioButton, radioButton_public;
     RelativeLayout relativeLayout;
     Button button;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chants);
+        toolbar = findViewById(R.id.toolBar);
+
         radioGroup = findViewById(R.id.radioprofile);
         radioButton = findViewById(R.id.radioFriends);
         radioButton_public = findViewById(R.id.radiopublic);
