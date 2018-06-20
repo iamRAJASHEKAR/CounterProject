@@ -1,6 +1,6 @@
 package com.example.mypc.counterapp.Activities.Fragments;
 
-public  class ChantsModel
+public class ChantsModel
 {
     public String getName() {
         return name;
@@ -19,7 +19,8 @@ public  class ChantsModel
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(String user)
+    {
         this.user = user;
     }
 
