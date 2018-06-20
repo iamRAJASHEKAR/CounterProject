@@ -1,6 +1,7 @@
 package com.example.mypc.counterapp.Activities.Fragments;
 
-class ChantsModel {
+public  class ChantsModel
+{
     public String getName() {
         return name;
     }

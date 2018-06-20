@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout android:orientation="vertical"
+<RelativeLayout android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <include
+        android:id="@+id/addchant_toolbar"
         layout="@layout/activity_toolbar"/>
    <!-- <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/relative_chantName"
         android:layout_margin="15dp"
+        android:layout_below="@+id/addchant_toolbar"
         android:layout_height="wrap_content">
         <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
@@ -40,7 +39,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/relative_chant"
-        android:layout_margin="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_below="@+id/relative_chantName"
         android:layout_height="wrap_content">
         <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
@@ -63,12 +64,15 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_margin="15dp"
+            android:id="@+id/relative_radio"
+            android:layout_below="@+id/relative_chant"
             android:layout_height="wrap_content">
 
             <RadioGroup
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:id="@+id/radioGroup"
+                android:layout_marginLeft="10dp"
                 android:layout_height="wrap_content">
                 <RadioButton
                     android:id="@+id/rdbPublic"
@@ -89,38 +93,71 @@
                     android:text="@string/txt_friend" />
 
             </RadioGroup>
-
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/rl_name_email"
+            android:layout_below="@+id/relative_radio"
+            android:background="@color/colorGray"
+            android:layout_height="40dp">
+      <com.example.mypc.counterapp.Fonts.TextViewBold
+          android:layout_width="wrap_content"
+          android:id="@+id/txt_name"
+          android:text="Name"
+          android:textColor="@android:color/black"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="25dp"
+          android:layout_height="wrap_content" />
+            <com.example.mypc.counterapp.Fonts.TextViewBold
+                android:layout_width="wrap_content"
+                android:id="@+id/txt_email"
+                android:text="Email"
+                android:textColor="@android:color/black"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="25dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content" />
 
-      <android.support.v7.widget.RecyclerView
-          android:layout_width="match_parent"
-          android:id="@+id/recyclerview_friendsList"
-          android:layout_height="100dp">
-      </android.support.v7.widget.RecyclerView>
+  </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:id="@+id/addchant_recyclerview"
+            android:layout_below="@+id/rl_name_email"
+            android:layout_height="120dp">
+        </android.support.v7.widget.RecyclerView>
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_alignParentBottom="true"
+       android:layout_height="wrap_content">
+       <com.example.mypc.counterapp.Fonts.ButtonBold
+        android:layout_width="200dp"
+           android:id="@+id/btn_save"
+        android:background="@drawable/ovalshape_orange"
+        android:text="@string/txt_save"
+        android:textAllCaps="false"
+           android:textSize="15sp"
+           android:layout_marginBottom="4dp"
+           android:layout_centerHorizontal="true"
+           android:textColor="@android:color/white"
+        android:layout_height="wrap_content" />
+   </RelativeLayout>
 
 
 
 
- <com.example.mypc.counterapp.Fonts.ButtonBold
-     android:layout_width="match_parent"
-     android:id="@+id/btn_save"
-     android:layout_marginLeft="30dp"
-     android:layout_marginRight="30dp"
-     android:text="@string/txt_save"
-     android:textAllCaps="false"
-     android:textSize="20sp"
-     android:layout_marginTop="10dp"
-     android:textColor="@android:color/white"
-     android:background="@drawable/ovalshape_orange"
-     android:layout_gravity="center_horizontal"
-     android:layout_height="wrap_content" />
 
-    </LinearLayout>
+
+
+
+
 
 
    <!-- </ScrollView>-->
 
 
-</LinearLayout>
+</RelativeLayout>
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/rate_us"
+            android:icon="@drawable/ic_star"
+            android:title="@string/rate_text"
+            android:checkable="false"/>
+
+        <item
+            android:id="@+id/share"
+            android:icon="@drawable/ic_share"
+            android:title="@string/share_text"
+            android:checkable="false"/>
+
+        <item
+            android:id="@+id/help"
+            android:icon="@drawable/ic_help"
+            android:title="@string/txt_help"
+            android:checkable="false"/>
+
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/txt_logout"
+            android:checkable="false"/>
+
+
+
+    </group>
+</menu>

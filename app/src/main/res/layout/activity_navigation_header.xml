@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:background="@android:color/white"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
    <RelativeLayout
        android:layout_width="match_parent"
        android:id="@+id/rl_sidemenu_logo"
-       android:layout_height="wrap_content">
+       android:layout_height="180dp">
 
        <ImageView
            android:layout_width="70dp"
@@ -28,7 +28,7 @@
            android:layout_height="wrap_content" />
    </RelativeLayout>
 
-    <LinearLayout
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:id="@+id/rl_sidemenu_text"
         android:weightSum="4"
@@ -132,7 +132,7 @@
 
 
     </LinearLayout>
-
+-->
 
 
 
