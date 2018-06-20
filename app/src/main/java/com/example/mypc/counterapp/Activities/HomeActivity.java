@@ -105,6 +105,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
+      //click on navigationview
         toolabr_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

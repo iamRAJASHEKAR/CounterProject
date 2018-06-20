@@ -22,7 +22,7 @@
         android:layout_below="@+id/image_logo"
         android:layout_marginTop="60dp"
         android:layout_height="wrap_content">
-         <Button
+         <com.example.mypc.counterapp.Fonts.ButtonBold
              android:layout_width="match_parent"
              android:id="@+id/btn_fb"
              android:layout_marginLeft="35dp"
