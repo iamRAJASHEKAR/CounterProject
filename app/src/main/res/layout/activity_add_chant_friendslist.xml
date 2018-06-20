@@ -1,58 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_weight="3"
-    android:layout_height="match_parent">
+    android:orientation="horizontal">
+
     <RelativeLayout
-        android:layout_width="wrap_content"
         android:id="@+id/rl_name"
-        android:gravity="start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1.5"
-        android:layout_height="wrap_content">
+        android:gravity="start">
+
         <com.example.mypc.counterapp.Fonts.TextViewRegular
-            android:layout_width="wrap_content"
             android:id="@+id/text_friend_name"
-            android:text="Name"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_height="wrap_content" />
+            android:layout_marginStart="5dp"
+            android:text="Name"
+            android:textColor="@android:color/black" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
         android:id="@+id/rl_mail"
-        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1.5"
-        android:layout_height="wrap_content">
+        android:gravity="center">
+
         <com.example.mypc.counterapp.Fonts.TextViewRegular
-            android:layout_width="wrap_content"
             android:id="@+id/text_friend_mail"
-            android:text="Name"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_height="wrap_content" />
+            android:layout_marginStart="5dp"
+            android:text="Name"
+            android:textColor="@android:color/black" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
         android:id="@+id/rl_invite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="0.3"
-        android:gravity="end"
-        android:layout_height="wrap_content">
+        android:gravity="end">
+
         <com.example.mypc.counterapp.Fonts.ButtonBold
-            android:layout_width="wrap_content"
             android:id="@+id/btn_invite"
-            android:text="Name"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_height="wrap_content" />
+            android:layout_marginStart="5dp"
+            android:text="Name"
+            android:textColor="@android:color/black" />
 
     </RelativeLayout>
 

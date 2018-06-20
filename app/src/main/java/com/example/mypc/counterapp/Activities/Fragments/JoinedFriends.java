@@ -46,11 +46,9 @@ public class JoinedFriends extends Fragment {
         return view;
     }
 
-    public void setData()
-    {
+    public void setData() {
 
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             userarray.add(new ChantsModel("Vedas", "vedas@gmail.com"));
         }
 
@@ -69,7 +67,6 @@ public class JoinedFriends extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             holder.name.setText(userarray.get(position).getName());
             holder.user.setText(userarray.get(position).getUser());
-
         }
 
         @Override
@@ -78,11 +75,10 @@ public class JoinedFriends extends Fragment {
         }
     }
 
-    private class ViewHolder extends RecyclerView.ViewHolder {
+    private class ViewHolder extends RecyclerView.ViewHolder
+    {
         TextView name, user;
-
-        public ViewHolder(View itemView, Context context)
-        {
+        public ViewHolder(View itemView, Context context) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             user = itemView.findViewById(R.id.user);
