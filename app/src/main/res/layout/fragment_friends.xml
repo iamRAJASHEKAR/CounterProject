@@ -14,7 +14,7 @@
         android:orientation="horizontal"
         android:weightSum="2">
 
-        <TextView
+        <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
@@ -24,7 +24,7 @@
             android:textColor="#000000"
             android:textStyle="bold" />
 
-        <TextView
+        <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -51,9 +51,9 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="3dp">
 
-        <Button
+        <com.example.mypc.counterapp.Fonts.ButtonRegular
             android:layout_width="150dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/round_button"

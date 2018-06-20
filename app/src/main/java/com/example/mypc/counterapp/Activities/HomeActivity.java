@@ -82,8 +82,6 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-
-
     }
 
     public void setData() {
@@ -119,7 +117,7 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
 
         @Override
         public int getItemCount() {
-            return chantsArrayList.size();
+            return    chantsArrayList.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -141,8 +139,6 @@ public class HomeActivity extends AppCompatActivity implements SideMenuFragment.
                 });
 
             }
-
-
         }
     }
 }

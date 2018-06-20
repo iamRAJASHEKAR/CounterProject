@@ -16,7 +16,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="25dp">
 
-            <TextView
+            <com.example.mypc.counterapp.Fonts.TextViewBold
                 android:id="@+id/text_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
                 android:textColor="#000000"
                 android:textSize="20dp" />
 
-            <EditText
+            <com.example.mypc.counterapp.Fonts.EditTextRegular
 
                 android:id="@+id/edit_name"
                 android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 android:maxLength="15"
                 android:maxLines="1" />
 
-            <TextView
+            <com.example.mypc.counterapp.Fonts.TextViewBold
                 android:id="@+id/user_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,10 +47,10 @@
                 android:textColor="#000000"
                 android:textSize="20dp" />
 
-            <EditText
+            <com.example.mypc.counterapp.Fonts.EditTextRegular
                 android:id="@+id/edit_email"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="40dp"
                 android:layout_below="@+id/user_email"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/edittext_background"
@@ -59,11 +59,10 @@
                 android:maxLength="15"
                 android:maxLines="1" />
 
-            <Button
+            <com.example.mypc.counterapp.Fonts.ButtonRegular
                 android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_below="@+id/edit_email"
-
                 android:layout_marginTop="15dp"
                 android:background="@drawable/round_button"
                 android:text="SAVE"
@@ -75,12 +74,12 @@
 
     </ScrollView>
 
-    <Button
+    <com.example.mypc.counterapp.Fonts.ButtonRegular
         android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/orange_button"
         android:text="Count"
         android:textColor="@color/white" />

@@ -62,13 +62,17 @@
             android:textColor="@color/black"
             android:textSize="20dp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.robinhood.ticker.TickerView
+            android:id="@+id/tickerview"
+            android:layout_width="200dp"
+            android:layout_height="75dp"
             android:layout_below="@+id/text_mega_count"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:src="@drawable/ic_counter" />
+            android:background="@drawable/orange_button"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="40dp" />
 
     </RelativeLayout>
 
@@ -107,17 +111,16 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_weight="1"
-                    android:text="Local Count"
+                    android:text="@string/local_count"
                     android:textSize="20dp" />
 
-                <com.example.mypc.counterapp.Fonts.TextViewBold
-                    android:id="@+id/LocalCount"
+                <com.robinhood.ticker.TickerView
+                    android:id="@+id/ticker_localCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:text="28"
                     android:textColor="@color/colorOrange"
                     android:textSize="30dp" />
             </LinearLayout>
@@ -136,20 +139,18 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_weight="1"
-                    android:text="My Contribution"
+                    android:text="@string/my_contribution"
                     android:textSize="20dp" />
 
-                <com.example.mypc.counterapp.Fonts.TextViewRegular
-                    android:id="@+id/text_my_count"
+                <com.robinhood.ticker.TickerView
+                    android:id="@+id/ticker_contribution"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:text="20"
                     android:textColor="@color/colorGray"
                     android:textSize="25dp" />
-
             </LinearLayout>
         </RelativeLayout>
 

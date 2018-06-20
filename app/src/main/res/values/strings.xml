@@ -1,7 +1,5 @@
 <resources>
-    <string name="facebook_app_id">242510262997142</string>
-    <string name="fb_login_protocol_scheme">fb242510262997142</string>
-    <string name="app_name">CounterApp</string>
+    <string name="app_name">Counter App</string>
     <string name="fb_login">lOGIN WITH FACEBOOK</string>
     <string name="google_login">LOGIN WITH GOOGLE</string>
     <string name="txt_hindu">Hindu</string>
@@ -28,8 +26,12 @@
     <string name="txt_send">Send</string>
     <string name="txt_yes">YES</string>
     <string name="txt_no">NO</string>
+    <string name="gplus_key">AIzaSyCEcs8K0fXV2dxZBJhQJYyMgPvNKGT7T0w</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="people_joined">People Joined</string>
+    <string name="local_count">Local Count</string>
+    <string name="my_contribution">My Contribution</string>
 
 </resources>

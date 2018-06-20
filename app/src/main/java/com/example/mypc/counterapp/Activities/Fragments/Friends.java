@@ -43,6 +43,7 @@ public class Friends extends Fragment {
 
 
         return view;
+
     }
 
     public void setData() {
@@ -50,7 +51,6 @@ public class Friends extends Fragment {
             userarray.add(new ChantsModel("Vedas", "vedas@gmail.com"));
         }
     }
-
     private class ChantsAdpater extends RecyclerView.Adapter<ViewHolder> {
         @NonNull
         @Override

@@ -17,28 +17,25 @@ import com.example.mypc.counterapp.Fonts.EditTextRegular;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
 import com.example.mypc.counterapp.R;
 
-public class HelpUsActivity extends AppCompatActivity
-{
+public class HelpUsActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     ImageView toolbaricon;
     TextViewBold toolbar_text;
-    EditTextRegular editName,editEmail,editPhone,editHelpMsg;
+    EditTextRegular editName, editEmail, editPhone, editHelpMsg;
     ButtonBold btnSend;
-    String name,email,phoneno,helpmsg;
+    String name, email, phoneno, helpmsg;
     ScrollView scrollView;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_helpus);
         init();
 
     }
 
-    public void init()
-    {
+    public void init() {
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         toolbaricon = findViewById(R.id.toolabar_icon);
@@ -51,14 +48,14 @@ public class HelpUsActivity extends AppCompatActivity
             }
         });
 
-        toolbar_text =findViewById(R.id.toolabr_title);
+        toolbar_text = findViewById(R.id.toolabr_title);
         toolbar_text.setText(R.string.help_text);
 
         scrollView = findViewById(R.id.scrollView);
         editName = findViewById(R.id.edit_name);
         editEmail = findViewById(R.id.edit_email);
         editPhone = findViewById(R.id.edit_phone);
-        editHelpMsg =findViewById(R.id.edit_help);
+        editHelpMsg = findViewById(R.id.edit_help);
         editHelpMsg.setOnTouchListener(touchListener);
 
         btnSend = findViewById(R.id.btn_send);
@@ -66,11 +63,11 @@ public class HelpUsActivity extends AppCompatActivity
 
     }
 
-    View.OnTouchListener touchListener = new View.OnTouchListener(){
-        public boolean onTouch(final View v, final MotionEvent motionEvent){
-            if(v.getId() == R.id.edit_help){
+    View.OnTouchListener touchListener = new View.OnTouchListener() {
+        public boolean onTouch(final View v, final MotionEvent motionEvent) {
+            if (v.getId() == R.id.edit_help) {
                 v.getParent().requestDisallowInterceptTouchEvent(true);
-                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK){
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_UP:
                         v.getParent().requestDisallowInterceptTouchEvent(false);
                         break;
@@ -80,40 +77,28 @@ public class HelpUsActivity extends AppCompatActivity
         }
     };
 
-    View.OnClickListener BtnSendClick = new View.OnClickListener()
-    {
+    View.OnClickListener BtnSendClick = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
+        public void onClick(View view) {
             validate();
         }
     };
 
 
     /////////editText Validations
-    public void validate()
-    {
+    public void validate() {
         name = editName.getText().toString();
         email = editEmail.getText().toString();
         phoneno = editPhone.getText().toString();
         helpmsg = editHelpMsg.getText().toString();
 
-        if(name.isEmpty())
-        {
+        if (name.isEmpty()) {
             editName.setError("Name Can'not be empty");
-        }
-        else if(email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches())
-        {
+        } else if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editEmail.setError("Enter Valid Email");
-        }
-
-        else if(phoneno.isEmpty() )
-        {
-             editPhone.setError("Enter Valid Phone number");
-        }
-
-        else if(helpmsg.isEmpty())
-        {
+        } else if (phoneno.isEmpty()) {
+            editPhone.setError("Enter Valid Phone number");
+        } else if (helpmsg.isEmpty()) {
             editHelpMsg.setError("Enter the message");
         }
 

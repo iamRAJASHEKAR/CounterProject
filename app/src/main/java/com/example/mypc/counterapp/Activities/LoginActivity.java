@@ -1,17 +1,9 @@
 package com.example.mypc.counterapp.Activities;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,232 +11,140 @@ import android.widget.Toast;
 
 import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.R;
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.Profile;
-import com.facebook.ProfileTracker;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Task;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-import java.util.Arrays;
-import java.util.List;
+    ButtonBold fbLogin, googleLogin;
+    private static final int RC_SIGN_IN = 234;
 
-public class LoginActivity extends AppCompatActivity {
-    Button fbLogin;
-    ButtonBold googleLogin;
-    private static final int PERMISSION_REQUEST_CODE = 1;
-    ProgressDialog mProgress;
-    String name, gendar,emailString, age;
-    private static final String EMAIL = "email";
+    //Tag for the logs optional
+    private static final String TAG = "simplifiedcoding";
 
-    AccessToken accessToken;
-    //ProgressDialog progress;
-    private Dialog logindilog, facebookalert, responsealert,failurealert;
-    List<String> permissionNeeds = Arrays.asList("user_photos", "email",
-            "user_birthday", "public_profile");
-    Button fb;
-    private CallbackManager callbackManager;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor sharedPreferencesEditor;
-    String socialmediaLoginEmail;
-    AccessTokenTracker accessTokenTracker;
-    ProfileTracker profileTracker;
+    //creating a GoogleSignInClient object
+    GoogleSignInClient mGoogleSignInClient;
+    GoogleApiClient googleApiClient;
+    //And also a Firebase Auth object
+    //FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        sharedPreferences = getApplicationContext().getSharedPreferences("socialMediaLoginDetails", Context.MODE_PRIVATE);
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
+        init();
 
-        mProgress = new ProgressDialog(LoginActivity.this);
-        mProgress.setMessage("Loading...");
-        mProgress.setProgress(Color.BLACK);
-        mProgress.setCancelable(true);
-        mProgress.setCanceledOnTouchOutside(false);
 
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
-                Log.e("sdf", "asdfas" + newToken);
-            }
-        };
-        profileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-
-            }
-        };
-        accessTokenTracker.startTracking();
-        profileTracker.startTracking();
-
-        fb = (Button) findViewById(R.id.btn_fb);
-        fb.setOnClickListener(new View.OnClickListener() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, LoginActivity.this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        googleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isConn()) {
-                   // mProgress.show();
-                    if (v == fb) {
-                        LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email"));
-                        LoginManager.getInstance().registerCallback(callbackManager,callback );
-                    }
-                } else {
-                  //  mProgress.dismiss();
-                    Toast.makeText(LoginActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
-                   // new AlertShowingDialog(LoginActivity.this, "No Internet connection");
-                }
+                signIn();
             }
         });
 
+        fbLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //if the requestCode is the Google Sign In code that we defined at starting
+        if (requestCode == RC_SIGN_IN) {
+
+            //Getting the GoogleSignIn Task
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                //Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                Toast.makeText(this, "hello" + account.getEmail() + account.getPhotoUrl(), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent);
+                //authenticating with firebasel
+                // firebaseAuthWithGoogle(account);
+            } catch (ApiException e)
+            {
+                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
-
-
-
-    public void init()
-    {
-        googleLogin = findViewById(R.id.btn_google);
-        //googleLogin.setOnClickListener(ClickOnGoogle);
 
     }
-    FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
+
+    private void signIn() {
+        //getting the google signin intent
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+
+        //starting the activity for result
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+
+    public void init() {
+        fbLogin = findViewById(R.id.btn_fb);
+        fbLogin.setOnClickListener(ClickFbLogin);
+
+        googleLogin = findViewById(R.id.btn_google);
+        googleLogin.setOnClickListener(ClickOnGoogle);
+
+    }
+
+
+    //Click on facebook button
+    View.OnClickListener ClickFbLogin = new View.OnClickListener() {
         @Override
-        public void onSuccess(LoginResult loginResult) {
-            Log.e("FBStatus", "onSuccess Called");
-
-            System.out.println("onSuccess");
-
-            String accessToken = loginResult.getAccessToken()
-                    .getToken();
-            Log.i("accessToken", accessToken);
-
-            GraphRequest request = GraphRequest.newMeRequest(
-                    loginResult.getAccessToken(),
-                    new GraphRequest.GraphJSONObjectCallback() {
-                        @Override
-                        public void onCompleted(JSONObject object,
-                                                GraphResponse response) {
-
-                            Log.i("LoginActivity", response.toString());
-                            try {
-                                String id = object.getString("id");
-                                String name = object.getString("name");
-                                String email = object.getString("email");
-                                 //String gender = object.getString("gender");
-                                if (email != null) {
-                                   // mProgress.dismiss();
-                                    sharedPreferencesEditor = sharedPreferences.edit();
-                                    sharedPreferencesEditor.putString("name", name);
-                                    //sharedPreferencesEditor.putString("gender",gender);
-                                    Log.e("username", "" + name);
-                                    //   sharedPreferencesEditor.putString("gender", gender);
-                                    String imageURLString = "http://graph.facebook.com/" + id + "/picture?type=large";
-                                    sharedPreferencesEditor.putString("picture", imageURLString);
-                                    sharedPreferencesEditor.putString("Type", "Facebook");
-                                    //  Log.e("gender", "" + gender);
-                                    Log.e("gender", "" + imageURLString);
-                                    // Log.e("emailfacebook", "call" + name + "" + email + "" + gender);
-                                    socialmediaLoginEmail = email;
-                                    sharedPreferencesEditor.commit();
-                                    LoginManager.getInstance().logOut();
-                                    mProgress.dismiss();
-                                    startActivity(new Intent(getApplicationContext(), ReligionActivity.class));
-
-                                } else {
-                                    Log.e("emailnull", "call");
-                                    LoginManager.getInstance().logOut();
-                                    mProgress.dismiss();
-
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-            Bundle parameters = new Bundle();
-            parameters.putString("fields",
-                    "id,name,email,gender, birthday");
-            request.setParameters(parameters);
-            request.executeAsync();
-
-        }
-
-        @Override
-        public void onCancel() {
-            mProgress.dismiss();
-
-            Log.e("FBStatus", "OnCancel Called");
-        }
-
-        @Override
-        public void onError(FacebookException e) {
-            Log.e("FBStatus", "OnCancel Called" + e);
-            mProgress.dismiss();
-
+        public void onClick(View view) {
+            Log.e("login", "Login with facebook");
+            startActivity(new Intent(LoginActivity.this, ReligionActivity.class));
         }
     };
+
+//no need to worry about this dude
+
+    //Click on google button
+    View.OnClickListener ClickOnGoogle = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Log.e("login", "Login with google");
+            startActivity(new Intent(LoginActivity.this, ReligionActivity.class));
+        }
+    };
+
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-        Log.e("requestcode", "" + requestCode + " " + resultCode);
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        /*if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            int statusCode = result.getStatus().getStatusCode();
-            Log.e("statuscode", "calldd" + statusCode);
-
-            handleSignInResult(result);
-        } else {
-        }*/
     }
-
-
-    public static boolean isOnline(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
+/*
+        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+        @Override
+        public void onResult(Status status) {
+            Toast.makeText(LoginActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
         }
-        return false;
-    }
-    public static void showNetworkAlert(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Network Alert");
-        builder.setMessage("Ple" +
-                "" +
-                "ase check your network connection and try again");
-        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
-
-    }
-
-
-
-    public boolean isConn() {
-        ConnectivityManager connectivity = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity.getActiveNetworkInfo() != null) {
-            if (connectivity.getActiveNetworkInfo().isConnected())
-                return true;
-        }
-        return false;
-    }
+    });
+*/
 
 
 }
