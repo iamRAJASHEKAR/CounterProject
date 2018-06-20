@@ -34,17 +34,22 @@
     </RelativeLayout>
 
 
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_weight="1"
+       android:layout_height="wrap_content">
     <com.example.mypc.counterapp.Fonts.ButtonBold
             android:layout_width="match_parent"
             android:id="@+id/btn_no_religion"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="50dp"
             android:layout_marginRight="15dp"
             android:textAllCaps="false"
+            android:layout_marginBottom="30dp"
             android:textColor="@android:color/white"
             android:background="@drawable/ovalshape_orange"
             android:text="@string/txt_didntfind_religion"
             android:layout_height="wrap_content" />
+   </RelativeLayout>
 
 
        <!-- <Button
