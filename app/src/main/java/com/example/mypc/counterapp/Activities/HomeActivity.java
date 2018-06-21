@@ -34,6 +34,8 @@ import com.example.mypc.counterapp.Fonts.TextViewRegular;
 import com.example.mypc.counterapp.Model.Chants;
 import com.example.mypc.counterapp.R;
 import com.example.mypc.counterapp.sessions.SessionsManager;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -42,6 +44,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
 import java.util.ArrayList;
+import java.util.logging.LogManager;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -135,12 +138,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         init();
 
         set_profile(imageView_profile, user_name);
-
-
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
     }
 
 
-    public void set_profile(CircleImageView imageView, TextView textView) {
+    public void set_profile(CircleImageView imageView, TextView textView)
+    {
         SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
 
         String name = prefs.getString("name", "No name defined");
@@ -148,16 +151,16 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
 
         Log.e("logindude", name + "\n" + url);
 
-        Glide.with(getApplicationContext()).load(url).asBitmap().into(imageView);
+        Glide.with(getApplicationContext()).load(url).asBitmap().placeholder(R.drawable.ic_logo)
+                .into(imageView);
         textView.setText(name);
     }
 
-    public void init() {
-
+    public void init()
+    {
         chantsArrayList = new ArrayList<>();
         floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(AddChantBtn);
-
         setData();
         chantRecyclerview = findViewById(R.id.recyclerview_chant);
         homeAdapter = new HomeAdapter();
@@ -179,34 +182,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     };
 
-   /* @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Log.e("itemid"," "+item.getItemId());
-        switch (item.getItemId())
-        {
-            case R.id.rate_us:
-                Log.e("rateus","rateus");
-                break;
-            case R.id.share:
-                Log.e("share","share");
-                break;
-
-            case R.id.help:
-                Log.e("help","help");
-                break;
-
-            case R.id.logout:
-                Log.e("logout","logout");
-                break;
-
-        }
-
-        return true;
-    }
-*/
-
-    ////////Logout alert Dailog
-
     public void logoutDialog() {
 
         TextViewRegular yes, no;
@@ -221,9 +196,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_background);
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Log.e("call", "dialog yes");
+
+                //LoginManager.getInstance().logOut();
+
 
                 Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
                         new ResultCallback<Status>() {
@@ -232,6 +209,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                                 if (sessionsManager.isLoggedIn()) {
                                     sessionsManager.setLogin(false);
+                                    finish();
                                 }
                                 //      Toast.makeText(HomeActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
 
@@ -317,5 +295,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         } else {
             super.onBackPressed();
         }
+/*
+        Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
+        startActivity(intent);*/
+        //      finish();
+
     }
 }
