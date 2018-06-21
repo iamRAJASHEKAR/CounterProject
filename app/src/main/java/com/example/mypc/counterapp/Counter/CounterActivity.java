@@ -189,20 +189,18 @@ public class CounterActivity extends AppCompatActivity {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (action == KeyEvent.ACTION_DOWN) {
-                    if (state == 1) {
+                    if (state == 1)
+                    {
                         minus();
                     }
-
-                    //TODO
                 }
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                if (action == KeyEvent.ACTION_DOWN) {
+                if (action == KeyEvent.ACTION_UP) {
                     if (state == 1) {
                         plus();
                     }
 
-                    //TODO
                 }
                 return true;
             default:

@@ -25,8 +25,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener
-{
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     ButtonBold fbLogin, googleLogin;
     private static final int RC_SIGN_IN = 234;
@@ -148,11 +147,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //no need to worry about this dude
 
     //Click on google button
-    View.OnClickListener ClickOnGoogle = new View.OnClickListener()
-    {
+    View.OnClickListener ClickOnGoogle = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
+        public void onClick(View view) {
             Log.e("login", "Login with google");
             startActivity(new Intent(LoginActivity.this, ReligionActivity.class));
         }
