@@ -29,13 +29,14 @@
         </android.support.v7.widget.RecyclerView>
 
      <com.github.clans.fab.FloatingActionButton
-         android:layout_width="5dp"
+         android:layout_width="10dp"
          android:id="@+id/fab"
+         app:fab_size="normal"
          android:layout_gravity="bottom|right"
          android:layout_marginBottom="10dp"
          android:layout_marginRight="20dp"
          android:src="@drawable/ic_add_fab"
-         android:layout_height="5dp"/>
+         android:layout_height="10dp"/>
 
 
 

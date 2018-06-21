@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="25dp">
 
             <com.example.mypc.counterapp.Fonts.TextViewBold
@@ -22,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:text="Name"
                 android:textColor="#000000"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <com.example.mypc.counterapp.Fonts.EditTextRegular
 
@@ -34,7 +35,7 @@
                 android:background="@drawable/edittext_background"
                 android:imeOptions="actionNext"
                 android:inputType="text"
-                android:maxLength="15"
+                android:maxLength="25"
                 android:maxLines="1" />
 
             <com.example.mypc.counterapp.Fonts.TextViewBold
@@ -45,7 +46,7 @@
                 android:layout_marginTop="10dp"
                 android:text="Email"
                 android:textColor="#000000"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <com.example.mypc.counterapp.Fonts.EditTextRegular
                 android:id="@+id/edit_email"
@@ -56,11 +57,12 @@
                 android:background="@drawable/edittext_background"
                 android:imeOptions="actionDone"
                 android:inputType="text"
-                android:maxLength="15"
+                android:maxLength="25"
                 android:maxLines="1" />
 
             <com.example.mypc.counterapp.Fonts.ButtonRegular
                 android:layout_width="150dp"
+                android:id="@+id/btn_save"
                 android:layout_height="40dp"
                 android:layout_below="@+id/edit_email"
                 android:layout_marginTop="15dp"
@@ -74,13 +76,16 @@
 
     </ScrollView>
 
-    <com.example.mypc.counterapp.Fonts.ButtonRegular
+    <com.example.mypc.counterapp.Fonts.ButtonBold
         android:layout_width="200dp"
+        android:id="@+id/btn_start_counting"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:background="@drawable/orange_button"
-        android:text="Count"
+        android:text="Start Counting"
+        android:textAllCaps="false"
+        android:textSize="20sp"
         android:textColor="@color/white" />
 </RelativeLayout>

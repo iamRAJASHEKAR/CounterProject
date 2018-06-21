@@ -5,36 +5,35 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Fragments.Friends">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linear_button"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:background="#BDC3C7"
-        android:orientation="horizontal"
-        android:weightSum="2">
+        android:background="#BDC3C7">
 
         <com.example.mypc.counterapp.Fonts.TextViewBold
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:id="@+id/textName"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:text="Name"
             android:textColor="#000000"
             android:textStyle="bold" />
 
         <com.example.mypc.counterapp.Fonts.TextViewBold
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="80dp"
+            android:layout_toRightOf="@+id/textName"
             android:text="Email"
             android:textColor="#000000"
-            android:textStyle="bold" />
+             />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"
@@ -51,14 +50,18 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="3dp">
 
-        <com.example.mypc.counterapp.Fonts.ButtonRegular
-            android:layout_width="150dp"
+        <com.example.mypc.counterapp.Fonts.ButtonBold
+            android:layout_width="200dp"
             android:layout_height="40dp"
+            android:id="@+id/btn_count"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/round_button"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:background="@drawable/ovalshape_orange"
             android:text="Start Counting"
-            android:textColor="#ffffff" />
+            />
 
     </RelativeLayout>
 
