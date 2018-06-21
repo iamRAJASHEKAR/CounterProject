@@ -39,7 +39,7 @@ public class CounterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counter);
-
+        //check internet connection
         countertoolbar = findViewById(R.id.toolBar);
         setSupportActionBar(countertoolbar);
 
