@@ -27,138 +27,132 @@ import com.example.mypc.counterapp.R;
 
 import java.util.ArrayList;
 
-public class ReligionActivity extends AppCompatActivity
-{
+public class ReligionActivity extends AppCompatActivity {
 
-   Button noReligionFound;
-   RecyclerView recyclerViewReligion;
-   ArrayList<Religion> religionarraylist;
-   String[] religions = {"Hindu","Muslim","Christian"};
-   ReligionAdapter religionAdapter;
+    Button noReligionFound;
+    RecyclerView recyclerViewReligion;
+    ArrayList<Religion> religionarraylist;
+    String[] religions = {"Hindu", "Muslim", "Christian"};
+    ReligionAdapter religionAdapter;
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_religion);
         init();
     }
 
-    public void init()
-    {
+    public void init() {
         religionarraylist = new ArrayList<>();
         setdata();
         recyclerViewReligion = findViewById(R.id.recyclerview_religion);
         noReligionFound = findViewById(R.id.btn_no_religion);
         noReligionFound.setOnClickListener(NoReligionFound);
-       LinearLayoutManager layoutManager = new LinearLayoutManager(this); layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-       recyclerViewReligion.setLayoutManager(layoutManager);
-      //  recyclerViewReligion.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerViewReligion.setLayoutManager(layoutManager);
+        //  recyclerViewReligion.setLayoutManager(new LinearLayoutManager(this));
         religionAdapter = new ReligionAdapter();
         recyclerViewReligion.setAdapter(religionAdapter);
 
     }
 
-    public void setdata()
-    {
-        for(int i = 0;i<religions.length;i++)
-        {
+    public void setdata() {
+        for (int i = 0; i < religions.length; i++) {
             religionarraylist.add(new Religion(religions[i]));
         }
     }
 
 
-
     View.OnClickListener NoReligionFound = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
+        public void onClick(View view) {
 
-                 showReligiondialog();
+            showReligiondialog();
         }
     };
 
 
     ////Dialog for entering the religion
-  public void showReligiondialog()
-  {
-      TextViewRegular save,cancel;
-      final Dialog dialog = new Dialog(ReligionActivity.this);
-      dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-      dialog.setCanceledOnTouchOutside(false);
-      dialog.setCancelable(false);
-      dialog.setContentView(R.layout.activity_religion_dialog);
-      save = dialog.findViewById(R.id.save);
-      cancel = dialog.findViewById(R.id.cancel);
+    public void showReligiondialog() {
+        TextViewRegular save, cancel;
+        final Dialog dialog = new Dialog(ReligionActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.activity_religion_dialog);
+        save = dialog.findViewById(R.id.save);
+        cancel = dialog.findViewById(R.id.cancel);
 
-      dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_background);
-      save.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view)
-          {
-              Log.e("call","dialog yes");
-             // startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_background);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("call", "dialog yes");
+                // startActivity(new Intent(getApplicationContext(),LoginActivity.class));
 
 
-          }
-      });
+            }
+        });
 
-      cancel.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view)
-          {
-              Log.e("call","dialog no");
-              dialog.dismiss();
-          }
-      });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("call", "dialog no");
+                dialog.dismiss();
+            }
+        });
 
-      dialog.show();
+        dialog.show();
 
-  }
-
-
-  class ReligionAdapter extends RecyclerView.Adapter<ReligionAdapter.ViewHolder>
-  {
+    }
 
 
+    class ReligionAdapter extends RecyclerView.Adapter<ReligionAdapter.ViewHolder> {
 
-      @Override
-      public ReligionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-          View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_religion_list, null);
-          final ViewHolder viewHolder = new ViewHolder(v, getApplicationContext());
-          return viewHolder;
-      }
 
-      @Override
-      public void onBindViewHolder(@NonNull ReligionAdapter.ViewHolder holder, int position)
-      {
-         holder.btn_religion.setText(religionarraylist.get(position).getReligionName());
+        @Override
+        public ReligionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_religion_list, null);
+            final ViewHolder viewHolder = new ViewHolder(v, getApplicationContext());
+            return viewHolder;
+        }
 
-      }
+        @Override
+        public void onBindViewHolder(@NonNull ReligionAdapter.ViewHolder holder, int position) {
+            holder.btn_religion.setText(religionarraylist.get(position).getReligionName());
 
-      @Override
-      public int getItemCount()
-      {
-          return religionarraylist.size();
-      }
+        }
 
-      public class ViewHolder extends RecyclerView.ViewHolder
-      {
-         ButtonBold btn_religion;
+        @Override
+        public int getItemCount() {
+            return religionarraylist.size();
+        }
 
-          public ViewHolder(View itemView, Context applicationContext)
-          {
-              super(itemView);
-              btn_religion =itemView.findViewById(R.id.btnReligio);
-              btn_religion.setOnClickListener(new View.OnClickListener() {
-                  @Override
-                  public void onClick(View view)
-                  {
-                      startActivity(new Intent(getApplicationContext(),HomeActivity.class));
-                  }
-              });
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            ButtonBold btn_religion;
 
-          }
-      }
-  }
+            public ViewHolder(View itemView, Context applicationContext) {
+                super(itemView);
+                btn_religion = itemView.findViewById(R.id.btnReligio);
+                btn_religion.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                   //     finish();
+                    }
+                });
 
+            }
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+
+    }
 }
