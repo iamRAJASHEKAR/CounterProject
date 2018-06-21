@@ -1,6 +1,7 @@
 package com.example.mypc.counterapp.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.R;
+import com.example.mypc.counterapp.sessions.SessionsManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -23,14 +25,17 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener
+{
 
     ButtonBold fbLogin, googleLogin;
     private static final int RC_SIGN_IN = 234;
-
+    SharedPreferences.Editor editor;
+    SessionsManager sessionsManager;
     //Tag for the logs optional
-    private static final String TAG = "simplifiedcoding";
+    public static final String MY_PREFS_NAME = "login";
 
+    int PRIVATE_MODE = 0;
     //creating a GoogleSignInClient object
     GoogleSignInClient mGoogleSignInClient;
     GoogleApiClient googleApiClient;
@@ -43,6 +48,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setContentView(R.layout.activity_login);
         init();
 
+        sessionsManager = new SessionsManager(getApplicationContext());
+        editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+
+        if (sessionsManager.isLoggedIn()) {
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(intent);
+
+        }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -64,6 +77,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View v) {
 
+                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                Toast.makeText(LoginActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
     }
@@ -79,14 +99,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             try {
                 //Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                Toast.makeText(this, "hello" + account.getEmail() + account.getPhotoUrl(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "hello" + account.getDisplayName() + account.getPhotoUrl(), Toast.LENGTH_SHORT).show();
+
+                sessionsManager.setLogin(true);
+                editor.putString("name", account.getDisplayName());
+                editor.putString("photo", String.valueOf(account.getPhotoUrl()));
+                editor.commit();
 
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
                 //authenticating with firebasel
                 // firebaseAuthWithGoogle(account);
-            } catch (ApiException e)
-            {
+            } catch (ApiException e) {
                 Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
@@ -124,9 +148,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //no need to worry about this dude
 
     //Click on google button
-    View.OnClickListener ClickOnGoogle = new View.OnClickListener() {
+    View.OnClickListener ClickOnGoogle = new View.OnClickListener()
+    {
         @Override
-        public void onClick(View view) {
+        public void onClick(View view)
+        {
             Log.e("login", "Login with google");
             startActivity(new Intent(LoginActivity.this, ReligionActivity.class));
         }
@@ -136,15 +162,5 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-/*
-        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-        @Override
-        public void onResult(Status status) {
-            Toast.makeText(LoginActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
-        }
-    });
-*/
-
 
 }

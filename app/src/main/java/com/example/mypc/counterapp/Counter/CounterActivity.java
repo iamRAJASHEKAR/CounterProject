@@ -168,7 +168,8 @@ public class CounterActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            if (state == 1) {
+            if (state == 1)
+            {
                 plus();
             }
         } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {

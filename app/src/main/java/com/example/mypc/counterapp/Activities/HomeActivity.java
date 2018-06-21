@@ -3,6 +3,7 @@ package com.example.mypc.counterapp.Activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,39 +28,52 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
 import com.example.mypc.counterapp.Fonts.TextViewRegular;
 import com.example.mypc.counterapp.Model.Chants;
 import com.example.mypc.counterapp.R;
+import com.example.mypc.counterapp.sessions.SessionsManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity
-{
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class HomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     DrawerLayout drawerLayout;
-
     public static boolean check = true;
     public static boolean checked = false;
     RecyclerView chantRecyclerview;
     Toolbar toolbar;
+    SessionsManager sessionsManager;
+    TextView user_name;
     TextViewBold toolbar_text;
     ImageView toolabr_image;
+    CircleImageView imageView_profile;
     ArrayList<Chants> chantsArrayList;
     HomeAdapter homeAdapter;
     com.github.clans.fab.FloatingActionButton floatingActionButton;
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
-
-
+    GoogleApiClient googleApiClient;
 
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitvity_home);
-
+        sessionsManager = new SessionsManager(this);
+        navigationView = findViewById(R.id.navigation_view);
+        imageView_profile = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
+        user_name = navigationView.getHeaderView(0).findViewById(R.id.text_email);
+        imageView_profile.setImageResource(R.drawable.ic_star);
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         toolabr_image = findViewById(R.id.toolabar_icon);
@@ -69,34 +83,32 @@ public class HomeActivity extends AppCompatActivity
 
         drawerLayout = findViewById(R.id.drawerLayout);
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
 
         navigationView = findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(MenuItem item)
-            {
+            public boolean onNavigationItemSelected(MenuItem item) {
                 drawerLayout.closeDrawers();
-               // item.setCheckable(true);
-                Log.e("item"," "+item.getTitle());
-                switch (item.getItemId())
-                {
+                // item.setCheckable(true);
+                Log.e("item", " " + item.getTitle());
+                switch (item.getItemId()) {
                     case R.id.rate_us:
-                        Log.e("rateus","rateus");
+                        Log.e("rateus", "rateus");
                         break;
                     case R.id.share:
-                        Log.e("share","share");
+                        Log.e("share", "share");
                         break;
 
                     case R.id.help:
-                        Log.e("help","help");
-                        startActivity(new Intent(getApplicationContext(),HelpUsActivity.class));
+                        Log.e("help", "help");
+                        startActivity(new Intent(getApplicationContext(), HelpUsActivity.class));
                         break;
 
                     case R.id.logout:
-                        Log.e("logout","logout");
+                        Log.e("logout", "logout");
                         logoutDialog();
                         break;
 
@@ -105,25 +117,42 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-      //click on navigationview
+        //click on navigationview
         toolabr_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    drawerLayout.openDrawer(GravityCompat.START);
+                drawerLayout.openDrawer(GravityCompat.START);
             }
         });
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, HomeActivity.this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        init();
 
-
-
-       init();
-
+        set_profile(imageView_profile, user_name);
 
 
     }
 
 
-    public void init()
-    {
+    public void set_profile(CircleImageView imageView, TextView textView) {
+        SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
+
+        String name = prefs.getString("name", "No name defined");
+        String url = prefs.getString("photo", "No name defined");
+
+        Log.e("logindude", name + "\n" + url);
+
+        Glide.with(getApplicationContext()).load(url).asBitmap().into(imageView);
+        textView.setText(name);
+    }
+
+    public void init() {
 
         chantsArrayList = new ArrayList<>();
         floatingActionButton = findViewById(R.id.fab);
@@ -135,9 +164,6 @@ public class HomeActivity extends AppCompatActivity
         chantRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         chantRecyclerview.setAdapter(homeAdapter);
     }
-
-
-
 
 
     public void setData() {
@@ -181,10 +207,9 @@ public class HomeActivity extends AppCompatActivity
 
     ////////Logout alert Dailog
 
-    public void logoutDialog()
-    {
+    public void logoutDialog() {
 
-        TextViewRegular yes,no;
+        TextViewRegular yes, no;
         final Dialog dialog = new Dialog(HomeActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCanceledOnTouchOutside(false);
@@ -196,9 +221,22 @@ public class HomeActivity extends AppCompatActivity
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_background);
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Log.e("call","dialog yes");
-                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+            public void onClick(View view)
+            {
+                Log.e("call", "dialog yes");
+
+                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                if (sessionsManager.isLoggedIn()) {
+                                    sessionsManager.setLogin(false);
+                                }
+                                //      Toast.makeText(HomeActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
                 drawerLayout.closeDrawers();
             }
         });
@@ -206,7 +244,7 @@ public class HomeActivity extends AppCompatActivity
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("call","dialog no");
+                Log.e("call", "dialog no");
                 dialog.dismiss();
                 drawerLayout.closeDrawers();
             }
@@ -215,7 +253,10 @@ public class HomeActivity extends AppCompatActivity
         dialog.show();
 
 
+    }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
@@ -256,7 +297,7 @@ public class HomeActivity extends AppCompatActivity
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.e("pos"," "+getLayoutPosition());
+                        Log.e("pos", " " + getLayoutPosition());
                         startActivity(new Intent(getApplicationContext(), ChantsActivity.class));
                     }
                 });
