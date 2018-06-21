@@ -28,6 +28,7 @@ import com.example.mypc.counterapp.Activities.Fragments.ChantsModel;
 import com.example.mypc.counterapp.Activities.Fragments.Friends;
 import com.example.mypc.counterapp.Activities.Fragments.JoinedFriends;
 import com.example.mypc.counterapp.Counter.CounterActivity;
+import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
 import com.example.mypc.counterapp.R;
 
@@ -40,8 +41,8 @@ public class ChantsActivity extends AppCompatActivity {
     RadioGroup radioGroup;
     RecyclerView recyclerView_peoples;
     RadioButton radioButton_friends, radioButton_public;
-    RelativeLayout relativeLayout_tab, relativeLayout_public;
-    Button button;
+    RelativeLayout relativeLayout_tab, relativeLayout_public,relative_peopled_Joined,relativeName;
+    ButtonBold button;
     Toolbar toolbar;
     Friends_Holder holder;
     ArrayList<ChantsModel> people_joined;
@@ -49,7 +50,8 @@ public class ChantsActivity extends AppCompatActivity {
     ImageView toolbar_icon;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chants);
         toolbar = findViewById(R.id.toolBar);
@@ -63,12 +65,21 @@ public class ChantsActivity extends AppCompatActivity {
         toolbar_icon.setImageResource(R.drawable.ic_back_arrow);
         toolbar_text.setText("Chants");
 
+        toolbar_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         radioGroup = findViewById(R.id.radioprofile);
         radioButton_friends = findViewById(R.id.radioFriends);
         radioButton_public = findViewById(R.id.radiopublic);
         radioButton_public = findViewById(R.id.radiopublic);
         relativeLayout_tab = findViewById(R.id.relative_appbar);
         relativeLayout_public = findViewById(R.id.relative_public);
+        relative_peopled_Joined = findViewById(R.id.realtive_people_joined);
+        relativeName = findViewById(R.id.liner_name);
 
         button = findViewById(R.id.count_public);
         button.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +114,12 @@ public class ChantsActivity extends AppCompatActivity {
                 if (radioButton_public.isChecked()) {
                     relativeLayout_tab.setVisibility(View.GONE);
                     relativeLayout_public.setVisibility(View.VISIBLE);
+                    recyclerView_peoples.setVisibility(View.VISIBLE);
+                    relative_peopled_Joined.setVisibility(View.VISIBLE);
+                    relativeName.setVisibility(View.VISIBLE);
+
+
+
 
                     //    Toast.makeText(ChantsActivity.this, "hello", Toast.LENGTH_SHORT).show();
 

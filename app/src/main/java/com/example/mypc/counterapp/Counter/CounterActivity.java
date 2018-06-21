@@ -6,15 +6,19 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mypc.counterapp.Fonts.ButtonBold;
+import com.example.mypc.counterapp.Fonts.TextViewBold;
 import com.example.mypc.counterapp.R;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
@@ -25,13 +29,34 @@ public class CounterActivity extends AppCompatActivity {
     ImageButton minus_button, plus_button;
     int japam_count;
     int my_contribution;
-    Button submit_button;
+    ButtonBold submit_button;
     TickerView ticker_mega, ticker_local, ticker_mycontribution;
+    Toolbar countertoolbar;
+    ImageView toolbar_icon;
+    TextViewBold conterText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counter);
+        //check internet connection
+        countertoolbar = findViewById(R.id.toolBar);
+        setSupportActionBar(countertoolbar);
+
+        toolbar_icon = findViewById(R.id.toolabar_icon);
+        conterText   = findViewById(R.id.toolabr_title);
+
+        toolbar_icon.setImageResource(R.drawable.ic_back_arrow);
+        conterText.setText("Counter");
+
+        toolbar_icon.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         text_screenmodes = findViewById(R.id.text_screenmode);
         text_megacount = findViewById(R.id.text_mega_count);
         ticker_mega = findViewById(R.id.tickerview);

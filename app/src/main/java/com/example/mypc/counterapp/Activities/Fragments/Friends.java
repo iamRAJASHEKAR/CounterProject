@@ -2,6 +2,7 @@ package com.example.mypc.counterapp.Activities.Fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.mypc.counterapp.Counter.CounterActivity;
+import com.example.mypc.counterapp.Fonts.ButtonBold;
+import com.example.mypc.counterapp.Fonts.TextViewRegular;
 import com.example.mypc.counterapp.R;
 
 import java.util.ArrayList;
@@ -19,10 +23,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Friends extends Fragment {
+public class Friends extends Fragment
+{
     RecyclerView recyclerView;
     ArrayList<ChantsModel> userarray;
     ChantsAdpater homeAdapter;
+    ButtonBold coountBtn;
 
 
     public Friends() {
@@ -34,6 +40,8 @@ public class Friends extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        coountBtn = view.findViewById(R.id.btn_count);
+        coountBtn.setOnClickListener(CountBtnClick);
         recyclerView = view.findViewById(R.id.recycler);
         userarray = new ArrayList<>();
         setData();
@@ -46,11 +54,23 @@ public class Friends extends Fragment {
 
     }
 
-    public void setData() {
-        for (int i = 0; i < 10; i++) {
+    public void setData()
+    {
+        for (int i = 0; i < 10; i++)
+        {
             userarray.add(new ChantsModel("Vedas", "vedas@gmail.com"));
         }
     }
+
+    ////////click on count btn
+    View.OnClickListener CountBtnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view)
+        {
+             startActivity(new Intent(getActivity(), CounterActivity.class));
+        }
+    };
+
     private class ChantsAdpater extends RecyclerView.Adapter<ViewHolder> {
         @NonNull
         @Override
@@ -74,7 +94,7 @@ public class Friends extends Fragment {
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, user;
+        TextViewRegular name, user;
 
         public ViewHolder(View itemView, Context context) {
             super(itemView);

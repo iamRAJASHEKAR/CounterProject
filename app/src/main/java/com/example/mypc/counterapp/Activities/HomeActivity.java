@@ -76,7 +76,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         navigationView = findViewById(R.id.navigation_view);
         imageView_profile = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
         user_name = navigationView.getHeaderView(0).findViewById(R.id.text_email);
-        imageView_profile.setImageResource(R.drawable.ic_star);
+        //imageView_profile.setImageResource(R.drawable.ic_star);
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         toolabr_image = findViewById(R.id.toolabar_icon);

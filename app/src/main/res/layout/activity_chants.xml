@@ -121,6 +121,7 @@
             android:id="@+id/realtive_people_joined"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:visibility="invisible"
             android:background="@color/colorGray">
 
             <com.example.mypc.counterapp.Fonts.TextViewRegular
@@ -133,21 +134,19 @@
                 android:textSize="18dp" />
         </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/liner_name"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_below="@id/realtive_people_joined"
             android:layout_marginTop="10dp"
-            android:background="#BDC3C7"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:background="#BDC3C7">
 
             <com.example.mypc.counterapp.Fonts.TextViewBold
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="Name"
                 android:textColor="#000000"
@@ -156,31 +155,32 @@
             <com.example.mypc.counterapp.Fonts.TextViewBold
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:layout_weight="1.2"
+                android:gravity="center"
                 android:text="Email"
                 android:textColor="#000000"
-                android:textStyle="bold" />
-        </LinearLayout>
+                />
+        </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_people_joined"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/liner_name"
-            android:layout_marginBottom="50dp">
+            android:visibility="invisible"
+            android:layout_height="220dp"
+            android:layout_below="@+id/liner_name">
 
         </android.support.v7.widget.RecyclerView>
 
-        <com.example.mypc.counterapp.Fonts.ButtonRegular
+        <com.example.mypc.counterapp.Fonts.ButtonBold
             android:id="@+id/count_public"
             android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
+            android:layout_height="40dp"
+            android:layout_below="@+id/recycler_people_joined"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
             android:background="@drawable/orange_button"
             android:text="Start Counting"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:visibility="visible" />

@@ -16,17 +16,18 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:text="Vedas"
-            android:textSize="20dp" />
+            android:textColor="@android:color/black"
+            android:textSize="15dp" />
 
         <com.example.mypc.counterapp.Fonts.TextViewRegular
             android:id="@+id/user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="50dp"
-            android:layout_toRightOf="@id/name"
+            android:textColor="@android:color/black"
             android:text="Vedas@gmail.com"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
     </RelativeLayout>
 

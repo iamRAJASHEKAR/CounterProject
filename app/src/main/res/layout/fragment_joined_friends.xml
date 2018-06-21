@@ -6,19 +6,17 @@
     android:orientation="vertical"
     tools:context=".Activities.Fragments.JoinedFriends">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="#BDC3C7"
-        android:orientation="horizontal"
-        android:weightSum="2">
+        >
 
         <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="Name"
             android:textColor="#000000"
@@ -27,13 +25,12 @@
         <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:text="Email"
             android:textColor="#000000"
             android:textStyle="bold" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"

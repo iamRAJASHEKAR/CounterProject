@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:textColor="@color/black"
             android:textSize="20dp" />
 
@@ -164,7 +164,7 @@
             android:background="@drawable/ic_plus" />
     </RelativeLayout>
 
-    <com.example.mypc.counterapp.Fonts.ButtonRegular
+    <com.example.mypc.counterapp.Fonts.ButtonBold
         android:id="@+id/submitButton"
         android:layout_width="200dp"
         android:layout_height="45dp"
@@ -173,6 +173,8 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/orange_button"
         android:text="Submit"
+        android:textAllCaps="false"
+        android:textSize="18sp"
         android:textColor="@color/white" />
 
     <com.example.mypc.counterapp.Fonts.TextViewRegular

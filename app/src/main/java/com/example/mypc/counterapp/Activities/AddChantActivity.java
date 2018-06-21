@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -65,6 +66,7 @@ public class AddChantActivity extends AppCompatActivity
 
         editChantname = findViewById(R.id.edit_chantName);
         editchantText = findViewById(R.id.edit_chant);
+        editchantText.setOnTouchListener(touchListener);
 
         radioGroup = findViewById(R.id.radioGroup);
         radioPublic = findViewById(R.id.rdbPublic);
@@ -115,6 +117,21 @@ public class AddChantActivity extends AppCompatActivity
 
         }
     };
+
+    View.OnTouchListener touchListener = new View.OnTouchListener() {
+        public boolean onTouch(final View v, final MotionEvent motionEvent) {
+            if (v.getId() == R.id.edit_help) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_UP:
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
+            }
+            return false;
+        }
+    };
+
 
     /////////Edit Text Validations
     public void validations()
