@@ -141,14 +141,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         FacebookSdk.sdkInitialize(this.getApplicationContext());
     }
 
-
     public void set_profile(CircleImageView imageView, TextView textView)
     {
         SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
 
         String name = prefs.getString("name", "No name defined");
         String url = prefs.getString("photo", "No name defined");
-
         Log.e("logindude", name + "\n" + url);
 
         Glide.with(getApplicationContext()).load(url).asBitmap().placeholder(R.drawable.ic_logo)
@@ -169,8 +167,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
 
-    public void setData() {
-        for (int i = 0; i < 10; i++) {
+    public void setData()
+    {
+        for (int i = 0; i < 10; i++)
+        {
             chantsArrayList.add(new Chants("The Gayathri Mantra", " Oṃ bhūr bhuvaḥ svaḥ tát savitúr váreṇyaṃ bhárgo devásya dhīmahi dhíyo yó naḥ pracodáyāt"));
         }
     }
