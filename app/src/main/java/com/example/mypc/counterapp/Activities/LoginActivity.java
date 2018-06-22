@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -37,25 +38,32 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,ConnectionReceiver.ConnectionReceiverListener {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, ConnectionReceiver.ConnectionReceiverListener {
 
     ButtonBold fbLogin, googleLogin;
     private static final int RC_SIGN_IN = 234;
     SharedPreferences.Editor editor;
     SessionsManager sessionsManager;
-
+    //Tag for the logs optional
+    MaterialDialog mProgress;
     public static final String MY_PREFS_NAME = "login";
-
+    public boolean isConnected;
     int PRIVATE_MODE = 0;
     //creating a GoogleSignInClient object
     GoogleSignInClient mGoogleSignInClient;
@@ -75,7 +83,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setContentView(R.layout.activity_login);
         init();
         checkConnection();
-               sessionsManager = new SessionsManager(getApplicationContext());
+        //  mProgressDialog = new MaterialDialog(this);
+        sessionsManager = new SessionsManager(getApplicationContext());
         editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 
         if (sessionsManager.isLoggedIn()) {
@@ -97,7 +106,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View v) {
 
-                signIn();
+                if (isConnected) {
+
+                    signIn();
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Check network", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
 
             }
         });
@@ -106,14 +122,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         fbLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isConn()) {
-
+                if (isConnected) {
+                    // mProgress.show();
+                    displayProgressDialog();
                     if (v == fbLogin) {
                         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email"));
                         LoginManager.getInstance().registerCallback(callbackManager, callback);
                     }
                 } else {
-
+                    hideProgressDialog();
+                    //  mProgress.dismiss();
                     Toast.makeText(LoginActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
                     // new AlertShowingDialog(LoginActivity.this, "No Internet connection");
                 }
@@ -122,40 +140,85 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+        if (opr.isDone()) {
+            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+            // and the GoogleSignInResult will be available instantly.
+            Log.d("notify", "Got cached sign-in");
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result);
+        } else {
+            // If the user has not previously signed in on this device or the sign-in has expired,
+            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+            // single sign-on will occur in this branch.
+            // showProgressDialog();
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(GoogleSignInResult googleSignInResult) {
+                    hideProgressDialog();
+                    handleSignInResult(googleSignInResult);
+                }
+            });
+        }
+
+    }
+
+
+    private void hideProgressDialog() {
+
+        if (mProgress != null && mProgress.isShowing()) {
+            mProgress.dismiss();
+        }
+
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
+            GoogleSignInAccount account = result.getSignInAccount();
+
+            Log.e("displaying", "display name: " + account.getDisplayName());
+
+           /* String personName = acct.getDisplayName();
+            String personPhotoUrl = acct.getPhotoUrl().toString();
+            String email = acct.getEmail();
+*/
+            sessionsManager.setLogin(true);
+            editor.putString("name", account.getDisplayName());
+            editor.putString("photo", String.valueOf(account.getPhotoUrl()));
+            editor.commit();
+
+            Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
+            startActivity(intent);
+            finish();
+
+
+        } else {
+            hideProgressDialog();
+        }
+
+
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
         //if the requestCode is the Google Sign In code that we defined at starting
         if (requestCode == RC_SIGN_IN) {
-
-            //Getting the GoogleSignIn Task
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                //Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                Toast.makeText(this, "hello" + account.getDisplayName() + account.getPhotoUrl(), Toast.LENGTH_SHORT).show();
-
-                sessionsManager.setLogin(true);
-                editor.putString("name", account.getDisplayName());
-                editor.putString("photo", String.valueOf(account.getPhotoUrl()));
-                editor.commit();
-
-                Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
-                startActivity(intent);
-                finish();
-            } catch (ApiException e) {
-                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
 
         }
 
     }
 
     private void signIn() {
+
+        displayProgressDialog();
         //getting the google signin intent
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-
         //starting the activity for result
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -166,11 +229,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
 
-       /* mProgress = new ProgressDialog(LoginActivity.this);
-        mProgress.setMessage("Loading...");
-        mProgress.setProgress(Color.BLACK);
-        mProgress.setCancelable(true);
-        mProgress.setCanceledOnTouchOutside(false);*/
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
@@ -236,15 +294,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     //sharedPreferencesEditor.commit();
 
                                     LoginManager.getInstance().logOut();
+                                    hideProgressDialog();
 
-
+                                    //                                mProgress.dismiss();
                                     startActivity(new Intent(getApplicationContext(), ReligionActivity.class));
 
                                     finish();
                                 } else {
                                     Log.e("emailnull", "call");
                                     LoginManager.getInstance().logOut();
-                                   // mProgress.dismiss();
+                                    hideProgressDialog();
 
                                 }
                             } catch (JSONException e) {
@@ -262,16 +321,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         @Override
         public void onCancel() {
-           // mProgress.dismiss();
-
-
+            hideProgressDialog();
             Log.e("FBStatus", "OnCancel Called");
         }
 
         @Override
         public void onError(FacebookException e) {
             Log.e("FBStatus", "OnCancel Called" + e);
-          //  mProgress.dismiss();
+            mProgress.dismiss();
 
         }
     };
@@ -310,8 +367,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //Click on google button
     View.OnClickListener ClickOnGoogle = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
+        public void onClick(View view) {
             Log.e("login", "Login with google");
             startActivity(new Intent(LoginActivity.this, ReligionActivity.class));
         }
@@ -324,57 +380,40 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onBackPressed() {
-      /*  finish();
-        super.onBackPressed();
-   */
         moveTaskToBack(true);
     }
 
+    public void displayProgressDialog() {
+        mProgress = new MaterialDialog.Builder(LoginActivity.this).content("Loading").canceledOnTouchOutside(false).progress(true, 0).show();
 
-    ////////Call back for checking the internet connection
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected)
-    {
-        if(!isConnected)
-        {
-            Snackbar.make(findViewById(R.id.relative_login),"check internet Connection",Snackbar.LENGTH_INDEFINITE).show();
-        }
-
-        else
-        {
-            Snackbar.make(findViewById(R.id.relative_login)," internet Connection on",Snackbar.LENGTH_INDEFINITE).show();
-            Log.e("network status"," On");
-        }
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
-
-        // register connection status listener
         TestApplication.getInstance().setConnectionListener(this);
+        super.onResume();
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean connect) {
+        isConnected = connect;
 
-   /////
-    private void checkConnection()
-    {
-        boolean isConnected = ConnectionReceiver.isConnected();
-        if(!isConnected)
-        {
-            //show a No Internet Alert or Dialog
-            Log.e("oncreate network status"," off");
-            Snackbar.make(findViewById(R.id.relative_login)," check internet Connection",Snackbar.LENGTH_INDEFINITE).show();
-        }
-        else
-        {
-            Log.e("oncreate network status"," on");
-            Snackbar.make(findViewById(R.id.relative_login)," internet Connection on",Snackbar.LENGTH_INDEFINITE).show();
-
+        if (!isConnected) {
+            Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
+            //  Snackbar.make(findViewById(R.id.relative_login), "check internet Connection", Snackbar.LENGTH_SHORT).show();
+        } else {
+            // Snackbar.make(findViewById(R.id.relative_login), " internet Connection on", Snackbar.LENGTH_INDEFINITE).show();
+            //  Log.e("network status", " On");
         }
     }
 
-
-
-
+    private void checkConnection() {
+        isConnected = ConnectionReceiver.isConnected();
+        if (!isConnected) {
+            Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
+            Log.e("oncreate network status", " off");
+        } else {
+            Log.e("oncreate network status", " on");
+        }
+    }
 }
