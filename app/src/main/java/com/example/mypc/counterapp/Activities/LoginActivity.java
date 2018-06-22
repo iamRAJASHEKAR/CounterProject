@@ -7,13 +7,17 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.mypc.counterapp.Fonts.ButtonBold;
+import com.example.mypc.counterapp.Network.ConnectionReceiver;
+import com.example.mypc.counterapp.Network.TestApplication;
 import com.example.mypc.counterapp.R;
 import com.example.mypc.counterapp.sessions.SessionsManager;
 import com.facebook.AccessToken;
@@ -36,25 +40,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,ConnectionReceiver.ConnectionReceiverListener {
 
     ButtonBold fbLogin, googleLogin;
     private static final int RC_SIGN_IN = 234;
     SharedPreferences.Editor editor;
     SessionsManager sessionsManager;
-    //Tag for the logs optional
-    ProgressDialog mProgress;
+
     public static final String MY_PREFS_NAME = "login";
 
     int PRIVATE_MODE = 0;
@@ -74,10 +73,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
         init();
-        sessionsManager = new SessionsManager(getApplicationContext());
+        checkConnection();
+               sessionsManager = new SessionsManager(getApplicationContext());
         editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 
         if (sessionsManager.isLoggedIn()) {
@@ -109,13 +107,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View v) {
                 if (isConn()) {
-                    // mProgress.show();
+
                     if (v == fbLogin) {
                         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email"));
                         LoginManager.getInstance().registerCallback(callbackManager, callback);
                     }
                 } else {
-                    //  mProgress.dismiss();
+
                     Toast.makeText(LoginActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
                     // new AlertShowingDialog(LoginActivity.this, "No Internet connection");
                 }
@@ -168,11 +166,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
 
-        mProgress = new ProgressDialog(LoginActivity.this);
+       /* mProgress = new ProgressDialog(LoginActivity.this);
         mProgress.setMessage("Loading...");
         mProgress.setProgress(Color.BLACK);
         mProgress.setCancelable(true);
-        mProgress.setCanceledOnTouchOutside(false);
+        mProgress.setCanceledOnTouchOutside(false);*/
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
@@ -239,14 +237,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                                     LoginManager.getInstance().logOut();
 
-                                    mProgress.dismiss();
+
                                     startActivity(new Intent(getApplicationContext(), ReligionActivity.class));
 
                                     finish();
                                 } else {
                                     Log.e("emailnull", "call");
                                     LoginManager.getInstance().logOut();
-                                    mProgress.dismiss();
+                                   // mProgress.dismiss();
 
                                 }
                             } catch (JSONException e) {
@@ -264,7 +262,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         @Override
         public void onCancel() {
-            mProgress.dismiss();
+           // mProgress.dismiss();
+
 
             Log.e("FBStatus", "OnCancel Called");
         }
@@ -272,7 +271,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         @Override
         public void onError(FacebookException e) {
             Log.e("FBStatus", "OnCancel Called" + e);
-            mProgress.dismiss();
+          //  mProgress.dismiss();
 
         }
     };
@@ -330,4 +329,52 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
    */
         moveTaskToBack(true);
     }
+
+
+    ////////Call back for checking the internet connection
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected)
+    {
+        if(!isConnected)
+        {
+            Snackbar.make(findViewById(R.id.relative_login),"check internet Connection",Snackbar.LENGTH_INDEFINITE).show();
+        }
+
+        else
+        {
+            Snackbar.make(findViewById(R.id.relative_login)," internet Connection on",Snackbar.LENGTH_INDEFINITE).show();
+            Log.e("network status"," On");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // register connection status listener
+        TestApplication.getInstance().setConnectionListener(this);
+    }
+
+
+   /////
+    private void checkConnection()
+    {
+        boolean isConnected = ConnectionReceiver.isConnected();
+        if(!isConnected)
+        {
+            //show a No Internet Alert or Dialog
+            Log.e("oncreate network status"," off");
+            Snackbar.make(findViewById(R.id.relative_login)," check internet Connection",Snackbar.LENGTH_INDEFINITE).show();
+        }
+        else
+        {
+            Log.e("oncreate network status"," on");
+            Snackbar.make(findViewById(R.id.relative_login)," internet Connection on",Snackbar.LENGTH_INDEFINITE).show();
+
+        }
+    }
+
+
+
+
 }
