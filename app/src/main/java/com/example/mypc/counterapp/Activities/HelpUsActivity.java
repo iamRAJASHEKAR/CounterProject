@@ -6,18 +6,33 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.EditTextRegular;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
+import com.example.mypc.counterapp.Network.ConnectionReceiver;
+import com.example.mypc.counterapp.Network.TestApplication;
 import com.example.mypc.counterapp.R;
+import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
+import com.example.mypc.counterapp.ServerObject.CounterServerObject;
 
-public class HelpUsActivity extends AppCompatActivity {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class HelpUsActivity extends AppCompatActivity implements ConnectionReceiver.ConnectionReceiverListener{
 
     Toolbar toolbar;
     ImageView toolbaricon;
@@ -26,6 +41,7 @@ public class HelpUsActivity extends AppCompatActivity {
     ButtonBold btnSend;
     String name, email, phoneno, helpmsg;
     ScrollView scrollView;
+    public boolean isConnected;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,16 +93,19 @@ public class HelpUsActivity extends AppCompatActivity {
         }
     };
 
-    View.OnClickListener BtnSendClick = new View.OnClickListener() {
+    View.OnClickListener BtnSendClick = new View.OnClickListener()
+    {
         @Override
-        public void onClick(View view) {
+        public void onClick(View view)
+        {
             validate();
         }
     };
 
 
     /////////editText Validations
-    public void validate() {
+    public void validate()
+    {
         name = editName.getText().toString();
         email = editEmail.getText().toString();
         phoneno = editPhone.getText().toString();
@@ -108,5 +127,83 @@ public class HelpUsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean connect)
+    {
+        isConnected = connect;
+
+        if (!isConnected)
+        {
+            Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this, " Connected to internet ", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    private void checkConnection()
+    {
+        isConnected = ConnectionReceiver.isConnected();
+        if (!isConnected) {
+            Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
+            Log.e("oncreate network status", " off");
+        } else {
+            Log.e("oncreate network status", " on");
+        }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        TestApplication.getInstance().setConnectionListener(this);
+        super.onResume();
+    }
+
+
+    ///////HelpUs server implementation
+
+    public void sendHelpMessage()
+    {
+
+        JSONObject helpObj = new JSONObject();
+        try
+        {
+            helpObj.put("name",name);
+            helpObj.put("email",email);
+            helpObj.put("phone",phoneno);
+            helpObj.put("message",helpmsg);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.e("helpObj"," "+helpObj);
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).
+                            addConverterFactory(GsonConverterFactory.create()).build();
+        ServerApiInterface api = retrofit.create(ServerApiInterface.class);
+        Call<CounterServerObject>  helpus = api.helpUs(helpObj);
+        helpus.enqueue(new Callback<CounterServerObject>() {
+            @Override
+            public void onResponse(Call<CounterServerObject> call, Response<CounterServerObject> response)
+            {
+                if(response.body()!=null)
+                {
+                    Log.e("helpstatusCode"," "+response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CounterServerObject> call, Throwable t)
+            {
+                Log.e("helpFailure","Failed");
+
+            }
+        });
     }
 }
