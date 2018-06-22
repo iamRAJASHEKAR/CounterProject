@@ -113,6 +113,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Toast toast = Toast.makeText(getApplicationContext(), "Check network", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
+                    //
                 }
 
             }

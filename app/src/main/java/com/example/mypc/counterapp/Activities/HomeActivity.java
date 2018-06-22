@@ -200,7 +200,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                             @Override
                             public void onResult(Status status) {
                                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                                if (sessionsManager.isLoggedIn()) {
+                                if (sessionsManager.isLoggedIn())
+                                {
                                     sessionsManager.setLogin(false);
                                     finish();
                                 }
