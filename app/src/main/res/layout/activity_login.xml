@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/relative_login"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_bg"
     tools:context=".Activities.LoginActivity">
 
 
-
-   <ImageView
-       android:layout_width="150dp"
-       android:id="@+id/image_logo"
-       android:background="@drawable/ic_logo"
-       android:layout_centerHorizontal="true"
-       android:layout_marginTop="60dp"
-       android:layout_height="170dp" />
+    <ImageView
+        android:id="@+id/image_logo"
+        android:layout_width="150dp"
+        android:layout_height="170dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/ic_logo" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/rl_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/image_logo"
-        android:layout_marginTop="60dp"
-        android:layout_height="wrap_content">
-         <com.example.mypc.counterapp.Fonts.ButtonBold
+        android:layout_marginTop="60dp">
+
+        <com.example.mypc.counterapp.Fonts.ButtonBold
+            android:id="@+id/btn_fb"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:background="@drawable/ic_facebook"
+            android:textSize="15sp" />
+        <!-- <com.example.mypc.counterapp.Fonts.ButtonBold
              android:layout_width="match_parent"
              android:id="@+id/btn_fb"
              android:layout_marginLeft="35dp"
@@ -31,29 +39,16 @@
              android:textSize="15sp"
              android:background="@drawable/ic_facebook"
              android:layout_height="45dp" />
-       <!-- <com.example.mypc.counterapp.Fonts.ButtonBold
-            android:layout_width="match_parent"
-            android:id="@+id/btn_fb"
-            android:layout_marginLeft="35dp"
-            android:layout_marginRight="35dp"
-            android:textSize="15sp"
-            android:background="@drawable/ic_facebook"
-            android:layout_height="45dp" />
--->
+ -->
         <com.example.mypc.counterapp.Fonts.ButtonBold
+            android:id="@+id/btn_google"
             android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/btn_fb"
             android:layout_marginLeft="35dp"
             android:layout_marginRight="35dp"
             android:layout_marginTop="20dp"
-            android:id="@+id/btn_google"
-            android:textSize="15sp"
             android:background="@drawable/ic_google"
-            android:layout_below="@+id/btn_fb"
-            android:layout_height="45dp" />
-
-
+            android:textSize="15sp" />
     </RelativeLayout>
-
-
-
 </RelativeLayout>

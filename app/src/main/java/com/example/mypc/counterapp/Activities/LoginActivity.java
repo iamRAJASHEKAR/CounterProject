@@ -1,11 +1,14 @@
 package com.example.mypc.counterapp.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +22,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Network.ConnectionReceiver;
 import com.example.mypc.counterapp.Network.TestApplication;
+import com.example.mypc.counterapp.PushNotification.Constants;
 import com.example.mypc.counterapp.R;
+import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
+import com.example.mypc.counterapp.ServerObject.UserLoginObjects;
 import com.example.mypc.counterapp.sessions.SessionsManager;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -54,14 +60,23 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, ConnectionReceiver.ConnectionReceiverListener {
+
+    String user_email, user_name;
 
     ButtonBold fbLogin, googleLogin;
     private static final int RC_SIGN_IN = 234;
     SharedPreferences.Editor editor;
+    public int status_code;
     SessionsManager sessionsManager;
     //Tag for the logs optional
-    MaterialDialog mProgress;
+    MaterialDialog mProgress, progress_login;
     public static final String MY_PREFS_NAME = "login";
     public boolean isConnected;
     int PRIVATE_MODE = 0;
@@ -82,13 +97,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         init();
+        //login("raju@gmail.com", "Mr.android");
         checkConnection();
         //  mProgressDialog = new MaterialDialog(this);
         sessionsManager = new SessionsManager(getApplicationContext());
         editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 
         if (sessionsManager.isLoggedIn()) {
-            Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent);
             finish();
         }
@@ -105,15 +121,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         googleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (isConnected) {
-
                     signIn();
                 } else {
                     Toast toast = Toast.makeText(getApplicationContext(), "Check network", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
-                    //
                 }
 
             }
@@ -125,7 +138,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onClick(View v) {
                 if (isConnected) {
                     // mProgress.show();
-                    displayProgressDialog();
+                    displayProgressDialog("Loading");
                     if (v == fbLogin) {
                         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email"));
                         LoginManager.getInstance().registerCallback(callbackManager, callback);
@@ -135,9 +148,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     //  mProgress.dismiss();
                     Toast.makeText(LoginActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
                     // new AlertShowingDialog(LoginActivity.this, "No Internet connection");
+
                 }
             }
         });
+
     }
 
     @Override
@@ -175,30 +190,40 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
+    private void hide_login_ProgressDialog() {
+
+        if (progress_login != null && progress_login.isShowing()) {
+
+            progress_login.dismiss();
+        }
+
+    }
+
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
 
             Log.e("displaying", "display name: " + account.getDisplayName());
 
-           /* String personName = acct.getDisplayName();
-            String personPhotoUrl = acct.getPhotoUrl().toString();
-            String email = acct.getEmail();
-*/
+            String personName = account.getDisplayName();
+            String email = account.getEmail();
+            user_email = email;
+            user_name = personName;
+            //  login(user_email, user_name);
             sessionsManager.setLogin(true);
             editor.putString("name", account.getDisplayName());
+            editor.putString("email", String.valueOf(account.getEmail()));
             editor.putString("photo", String.valueOf(account.getPhotoUrl()));
             editor.commit();
-
+            storeLogin(2);/*
             Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
             startActivity(intent);
-            finish();
-
-
+            finish();*/
+            login(user_email, user_name);
+            hideProgressDialog();
         } else {
             hideProgressDialog();
         }
-
 
     }
 
@@ -217,7 +242,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void signIn() {
 
-        displayProgressDialog();
+        displayProgressDialog("Loading");
         //getting the google signin intent
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         //starting the activity for result
@@ -239,12 +264,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-
             }
         };
         accessTokenTracker.startTracking();
         profileTracker.startTracking();
-
     }
 
     FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
@@ -257,7 +280,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             String accessToken = loginResult.getAccessToken()
                     .getToken();
             Log.i("accessToken", accessToken);
-
             GraphRequest request = GraphRequest.newMeRequest(
                     loginResult.getAccessToken(),
                     new GraphRequest.GraphJSONObjectCallback() {
@@ -288,8 +310,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                                     sessionsManager.setLogin(true);
                                     editor.putString("name", name);
+                                    editor.putString("email", email);
                                     editor.putString("photo", imageURLString);
                                     editor.commit();
+                                    user_email = email;
+                                    user_name = name;
+                                    // login(user_email, user_name);
 
 
                                     //sharedPreferencesEditor.commit();
@@ -297,15 +323,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     LoginManager.getInstance().logOut();
                                     hideProgressDialog();
 
-                                    //                                mProgress.dismiss();
-                                    startActivity(new Intent(getApplicationContext(), ReligionActivity.class));
+                                    login(user_email, user_name);
 
-                                    finish();
+                                    storeLogin(1);
                                 } else {
                                     Log.e("emailnull", "call");
                                     LoginManager.getInstance().logOut();
                                     hideProgressDialog();
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -317,7 +341,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     "id,name,email,gender, birthday");
             request.setParameters(parameters);
             request.executeAsync();
-
         }
 
         @Override
@@ -330,7 +353,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         public void onError(FacebookException e) {
             Log.e("FBStatus", "OnCancel Called" + e);
             mProgress.dismiss();
-
         }
     };
 
@@ -353,6 +375,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
+    public void display_login_Progress(String msg) {
+        progress_login = new MaterialDialog.Builder(LoginActivity.this).content(msg).canceledOnTouchOutside(false).progress(true, 0).show();
+
+    }
 
     //Click on facebook button
     View.OnClickListener ClickFbLogin = new View.OnClickListener() {
@@ -384,8 +410,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         moveTaskToBack(true);
     }
 
-    public void displayProgressDialog() {
-        mProgress = new MaterialDialog.Builder(LoginActivity.this).content("Loading").canceledOnTouchOutside(false).progress(true, 0).show();
+    public void displayProgressDialog(String msg) {
+        mProgress = new MaterialDialog.Builder(LoginActivity.this).content(msg).canceledOnTouchOutside(false).progress(true, 0).show();
 
     }
 
@@ -398,7 +424,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onNetworkConnectionChanged(boolean connect) {
         isConnected = connect;
-
         if (!isConnected) {
             Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
             //  Snackbar.make(findViewById(R.id.relative_login), "check internet Connection", Snackbar.LENGTH_SHORT).show();
@@ -416,5 +441,101 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         } else {
             Log.e("oncreate network status", " on");
         }
+    }
+
+    public void login(String email, String name) {
+        display_login_Progress("Registering...");
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(Constants.SHARED_PREF, 0);
+        String token = prefs.getString("regId", "No name defined");
+        @SuppressLint("HardwareIds") String device_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        UserLoginObjects userLogin = new UserLoginObjects();
+        userLogin.email = email;
+        userLogin.name = name;
+        userLogin.device_id = device_id;
+        userLogin.device_token = token;
+
+        Log.e("tokengenbe", email + "\n" + name + "\n" + device_id + "\n" + token);
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        ServerApiInterface api = retrofit.create(ServerApiInterface.class);
+        Call<UserLoginObjects> login_user = api.login_user(userLogin);
+        login_user.enqueue(new Callback<UserLoginObjects>() {
+            @Override
+            public void onResponse(Call<UserLoginObjects> call, Response<UserLoginObjects> response) {
+
+                hide_login_ProgressDialog();
+                if (response.body() != null) {
+                    status_code = Integer.parseInt(response.body().getResponse());
+                    Log.e("lloginuser", " " + status_code);
+                    if (status_code == 3) {
+                        Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserLoginObjects> call, Throwable t) {
+                Log.e("fhfabhfbd", t.getMessage());
+
+                hide_login_ProgressDialog();
+
+                Toast.makeText(LoginActivity.this, "Failed to register try again", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+    }
+
+    private void storeLogin(int token) {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("logindata", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("loginstack", token);
+        editor.commit();
+
+    }
+
+
+    public class Login_user extends AsyncTask<Void, Void, Void> {
+        String email, name;
+
+        public Login_user(final String email, final String name) {
+            this.email = email;
+            this.name = name;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            display_login_Progress("Registering...");
+            //    displayProgressDialog("Registering please wait ");
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+//            login(email, name);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            hide_login_ProgressDialog();
+            action();
+            super.onPostExecute(aVoid);
+        }
+    }
+
+    public void action() {
+        Log.e("slowversion", " " + status_code);
+
     }
 }

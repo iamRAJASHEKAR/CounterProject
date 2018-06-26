@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "765958273256",
-    "firebase_url": "https://counter-207709.firebaseio.com",
-    "project_id": "counter-207709",
-    "storage_bucket": "counter-207709.appspot.com"
+    "project_number": "793696269873",
+    "firebase_url": "https://counterapp-e0552.firebaseio.com",
+    "project_id": "counterapp-e0552",
+    "storage_bucket": "counterapp-e0552.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:765958273256:android:e5427ca9899e1291",
+        "mobilesdk_app_id": "1:793696269873:android:e5427ca9899e1291",
         "android_client_info": {
           "package_name": "com.example.mypc.counterapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "765958273256-e7s3l9pfbvr6ehradgfs03n7fgnbmdme.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "793696269873-o9e878rcboj6ncu3c3phrvj6lulm10u0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mypc.counterapp",
+            "certificate_hash": "64b01060af95169e0bfb4923853f6c0aeced17f1"
+          }
         },
         {
-          "client_id": "765958273256-8rv01f3qsu6ftiai0h4dtiub8brvorlo.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "765958273256-8rv01f3qsu6ftiai0h4dtiub8brvorlo.apps.googleusercontent.com",
+          "client_id": "793696269873-r19oc007stlqkfrhvb728ak96pde76gb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBDZKBbHkNZ8QHRV4XdV6bWPK8ZO4Khg90"
+          "current_key": "AIzaSyBLmCimdrrHzBKuQXaYx7IAc2MrL-O_SqE"
         }
       ],
       "services": {
@@ -40,8 +40,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "765958273256-e7s3l9pfbvr6ehradgfs03n7fgnbmdme.apps.googleusercontent.com",
+              "client_id": "793696269873-r19oc007stlqkfrhvb728ak96pde76gb.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "793696269873-glimv28130no62ictle4qm54tjo057cr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.krishna.counterapp"
+              }
             }
           ]
         },
