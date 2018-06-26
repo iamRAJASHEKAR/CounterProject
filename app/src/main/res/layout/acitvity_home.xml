@@ -28,17 +28,15 @@
             android:layout_height="wrap_content">
         </android.support.v7.widget.RecyclerView>
 
-     <com.github.clans.fab.FloatingActionButton
-         android:layout_width="10dp"
+     <ImageButton
+         android:layout_width="70dp"
          android:id="@+id/fab"
-         app:fab_size="normal"
          android:layout_gravity="bottom|right"
-         android:layout_marginBottom="10dp"
-         android:layout_marginRight="20dp"
-         android:src="@drawable/ic_add_fab"
-         android:layout_height="10dp"/>
+         android:layout_marginBottom="20dp"
+         android:layout_marginRight="22dp"
+         android:background="@drawable/ic_add_fab"
 
-
+         android:layout_height="70dp"/>
 
     </FrameLayout>
 
@@ -50,6 +48,7 @@
         android:background="@android:color/white"
         app:headerLayout="@layout/activity_navigation_header"
         app:menu="@menu/navigation_list"
+        app:itemTextAppearance="@style/NavigationText"
         android:layout_height="match_parent">
 
     </android.support.design.widget.NavigationView>

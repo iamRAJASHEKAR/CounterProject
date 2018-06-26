@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -62,7 +64,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     CircleImageView imageView_profile;
     ArrayList<Chants> chantsArrayList;
     HomeAdapter homeAdapter;
-    com.github.clans.fab.FloatingActionButton floatingActionButton;
+   ImageButton floatingActionButton;
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
     GoogleApiClient googleApiClient;
@@ -103,6 +105,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                         break;
                     case R.id.share:
                         Log.e("share", "share");
+                        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Counter Application");
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Counter application used for counting the chants");
+                        startActivity(Intent.createChooser(sharingIntent, "Share using"));
                         break;
 
                     case R.id.help:
@@ -196,16 +203,19 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 Log.e("call", "dialog yes");
 
                 Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
+                        new ResultCallback<Status>()
+                        {
                             @Override
-                            public void onResult(Status status) {
+                            public void onResult(Status status)
+                            {
                                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                                 if (sessionsManager.isLoggedIn())
                                 {
                                     sessionsManager.setLogin(false);
                                     finish();
                                 }
-                                //      Toast.makeText(HomeActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
+
+
 
                             }
                         });
@@ -252,6 +262,31 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
             holder.chantTitle.setText(chantsArrayList.get(position).getChantTitle());
             holder.chantText.setText(chantsArrayList.get(position).getChantText());
 
+            holder.textVisibility.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view)
+                {
+                      startActivity(new Intent(getApplicationContext(),ChantJoin.class));
+                }
+            });
+
+            holder.textCreated.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view)
+                {
+
+                }
+            });
+
+            holder.chantText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view)
+                {
+                    startActivity(new Intent(getApplicationContext(), ChantsActivity.class));
+
+                }
+            });
+
         }
 
         @Override
@@ -263,20 +298,26 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
 
             TextViewBold chantTitle;
             TextViewRegular chantText;
+            TextViewRegular textVisibility,textCreated;
+            ImageView rightarrow;
 
             public ViewHolder(View itemView, Context applicationContext) {
                 super(itemView);
 
                 chantTitle = itemView.findViewById(R.id.chant_title);
                 chantText = itemView.findViewById(R.id.chant_text);
+                textVisibility = itemView.findViewById(R.id.text_visiible);
+                textCreated = itemView.findViewById(R.id.text_created);
+                rightarrow = itemView.findViewById(R.id.right_arrow);
 
-                itemView.setOnClickListener(new View.OnClickListener() {
+
+               /* itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Log.e("pos", " " + getLayoutPosition());
                         startActivity(new Intent(getApplicationContext(), ChantsActivity.class));
                     }
-                });
+                });*/
 
             }
 
@@ -293,10 +334,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         } else {
             super.onBackPressed();
         }
-/*
-        Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
-        startActivity(intent);*/
-        //      finish();
+
 
     }
 }

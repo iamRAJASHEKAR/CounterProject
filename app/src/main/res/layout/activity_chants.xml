@@ -8,6 +8,9 @@
 
     <include layout="@layout/activity_toolbar" />
 
+
+
+
     <android.support.v7.widget.CardView
 
         android:id="@+id/relate_mantra"
@@ -70,6 +73,7 @@
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
+
 
     <RelativeLayout
         android:id="@+id/relate_radio"
@@ -166,26 +170,47 @@
             android:id="@+id/recycler_people_joined"
             android:layout_width="match_parent"
             android:visibility="invisible"
-            android:layout_height="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
             android:layout_below="@+id/liner_name">
 
         </android.support.v7.widget.RecyclerView>
 
+        <!--<com.example.mypc.counterapp.Fonts.ButtonBold
+            android:id="@+id/count_public"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/orange_button"
+            android:text="Start Counting"
+            android:textSize="15sp"
+            android:layout_marginBottom="20dp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:visibility="visible" />-->
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/rl_count_public"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
         <com.example.mypc.counterapp.Fonts.ButtonBold
             android:id="@+id/count_public"
             android:layout_width="200dp"
             android:layout_height="40dp"
-            android:layout_below="@+id/recycler_people_joined"
             android:layout_centerHorizontal="true"
             android:background="@drawable/orange_button"
             android:text="Start Counting"
-            android:textSize="18sp"
-            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:layout_marginBottom="8dp"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:visibility="visible" />
 
     </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/relative_appbar"
@@ -217,6 +242,5 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </RelativeLayout>
-
 
 </RelativeLayout>

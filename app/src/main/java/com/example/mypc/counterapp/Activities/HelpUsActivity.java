@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.EditTextRegular;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
@@ -22,6 +23,7 @@ import com.example.mypc.counterapp.Network.TestApplication;
 import com.example.mypc.counterapp.R;
 import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
 import com.example.mypc.counterapp.ServerObject.CounterServerObject;
+import com.example.mypc.counterapp.ServerObject.HelpusServerObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,16 +44,20 @@ public class HelpUsActivity extends AppCompatActivity implements ConnectionRecei
     String name, email, phoneno, helpmsg;
     ScrollView scrollView;
     public boolean isConnected;
+    MaterialDialog mProgress;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_helpus);
+        checkConnection();
         init();
 
     }
 
-    public void init() {
+    public void init()
+    {
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         toolbaricon = findViewById(R.id.toolabar_icon);
@@ -98,7 +104,15 @@ public class HelpUsActivity extends AppCompatActivity implements ConnectionRecei
         @Override
         public void onClick(View view)
         {
-            validate();
+           if(isConnected)
+           {
+              validate();
+           }
+           else
+           {
+               Toast.makeText(HelpUsActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
+
+           }
         }
     };
 
@@ -111,7 +125,8 @@ public class HelpUsActivity extends AppCompatActivity implements ConnectionRecei
         phoneno = editPhone.getText().toString();
         helpmsg = editHelpMsg.getText().toString();
 
-        if (name.isEmpty()) {
+        if (name.isEmpty())
+        {
             editName.setError("Name Can'not be empty");
         } else if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editEmail.setError("Enter Valid Email");
@@ -120,6 +135,12 @@ public class HelpUsActivity extends AppCompatActivity implements ConnectionRecei
         } else if (helpmsg.isEmpty()) {
             editHelpMsg.setError("Enter the message");
         }
+        else
+        {
+            sendHelpMessage();
+        }
+
+
 
     }
 
@@ -163,47 +184,78 @@ public class HelpUsActivity extends AppCompatActivity implements ConnectionRecei
         super.onResume();
     }
 
+    public void displayProgressDialog()
+    {
+        mProgress = new MaterialDialog.Builder(HelpUsActivity.this).content("Loading").canceledOnTouchOutside(false).progress(true, 0).show();
+
+    }
+
+    private void hideProgressDialog()
+    {
+
+        if (mProgress != null && mProgress.isShowing()) {
+            mProgress.dismiss();
+        }
+
+    }
+
 
     ///////HelpUs server implementation
 
     public void sendHelpMessage()
     {
-
-        JSONObject helpObj = new JSONObject();
-        try
-        {
-            helpObj.put("name",name);
-            helpObj.put("email",email);
-            helpObj.put("phone",phoneno);
-            helpObj.put("message",helpmsg);
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Log.e("helpObj"," "+helpObj);
+        displayProgressDialog();
+        HelpusServerObject helpObj = new HelpusServerObject();
+        helpObj.name = name.trim();
+        helpObj.email = email.trim();
+        helpObj.phone = phoneno.trim();
+        helpObj.message = helpmsg.trim();
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).
                             addConverterFactory(GsonConverterFactory.create()).build();
         ServerApiInterface api = retrofit.create(ServerApiInterface.class);
-        Call<CounterServerObject>  helpus = api.helpUs(helpObj);
-        helpus.enqueue(new Callback<CounterServerObject>() {
+        Call<HelpusServerObject>  helpus = api.helpUs(helpObj);
+        helpus.enqueue(new Callback<HelpusServerObject>() {
             @Override
-            public void onResponse(Call<CounterServerObject> call, Response<CounterServerObject> response)
+            public void onResponse(Call<HelpusServerObject> call, Response<HelpusServerObject> response)
             {
                 if(response.body()!=null)
                 {
-                    Log.e("helpstatusCode"," "+response.body().getResponse());
+
+                    Log.e("helpstatusCode"," "+response.body().response+" "+response.body().message);
+                    String statuscode = response.body().response;
+                    if(statuscode.equals("3"))
+                    {
+                        startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+                    }
+                    hideProgressDialog();
+
                 }
             }
 
             @Override
-            public void onFailure(Call<CounterServerObject> call, Throwable t)
+            public void onFailure(Call<HelpusServerObject> call, Throwable t)
             {
+
                 Log.e("helpFailure","Failed");
+                hideProgressDialog();
+
 
             }
         });
+    }
+
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        hideProgressDialog();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        hideProgressDialog();
     }
 }

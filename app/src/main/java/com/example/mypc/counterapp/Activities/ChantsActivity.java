@@ -35,19 +35,21 @@ import com.example.mypc.counterapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChantsActivity extends AppCompatActivity {
+public class ChantsActivity extends AppCompatActivity
+{
     private TabLayout tabLayout;
     private ViewPager viewPager;
     RadioGroup radioGroup;
     RecyclerView recyclerView_peoples;
     RadioButton radioButton_friends, radioButton_public;
-    RelativeLayout relativeLayout_tab, relativeLayout_public,relative_peopled_Joined,relativeName;
+    RelativeLayout relativeLayout_tab, relativeLayout_public,relative_peopled_Joined,relativeName,relative_count_public;
     ButtonBold button;
     Toolbar toolbar;
     Friends_Holder holder;
     ArrayList<ChantsModel> people_joined;
     TextViewBold toolbar_text;
     ImageView toolbar_icon;
+    ImageView editImage,deleteImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -79,7 +81,10 @@ public class ChantsActivity extends AppCompatActivity {
         relativeLayout_tab = findViewById(R.id.relative_appbar);
         relativeLayout_public = findViewById(R.id.relative_public);
         relative_peopled_Joined = findViewById(R.id.realtive_people_joined);
+        relative_count_public = findViewById(R.id.rl_count_public);
         relativeName = findViewById(R.id.liner_name);
+        editImage = findViewById(R.id.image_edit);
+        deleteImage = findViewById(R.id.image_delete);
 
         button = findViewById(R.id.count_public);
         button.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +106,7 @@ public class ChantsActivity extends AppCompatActivity {
 
                     relativeLayout_tab.setVisibility(View.VISIBLE);
                     relativeLayout_public.setVisibility(View.GONE);
+                    relative_count_public.setVisibility(View.GONE);
 
                     //    Toast.makeText(ChantsActivity.this, "hello", Toast.LENGTH_SHORT).show();
 
@@ -117,6 +123,7 @@ public class ChantsActivity extends AppCompatActivity {
                     recyclerView_peoples.setVisibility(View.VISIBLE);
                     relative_peopled_Joined.setVisibility(View.VISIBLE);
                     relativeName.setVisibility(View.VISIBLE);
+                    relative_count_public.setVisibility(View.VISIBLE);
 
 
 

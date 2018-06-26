@@ -19,7 +19,7 @@
         <item
             android:id="@+id/help"
             android:icon="@drawable/ic_help"
-            android:title="@string/txt_help"
+            android:title="@string/help_text"
             android:checkable="false"/>
 
         <item

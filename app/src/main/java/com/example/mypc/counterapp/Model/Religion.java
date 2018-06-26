@@ -3,26 +3,13 @@ package com.example.mypc.counterapp.Model;
 public class Religion
 {
 
-    private String religionName;
+    private String religion_name;
 
-
-    public Religion(String religionName)
-    {
-        this.religionName = religionName;
+    public String getReligion_name() {
+        return religion_name;
     }
 
-
-
-
-    public String getReligionName()
-    {
-        return religionName;
+    public void setReligion_name(String religion_name) {
+        this.religion_name = religion_name;
     }
-
-    public void setReligionName(String religionName)
-    {
-        this.religionName = religionName;
-    }
-
-
 }

@@ -24,6 +24,7 @@ import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.TextViewRegular;
 import com.example.mypc.counterapp.Model.Religion;
 import com.example.mypc.counterapp.R;
+import com.example.mypc.counterapp.ServerObject.CounterController;
 
 import java.util.ArrayList;
 
@@ -44,7 +45,8 @@ public class ReligionActivity extends AppCompatActivity {
 
     public void init() {
         religionarraylist = new ArrayList<>();
-        setdata();
+        religionarraylist = CounterController.getInstance().religionArrayList;
+        Log.e("religions"," "+religionarraylist.size());
         recyclerViewReligion = findViewById(R.id.recyclerview_religion);
         noReligionFound = findViewById(R.id.btn_no_religion);
         noReligionFound.setOnClickListener(NoReligionFound);
@@ -57,11 +59,11 @@ public class ReligionActivity extends AppCompatActivity {
 
     }
 
-    public void setdata() {
+   /* public void setdata() {
         for (int i = 0; i < religions.length; i++) {
             religionarraylist.add(new Religion(religions[i]));
         }
-    }
+    }*/
 
 
     View.OnClickListener NoReligionFound = new View.OnClickListener() {
@@ -120,7 +122,8 @@ public class ReligionActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ReligionAdapter.ViewHolder holder, int position) {
-            holder.btn_religion.setText(religionarraylist.get(position).getReligionName());
+           Log.e("religionsName"," "+religionarraylist.get(position).getReligion_name());
+            holder.btn_religion.setText(religionarraylist.get(position).getReligion_name());
 
         }
 

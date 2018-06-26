@@ -58,7 +58,7 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@android:color/white"
             android:textAllCaps="false"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:background="@drawable/ovalshape_orange"
             android:text="Start Counting"
             />

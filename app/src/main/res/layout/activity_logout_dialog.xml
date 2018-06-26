@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="250dp"
-    android:layout_height="130dp">
+    android:layout_width="270dp"
+    android:layout_height="150dp">
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
         android:layout_height="wrap_content">
         <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
@@ -31,7 +32,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:orientation="horizontal"
         android:weightSum="2"
         android:layout_height="wrap_content">

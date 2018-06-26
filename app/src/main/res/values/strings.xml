@@ -21,9 +21,9 @@
     <string name="txt_friend">Friends</string>
     <string name="txt_save">Save</string>
     <string name="txt_add_chant">Add Chants</string>
-    <string name="txt_name">Name:</string>
-    <string name="txt_email">Email:</string>
-    <string name="txt_phone">Phone:</string>
+    <string name="txt_name">Name</string>
+    <string name="txt_email">Email</string>
+    <string name="txt_phone">Phone</string>
     <string name="txt_help">How do you want to help us</string>
     <string name="txt_send">Send</string>
     <string name="txt_yes">YES</string>

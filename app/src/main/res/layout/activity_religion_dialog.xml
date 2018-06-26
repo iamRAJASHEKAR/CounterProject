@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="250dp"
-    android:layout_height="130dp">
+    android:layout_width="280dp"
+    android:layout_height="150dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -22,8 +22,10 @@
         <com.example.mypc.counterapp.Fonts.EditTextRegular
             android:layout_width="match_parent"
             android:id="@+id/dialog_text"
-            android:layout_marginLeft="10dp"
+            android:layout_margin="10dp"
             android:padding="10dp"
+            android:maxLines="1"
+            android:maxLength="20"
             android:textColor="@android:color/black"
             android:layout_height="wrap_content" />
     </RelativeLayout>

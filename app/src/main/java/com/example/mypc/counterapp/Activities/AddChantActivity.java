@@ -1,12 +1,14 @@
 package com.example.mypc.counterapp.Activities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,16 +17,28 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mypc.counterapp.Activities.Fragments.ChantsModel;
 import com.example.mypc.counterapp.Fonts.EditTextRegular;
 import com.example.mypc.counterapp.Fonts.TextViewRegular;
+import com.example.mypc.counterapp.Network.ConnectionReceiver;
+import com.example.mypc.counterapp.Network.TestApplication;
 import com.example.mypc.counterapp.R;
+import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
+import com.example.mypc.counterapp.ServerObject.AddChantServerObject;
 
 import java.util.ArrayList;
 
-public class AddChantActivity extends AppCompatActivity
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class AddChantActivity extends AppCompatActivity implements ConnectionReceiver.ConnectionReceiverListener
 {
 
    android.support.v7.widget.Toolbar addChantToolbar;
@@ -37,12 +51,25 @@ public class AddChantActivity extends AppCompatActivity
    RecyclerView addchantRecyclerview;
    AddChantAdapter addChantAdapter;
    ArrayList<ChantsModel> chantsModelArrayList;
+   RelativeLayout nameEmailLayout;
+   String radioButtonText,chantname,chantDescription,createdBy,createdEmail,timestamp;
+    public boolean isConnected;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_chant);
+        checkConnection();
+        SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
+
+        createdBy = prefs.getString("name", "No name defined");
+
+        long unixTime = System.currentTimeMillis() / 1000L;
+        timestamp = String.valueOf(unixTime);
+        Log.e("name timestamp"," "+createdBy+" "+timestamp);
+
         chantsModelArrayList = new ArrayList<>();
         init();
     }
@@ -75,6 +102,8 @@ public class AddChantActivity extends AppCompatActivity
         saveBtn = findViewById(R.id.btn_save);
         saveBtn.setOnClickListener(SaveBtnClick);
 
+        nameEmailLayout = findViewById(R.id.rl_name_email);
+
         setData();
 
         addchantRecyclerview = findViewById(R.id.addchant_recyclerview);
@@ -86,6 +115,7 @@ public class AddChantActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
+               radioButtonText = "Public";
                 if(radioPublic.isChecked())
                 {
                     addchantRecyclerview.setVisibility(View.INVISIBLE);
@@ -99,8 +129,10 @@ public class AddChantActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
+               radioButtonText = "Friend";
                 if(radioFriends.isChecked())
                 addchantRecyclerview.setVisibility(View.VISIBLE);
+                nameEmailLayout.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -112,8 +144,18 @@ public class AddChantActivity extends AppCompatActivity
         @Override
         public void onClick(View view)
         {
-               validations();
-               finish();
+              chantname = editChantname.getText().toString();
+              chantDescription = editchantText.getText().toString();
+              if(isConnected)
+              {
+                 validations();
+              }
+              else
+              {
+                  Toast.makeText(AddChantActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
+
+              }
+
 
         }
     };
@@ -145,6 +187,14 @@ public class AddChantActivity extends AppCompatActivity
         {
             editchantText.setError("Enter the chant");
         }
+
+        else
+        {
+            addChants();
+        }
+
+
+
     }
 
     public void setData()
@@ -155,6 +205,74 @@ public class AddChantActivity extends AppCompatActivity
 
         }
     }
+
+    ///////Adding the chants and send to server
+    public void addChants()
+    {
+       AddChantServerObject addChantObj = new AddChantServerObject();
+       addChantObj.chantName = chantname.trim();
+       addChantObj.chantDescription = chantDescription.trim();
+       addChantObj.createdBy = createdBy.trim();
+       addChantObj.privacy = radioButtonText.trim();
+       addChantObj.timestamp = timestamp.trim();
+       addChantObj.created_email = "vedas@gmail.com".trim();
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
+        ServerApiInterface api = retrofit.create(ServerApiInterface.class);
+        Call<AddChantServerObject> addChants = api.addChants(addChantObj);
+        addChants.enqueue(new Callback<AddChantServerObject>() {
+            @Override
+            public void onResponse(Call<AddChantServerObject> call, Response<AddChantServerObject> response)
+            {
+                   if(response.body()!=null)
+                   {
+                       Log.e("addchantStatuscode"," "+response.body().response);
+                   }
+            }
+
+            @Override
+            public void onFailure(Call<AddChantServerObject> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean connect)
+    {
+        isConnected = connect;
+
+        if (!isConnected)
+        {
+            Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this, " Connected to internet ", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    private void checkConnection()
+    {
+        isConnected = ConnectionReceiver.isConnected();
+        if (!isConnected) {
+            Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
+            Log.e("oncreate network status", " off");
+        } else {
+            Log.e("oncreate network status", " on");
+        }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        TestApplication.getInstance().setConnectionListener(this);
+        super.onResume();
+    }
+
+
 
     class AddChantAdapter extends RecyclerView.Adapter<AddChantAdapter.ViewHolder>
     {

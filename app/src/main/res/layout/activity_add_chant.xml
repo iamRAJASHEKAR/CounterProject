@@ -29,10 +29,12 @@
             android:layout_width="match_parent"
             android:id="@+id/edit_chantName"
             android:layout_marginTop="5dp"
-            android:textColor="@android:color/white"
+            android:maxLines="1"
+            android:maxLength="30"
+            android:textColor="@android:color/black"
             android:layout_below="@+id/text_chantname"
             android:background="@drawable/rectangleshape"
-            android:layout_height="50dp" />
+            android:layout_height="45dp" />
 
     </RelativeLayout>
 
@@ -53,6 +55,8 @@
             android:layout_width="match_parent"
             android:id="@+id/edit_chant"
             android:layout_marginTop="5dp"
+            android:inputType="textMultiLine"
+            android:gravity="top"
             android:layout_below="@+id/text_chant"
             android:background="@drawable/rectangleshape"
             android:layout_height="100dp" />
@@ -98,6 +102,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:id="@+id/rl_name_email"
+            android:visibility="gone"
             android:layout_below="@+id/relative_radio"
             android:background="@color/colorGray"
             android:layout_height="40dp">
