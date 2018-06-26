@@ -26,6 +26,7 @@ import com.example.mypc.counterapp.Network.TestApplication;
 import com.example.mypc.counterapp.PushNotification.Constants;
 import com.example.mypc.counterapp.R;
 import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
+import com.example.mypc.counterapp.ServerObject.CounterController;
 import com.example.mypc.counterapp.ServerObject.UserLoginObjects;
 import com.example.mypc.counterapp.sessions.SessionsManager;
 import com.facebook.AccessToken;
@@ -97,6 +98,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        fetchData();
         init();
         //login("raju@gmail.com", "Mr.android");
         checkConnection();
@@ -531,5 +533,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void action() {
         Log.e("slowversion", " " + status_code);
 
+    }
+
+    ///fetchdata
+    public void fetchData()
+    {
+        CounterController.getInstance().fetchReligions();
     }
 }
