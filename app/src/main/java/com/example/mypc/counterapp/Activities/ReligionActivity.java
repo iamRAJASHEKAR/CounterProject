@@ -29,6 +29,7 @@ import com.example.mypc.counterapp.Model.Religion;
 import com.example.mypc.counterapp.R;
 import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
 import com.example.mypc.counterapp.ServerObject.AddRelegionObject;
+import com.example.mypc.counterapp.ServerObject.CounterController;
 import com.example.mypc.counterapp.ServerObject.CounterServerObject;
 
 import org.json.JSONException;
@@ -67,6 +68,7 @@ public class ReligionActivity extends AppCompatActivity {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewReligion.setLayoutManager(layoutManager);
         //  recyclerViewReligion.setLayoutManager(new LinearLayoutManager(this));
+        religionarraylist = CounterController.getInstance().religionArrayList;
         religionAdapter = new ReligionAdapter();
         recyclerViewReligion.setAdapter(religionAdapter);
 
@@ -217,6 +219,7 @@ public class ReligionActivity extends AppCompatActivity {
                         Toast toast = Toast.makeText(ReligionActivity.this, "Relegion added successfully", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
+                        CounterController.getInstance().fetchReligions();
 
                     } else if (status_code.equals("2")) {
                         Toast toast = Toast.makeText(ReligionActivity.this, "Relegion exist ", Toast.LENGTH_SHORT);
