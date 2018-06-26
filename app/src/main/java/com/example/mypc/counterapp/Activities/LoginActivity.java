@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -70,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     String user_email, user_name;
 
-    ButtonBold fbLogin, googleLogin;
+    ImageButton fbLogin, googleLogin;
     private static final int RC_SIGN_IN = 234;
     SharedPreferences.Editor editor;
     public int status_code;
@@ -187,7 +188,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (mProgress != null && mProgress.isShowing()) {
             mProgress.dismiss();
         }
-
     }
 
     private void hide_login_ProgressDialog() {
@@ -202,23 +202,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
-
             Log.e("displaying", "display name: " + account.getDisplayName());
-
             String personName = account.getDisplayName();
             String email = account.getEmail();
             user_email = email;
             user_name = personName;
             //  login(user_email, user_name);
-            sessionsManager.setLogin(true);
             editor.putString("name", account.getDisplayName());
             editor.putString("email", String.valueOf(account.getEmail()));
             editor.putString("photo", String.valueOf(account.getPhotoUrl()));
             editor.commit();
-            storeLogin(2);/*
-            Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
-            startActivity(intent);
-            finish();*/
+            storeLogin(2);
             login(user_email, user_name);
             hideProgressDialog();
         } else {
@@ -308,7 +302,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     socialmediaLoginEmail = email;
 
 
-                                    sessionsManager.setLogin(true);
                                     editor.putString("name", name);
                                     editor.putString("email", email);
                                     editor.putString("photo", imageURLString);
@@ -472,6 +465,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     status_code = Integer.parseInt(response.body().getResponse());
                     Log.e("lloginuser", " " + status_code);
                     if (status_code == 3) {
+                        sessionsManager.setLogin(true);
                         Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
                         startActivity(intent);
                         finish();
