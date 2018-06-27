@@ -136,10 +136,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
 
         fb_login();
-        fbLogin.setOnClickListener(new View.OnClickListener() {
+        fbLogin.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
-                if (isConnected) {
+                if (isConnected)
+                {
                     // mProgress.show();
                     displayProgressDialog("Loading");
                     if (v == fbLogin) {
@@ -482,7 +484,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 Log.e("fhfabhfbd", t.getMessage());
 
                 hide_login_ProgressDialog();
-
                 Toast.makeText(LoginActivity.this, "Failed to register try again", Toast.LENGTH_SHORT).show();
 
             }

@@ -4,6 +4,7 @@ import com.example.mypc.counterapp.ServerObject.AddChantServerObject;
 import com.example.mypc.counterapp.ServerObject.AddRelegionObject;
 import com.example.mypc.counterapp.ServerObject.CounterServerObject;
 import com.example.mypc.counterapp.ServerObject.HelpusServerObject;
+import com.example.mypc.counterapp.ServerObject.LogoutServerObjects;
 import com.example.mypc.counterapp.ServerObject.UserLoginObjects;
 
 import org.json.JSONObject;
@@ -30,12 +31,15 @@ public interface ServerApiInterface {
     @POST("addchant")
     Call<AddChantServerObject> addChants(@Body AddChantServerObject AddChantObj);
 
-
     @POST("addreligion")
     Call<AddRelegionObject> add_relegion(@Body AddRelegionObject add_relegion);
 
     @POST("login")
     Call<UserLoginObjects> login_user(@Body UserLoginObjects login_user);
+
+
+    @POST("login")
+    Call<LogoutServerObjects> logout_user(@Body LogoutServerObjects logout_user);
 
 
 }
