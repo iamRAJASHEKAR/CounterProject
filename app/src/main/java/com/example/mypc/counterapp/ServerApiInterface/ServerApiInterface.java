@@ -2,7 +2,10 @@ package com.example.mypc.counterapp.ServerApiInterface;
 
 import com.example.mypc.counterapp.ServerObject.AddChantServerObject;
 import com.example.mypc.counterapp.ServerObject.AddRelegionObject;
+import com.example.mypc.counterapp.ServerObject.ChantFriendList;
 import com.example.mypc.counterapp.ServerObject.CounterServerObject;
+import com.example.mypc.counterapp.ServerObject.FetchingFriendsChants;
+import com.example.mypc.counterapp.ServerObject.FetchingPublicChant;
 import com.example.mypc.counterapp.ServerObject.HelpusServerObject;
 import com.example.mypc.counterapp.ServerObject.LogoutServerObjects;
 import com.example.mypc.counterapp.ServerObject.UserLoginObjects;
@@ -37,9 +40,16 @@ public interface ServerApiInterface {
     @POST("login")
     Call<UserLoginObjects> login_user(@Body UserLoginObjects login_user);
 
-
     @POST("login")
     Call<LogoutServerObjects> logout_user(@Body LogoutServerObjects logout_user);
 
+    @POST("public ")
+    Call<FetchingPublicChant> fetch_public(@Body FetchingPublicChant fetch_public);
 
+    @POST("friend")
+    Call<FetchingFriendsChants> fetch_friends(@Body FetchingFriendsChants fetch_friends);
+
+
+    @POST("friends")
+    Call<ChantFriendList> fetchchant_friends(@Body ChantFriendList chantFriendList);
 }

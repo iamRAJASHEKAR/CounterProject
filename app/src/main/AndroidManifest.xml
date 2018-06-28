@@ -82,7 +82,7 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name="PushNotification.Myfirebasemessaging">
+        <service android:name=".PushNotification.Myfirebasemessaging">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

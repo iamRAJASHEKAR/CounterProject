@@ -44,13 +44,11 @@ public class CounterActivity extends AppCompatActivity {
         setSupportActionBar(countertoolbar);
 
         toolbar_icon = findViewById(R.id.toolabar_icon);
-        conterText   = findViewById(R.id.toolabr_title);
-
+        conterText = findViewById(R.id.toolabr_title);
         toolbar_icon.setImageResource(R.drawable.ic_back_arrow);
         conterText.setText("Counter");
 
-        toolbar_icon.setOnClickListener(new View.OnClickListener()
-        {
+        toolbar_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -189,23 +187,7 @@ public class CounterActivity extends AppCompatActivity {
         }
 
     }
-/*
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            if (state == 1) {
-                plus();
-            }
-        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-            if (state == 1) {
-                minus();
-            }
-        }
-        return true;
-    }
-*/
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -214,25 +196,21 @@ public class CounterActivity extends AppCompatActivity {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (action == KeyEvent.ACTION_DOWN) {
-                    if (state == 1)
-                    {
-                        minus();
+                    if (state == 1) {
+                        plus();
                     }
                 }
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 if (action == KeyEvent.ACTION_UP) {
                     if (state == 1) {
-                        plus();
+                        minus();
                     }
-
                 }
                 return true;
             default:
                 return super.dispatchKeyEvent(event);
         }
-
-
     }
 
     @Override

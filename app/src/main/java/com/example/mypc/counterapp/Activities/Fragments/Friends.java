@@ -8,25 +8,31 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.example.mypc.counterapp.Activities.LoginActivity;
+import com.example.mypc.counterapp.Controllers.Chantfriendscontroller;
 import com.example.mypc.counterapp.Counter.CounterActivity;
 import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.TextViewRegular;
+import com.example.mypc.counterapp.Model.FriendsList;
 import com.example.mypc.counterapp.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Friends extends Fragment
-{
+public class Friends extends Fragment {
     RecyclerView recyclerView;
-    ArrayList<ChantsModel> userarray;
+    ArrayList<FriendsList> userarray;
     ChantsAdpater homeAdapter;
     ButtonBold coountBtn;
 
@@ -44,30 +50,16 @@ public class Friends extends Fragment
         coountBtn.setOnClickListener(CountBtnClick);
         recyclerView = view.findViewById(R.id.recycler);
         userarray = new ArrayList<>();
-        setData();
-        homeAdapter = new ChantsAdpater();
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(homeAdapter);
-
-
+        display_inactiive_friends();
         return view;
 
-    }
-
-    public void setData()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            userarray.add(new ChantsModel("Vedas", "vedas@gmail.com"));
-        }
     }
 
     ////////click on count btn
     View.OnClickListener CountBtnClick = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
-             startActivity(new Intent(getActivity(), CounterActivity.class));
+        public void onClick(View view) {
+            startActivity(new Intent(getActivity(), CounterActivity.class));
         }
     };
 
@@ -83,7 +75,7 @@ public class Friends extends Fragment
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             holder.name.setText(userarray.get(position).getName());
-            holder.user.setText(userarray.get(position).getUser());
+            holder.user.setText(userarray.get(position).getEmail());
         }
 
         @Override
@@ -102,5 +94,39 @@ public class Friends extends Fragment
             user = itemView.findViewById(R.id.user);
 
         }
+    }
+
+    @Override
+    public void onResume() {
+        EventBus.getDefault().register(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+        super.onPause();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(LoginActivity.MessageEvent event) {
+        Log.e("activeevent", "" + event.message);
+        String resultData = event.message.trim();
+        if (resultData.equals("active_friends")) {
+            display_inactiive_friends();
+
+        }
+
+    }
+
+    private void display_inactiive_friends() {
+        userarray = Chantfriendscontroller.getintance().inactive_friends;
+        if (userarray.size() > 0) {
+            homeAdapter = new ChantsAdpater();
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(homeAdapter);
+            homeAdapter.notifyDataSetChanged();
+        }
+
     }
 }

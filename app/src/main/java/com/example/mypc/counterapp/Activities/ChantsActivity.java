@@ -1,7 +1,6 @@
 package com.example.mypc.counterapp.Activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,13 +9,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -27,7 +25,7 @@ import com.example.mypc.counterapp.Activities.Fragments.AddNewFriend;
 import com.example.mypc.counterapp.Activities.Fragments.ChantsModel;
 import com.example.mypc.counterapp.Activities.Fragments.Friends;
 import com.example.mypc.counterapp.Activities.Fragments.JoinedFriends;
-import com.example.mypc.counterapp.Counter.CounterActivity;
+import com.example.mypc.counterapp.Controllers.Chantfriendscontroller;
 import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
 import com.example.mypc.counterapp.R;
@@ -35,25 +33,25 @@ import com.example.mypc.counterapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChantsActivity extends AppCompatActivity
-{
+public class ChantsActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    TextView chantname, chantdescr;
+    String chant_name, chant_decr, chant_id, chant_privacy;
     RadioGroup radioGroup;
     RecyclerView recyclerView_peoples;
     RadioButton radioButton_friends, radioButton_public;
-    RelativeLayout relativeLayout_tab, relativeLayout_public,relative_peopled_Joined,relativeName,relative_count_public;
+    RelativeLayout relativeLayout_tab, relativeLayout_public, relative_peopled_Joined, relativeName, relative_count_public;
     ButtonBold button;
     Toolbar toolbar;
     Friends_Holder holder;
     ArrayList<ChantsModel> people_joined;
     TextViewBold toolbar_text;
     ImageView toolbar_icon;
-    ImageView editImage,deleteImage;
+    ImageView editImage, deleteImage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chants);
         toolbar = findViewById(R.id.toolBar);
@@ -61,9 +59,12 @@ public class ChantsActivity extends AppCompatActivity
         people_joined = new ArrayList<>();
         setData();
 
-        recyclerView_peoples = findViewById(R.id.recycler_people_joined);
+
+        //recyclerView_peoples = findViewById(R.id.recycler_people_joined);
         toolbar_text = findViewById(R.id.toolabr_title);
         toolbar_icon = findViewById(R.id.toolabar_icon);
+        chantname = findViewById(R.id.the_mantra);
+        chantdescr = findViewById(R.id.the_mantra_lines);
         toolbar_icon.setImageResource(R.drawable.ic_back_arrow);
         toolbar_text.setText("Chants");
 
@@ -79,27 +80,35 @@ public class ChantsActivity extends AppCompatActivity
         radioButton_public = findViewById(R.id.radiopublic);
         radioButton_public = findViewById(R.id.radiopublic);
         relativeLayout_tab = findViewById(R.id.relative_appbar);
-        relativeLayout_public = findViewById(R.id.relative_public);
-        relative_peopled_Joined = findViewById(R.id.realtive_people_joined);
-        relative_count_public = findViewById(R.id.rl_count_public);
-        relativeName = findViewById(R.id.liner_name);
+        // relativeLayout_public = findViewById(R.id.relative_public);
+        //  relative_peopled_Joined = findViewById(R.id.realtive_people_joined);
+        //  relative_count_public = findViewById(R.id.rl_count_public);
+        //  relativeName = findViewById(R.id.liner_name);
         editImage = findViewById(R.id.image_edit);
         deleteImage = findViewById(R.id.image_delete);
 
-        button = findViewById(R.id.count_public);
-        button.setOnClickListener(new View.OnClickListener() {
+        //  button = findViewById(R.id.count_public);
+       /* button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), CounterActivity.class));
             }
-        });
+        });*/
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        getIntentData();
 
-        radioButton_friends.setOnClickListener(new View.OnClickListener() {
+        if (radioButton_friends.isChecked()) {
+            relativeLayout_tab.setVisibility(View.VISIBLE);/*
+            relativeLayout_public.setVisibility(View.GONE);
+            relative_count_public.setVisibility(View.GONE);*/
+
+        }
+
+        /*radioButton_friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (radioButton_friends.isChecked()) {
@@ -107,12 +116,10 @@ public class ChantsActivity extends AppCompatActivity
                     relativeLayout_tab.setVisibility(View.VISIBLE);
                     relativeLayout_public.setVisibility(View.GONE);
                     relative_count_public.setVisibility(View.GONE);
-
-                    //    Toast.makeText(ChantsActivity.this, "hello", Toast.LENGTH_SHORT).show();
-
                 }
             }
-        });
+        });*/
+/*
 
         radioButton_public.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,20 +131,16 @@ public class ChantsActivity extends AppCompatActivity
                     relative_peopled_Joined.setVisibility(View.VISIBLE);
                     relativeName.setVisibility(View.VISIBLE);
                     relative_count_public.setVisibility(View.VISIBLE);
-
-
-
-
-                    //    Toast.makeText(ChantsActivity.this, "hello", Toast.LENGTH_SHORT).show();
-
                 }
             }
         });
+*/
 
-        holder = new Friends_Holder();
+        holder = new Friends_Holder();/*
         recyclerView_peoples.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        recyclerView_peoples.setAdapter(holder);
+        recyclerView_peoples.setAdapter(holder);*/
         // int pos = radioGroup.getCheckedRadioButtonId();
+        Chantfriendscontroller.getintance().fillcontext(getApplicationContext());
 
     }
 
@@ -219,5 +222,19 @@ public class ChantsActivity extends AppCompatActivity
 
             }
         }
+    }
+
+    public void getIntentData() {
+        chant_name = getIntent().getExtras().getString("chant_name");
+        chant_decr = getIntent().getExtras().getString("chant_dec");
+        chant_privacy = getIntent().getExtras().getString("chant_privacy");
+        chant_id = getIntent().getExtras().getString("chant_id");
+        chantname.setText(chant_name);
+        chantdescr.setText(chant_decr);
+        if (chant_privacy.equals("Friend")) {
+            radioButton_friends.setChecked(true);
+            Chantfriendscontroller.getintance().fetch_chantFriends(chant_id);
+        }
+        Log.e("vhvfdbsjb", chant_name + chant_decr + chant_privacy + chant_id);
     }
 }

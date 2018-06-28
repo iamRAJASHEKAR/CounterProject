@@ -20,6 +20,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.mypc.counterapp.Controllers.Chantfriendscontroller;
+import com.example.mypc.counterapp.Controllers.FetchPublicChantController;
 import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Network.ConnectionReceiver;
 import com.example.mypc.counterapp.Network.TestApplication;
@@ -71,7 +73,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, ConnectionReceiver.ConnectionReceiverListener {
 
     String user_email, user_name;
-
     ImageButton fbLogin, googleLogin;
     private static final int RC_SIGN_IN = 234;
     SharedPreferences.Editor editor;
@@ -82,14 +83,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public static final String MY_PREFS_NAME = "login";
     public boolean isConnected;
     int PRIVATE_MODE = 0;
-    //creating a GoogleSignInClient object
     GoogleSignInClient mGoogleSignInClient;
     GoogleApiClient googleApiClient;
-    //And also a Firebase Auth object
-    //FirebaseAuth mAuth;
     private CallbackManager callbackManager;
     SharedPreferences sharedPreferences;
-    //SharedPreferences.Editor sharedPreferencesEditor;
     String socialmediaLoginEmail;
     AccessTokenTracker accessTokenTracker;
     ProfileTracker profileTracker;
@@ -106,7 +103,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         sessionsManager = new SessionsManager(getApplicationContext());
         editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 
-        if (sessionsManager.isLoggedIn()) {
+        if (sessionsManager.isLoggedIn())
+        {
+            FetchPublicChantController.getinstance().fillContext(getApplicationContext());
             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent);
             finish();
@@ -131,17 +130,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 }
-
             }
         });
 
         fb_login();
-        fbLogin.setOnClickListener(new View.OnClickListener()
-        {
+        fbLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isConnected)
-                {
+                if (isConnected) {
                     // mProgress.show();
                     displayProgressDialog("Loading");
                     if (v == fbLogin) {
@@ -157,6 +153,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 }
             }
         });
+
 
     }
 
@@ -468,7 +465,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (response.body() != null) {
                     status_code = Integer.parseInt(response.body().getResponse());
                     Log.e("lloginuser", " " + status_code);
-                    if (status_code == 3) {
+                    if (status_code == 3)
+                    {
                         sessionsManager.setLogin(true);
                         Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
                         startActivity(intent);
@@ -488,8 +486,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             }
         });
-
-
     }
 
     private void storeLogin(int token) {
@@ -537,8 +533,24 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     ///fetchdata
-    public void fetchData()
-    {
+    public void fetchData() {
         CounterController.getInstance().fetchReligions();
     }
+
+
+    public static class MessageEvent
+    {
+        public final String message;
+
+        public MessageEvent(String message)
+        {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
+
 }
