@@ -57,11 +57,9 @@
         android:layout_marginBottom="75dp"
         android:background="@drawable/orange_button"
         android:text="Join"
-        android:textSize="18dp"
         android:textAllCaps="false"
-        android:textColor="@color/white" />
-
-
+        android:textColor="@color/white"
+        android:textSize="18dp" />
 
 
 </RelativeLayout>

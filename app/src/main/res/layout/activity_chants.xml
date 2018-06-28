@@ -9,8 +9,6 @@
     <include layout="@layout/activity_toolbar" />
 
 
-
-
     <android.support.v7.widget.CardView
 
         android:id="@+id/relate_mantra"
@@ -79,8 +77,8 @@
         android:id="@+id/relate_radio"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="15dp"
-        android:layout_below="@id/relate_mantra">
+        android:layout_below="@id/relate_mantra"
+        android:layout_marginLeft="15dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -113,85 +111,86 @@
 
         </RelativeLayout>
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/relative_public"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/relate_radio"
-        android:visibility="visible">
-
+    <!--
         <RelativeLayout
-            android:id="@+id/realtive_people_joined"
+            android:id="@+id/relative_public"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:visibility="invisible"
-            android:background="@color/colorGray">
-
-            <com.example.mypc.counterapp.Fonts.TextViewRegular
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:text="@string/people_joined"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/liner_name"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/realtive_people_joined"
-            android:layout_marginTop="10dp"
-            android:background="#BDC3C7">
-
-            <com.example.mypc.counterapp.Fonts.TextViewBold
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_vertical"
-                android:text="Name"
-                android:textColor="#000000"
-                android:textStyle="bold" />
-
-            <com.example.mypc.counterapp.Fonts.TextViewBold
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.2"
-                android:gravity="center"
-                android:text="Email"
-                android:textColor="#000000"
-                />
-        </RelativeLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_people_joined"
-            android:layout_width="match_parent"
-            android:visibility="invisible"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:layout_below="@+id/liner_name">
+            android:layout_below="@+id/relate_radio"
+            android:visibility="visible">
 
-        </android.support.v7.widget.RecyclerView>
+            <RelativeLayout
+                android:id="@+id/realtive_people_joined"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:visibility="invisible"
+                android:background="@color/colorGray">
 
-        <!--<com.example.mypc.counterapp.Fonts.ButtonBold
-            android:id="@+id/count_public"
-            android:layout_width="200dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/orange_button"
-            android:text="Start Counting"
-            android:textSize="15sp"
-            android:layout_marginBottom="20dp"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:visibility="visible" />-->
-    </RelativeLayout>
+                <com.example.mypc.counterapp.Fonts.TextViewRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/people_joined"
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
+            </RelativeLayout>
 
-    <RelativeLayout
+            <RelativeLayout
+                android:id="@+id/liner_name"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/realtive_people_joined"
+                android:layout_marginTop="10dp"
+                android:background="#BDC3C7">
+
+                <com.example.mypc.counterapp.Fonts.TextViewBold
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Name"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+
+                <com.example.mypc.counterapp.Fonts.TextViewBold
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.2"
+                    android:gravity="center"
+                    android:text="Email"
+                    android:textColor="#000000"
+                    />
+            </RelativeLayout>-->
+    <!--
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_people_joined"
+                android:layout_width="match_parent"
+                android:visibility="invisible"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:layout_below="@+id/liner_name">
+
+            </android.support.v7.widget.RecyclerView>
+    -->
+
+    <!--<com.example.mypc.counterapp.Fonts.ButtonBold
+        android:id="@+id/count_public"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/orange_button"
+        android:text="Start Counting"
+        android:textSize="15sp"
+        android:layout_marginBottom="20dp"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:visibility="visible" />-->
+
+    <!--<RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/rl_count_public"
         android:layout_alignParentBottom="true"
@@ -210,7 +209,7 @@
             android:visibility="visible" />
 
     </RelativeLayout>
-
+-->
 
     <RelativeLayout
         android:id="@+id/relative_appbar"
@@ -242,5 +241,4 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </RelativeLayout>
-
 </RelativeLayout>

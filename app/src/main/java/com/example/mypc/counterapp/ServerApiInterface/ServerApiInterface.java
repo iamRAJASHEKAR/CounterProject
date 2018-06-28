@@ -49,7 +49,7 @@ public interface ServerApiInterface {
     @POST("friend")
     Call<FetchingFriendsChants> fetch_friends(@Body FetchingFriendsChants fetch_friends);
 
-//adding
+//adding hh 
     @POST("friends")
     Call<ChantFriendList> fetchchant_friends(@Body ChantFriendList chantFriendList);
 }
