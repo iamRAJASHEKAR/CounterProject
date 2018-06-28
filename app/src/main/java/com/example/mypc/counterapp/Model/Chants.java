@@ -6,6 +6,8 @@ public class Chants
 
     String chantText;
 
+
+
     public Chants(String chantTitle, String chantText)
     {
         this.chantTitle = chantTitle;
@@ -27,4 +29,6 @@ public class Chants
     public void setChantText(String chantText) {
         this.chantText = chantText;
     }
+
+
 }

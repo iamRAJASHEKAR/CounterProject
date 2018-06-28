@@ -1,8 +1,14 @@
 package com.example.mypc.counterapp.Activities;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,9 +27,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.mypc.counterapp.Activities.Fragments.ChantsModel;
+import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.EditTextRegular;
 import com.example.mypc.counterapp.Fonts.TextViewRegular;
+import com.example.mypc.counterapp.Model.Contact;
 import com.example.mypc.counterapp.Network.ConnectionReceiver;
 import com.example.mypc.counterapp.Network.TestApplication;
 import com.example.mypc.counterapp.R;
@@ -31,6 +40,9 @@ import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
 import com.example.mypc.counterapp.ServerObject.AddChantServerObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,44 +50,49 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AddChantActivity extends AppCompatActivity implements ConnectionReceiver.ConnectionReceiverListener
-{
+public class AddChantActivity extends AppCompatActivity implements ConnectionReceiver.ConnectionReceiverListener {
 
-   android.support.v7.widget.Toolbar addChantToolbar;
-   ImageView toolbarIconback;
-   TextView toolText;
-   Button saveBtn;
-   EditTextRegular editChantname,editchantText;
-   RadioGroup radioGroup;
-   RadioButton radioPublic,radioFriends;
-   RecyclerView addchantRecyclerview;
-   AddChantAdapter addChantAdapter;
-   ArrayList<ChantsModel> chantsModelArrayList;
-   RelativeLayout nameEmailLayout;
-   String radioButtonText,chantname,chantDescription,createdBy,createdEmail,timestamp;
+    android.support.v7.widget.Toolbar addChantToolbar;
+    ImageView toolbarIconback;
+    TextView toolText;
+    Button saveBtn;
+    EditTextRegular editChantname, editchantText;
+    RadioGroup radioGroup;
+    RadioButton radioPublic, radioFriends;
+    RecyclerView addchantRecyclerview;
+    AddChantAdapter addChantAdapter;
+    ArrayList<ChantsModel> chantsModelArrayList;
+    RelativeLayout nameEmailLayout;
+    String radioButtonText, chantname, chantDescription, createdBy, createdEmail, timestamp;
     public boolean isConnected;
+    ArrayList<String> mSelectedFriendsEmail = new ArrayList<String>();
+    ArrayList<String> mSelectedFriendsName = new ArrayList<>();
+    ArrayList<Contact> friendsArrayList;
+    MaterialDialog mProgress;
+
 
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_chant);
+        friendsArrayList = new ArrayList<>();
         checkConnection();
+        loadContactsOnSeparateThread();
         SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
 
         createdBy = prefs.getString("name", "No name defined");
+        createdEmail = prefs.getString("email", "No name defined");
 
         long unixTime = System.currentTimeMillis() / 1000L;
         timestamp = String.valueOf(unixTime);
-        Log.e("name timestamp"," "+createdBy+" "+timestamp);
+        Log.e("name timestamp", " " + createdBy + " " + timestamp);
 
         chantsModelArrayList = new ArrayList<>();
         init();
     }
 
-    public void init()
-    {
+    public void init() {
         addChantToolbar = findViewById(R.id.toolBar);
         setSupportActionBar(addChantToolbar);
 
@@ -104,57 +121,50 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
 
         nameEmailLayout = findViewById(R.id.rl_name_email);
 
-        setData();
+        //  setData();
+        //  getNameEmailDetails();
 
         addchantRecyclerview = findViewById(R.id.addchant_recyclerview);
         addchantRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         addChantAdapter = new AddChantAdapter();
         addchantRecyclerview.setAdapter(addChantAdapter);
 
+
         radioPublic.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-               radioButtonText = "Public";
-                if(radioPublic.isChecked())
-                {
+            public void onClick(View view) {
+                radioButtonText = "Public";
+                if (radioPublic.isChecked()) {
                     addchantRecyclerview.setVisibility(View.INVISIBLE);
                 }
 
             }
         });
 
-        radioFriends.setOnClickListener(new View.OnClickListener()
-        {
+        radioFriends.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-               radioButtonText = "Friend";
-                if(radioFriends.isChecked())
-                addchantRecyclerview.setVisibility(View.VISIBLE);
+            public void onClick(View view) {
+                radioButtonText = "Friend";
+                if (radioFriends.isChecked())
+                    addchantRecyclerview.setVisibility(View.VISIBLE);
                 nameEmailLayout.setVisibility(View.VISIBLE);
             }
         });
     }
 
 
-
-    View.OnClickListener SaveBtnClick = new View.OnClickListener()
-    {
+    View.OnClickListener SaveBtnClick = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
-              chantname = editChantname.getText().toString();
-              chantDescription = editchantText.getText().toString();
-              if(isConnected)
-              {
-                 validations();
-              }
-              else
-              {
-                  Toast.makeText(AddChantActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
+        public void onClick(View view) {
+            chantname = editChantname.getText().toString();
+            chantDescription = editchantText.getText().toString();
+            if (isConnected)
+            {
+                validations();
+            } else {
+                Toast.makeText(AddChantActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
 
-              }
+            }
 
 
         }
@@ -176,86 +186,177 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
 
 
     /////////Edit Text Validations
-    public void validations()
-    {
-        if(editChantname.length()==0)
-        {
+    public void validations() {
+        if (editChantname.length() == 0) {
             editChantname.setError("Enter chant name");
-        }
-
-        else if(editchantText.length() == 0)
-        {
+        } else if (editchantText.length() == 0) {
             editchantText.setError("Enter the chant");
-        }
-
-        else
-        {
+        } else {
             addChants();
         }
 
 
-
     }
 
-    public void setData()
+  /*  public void setData()
     {
         for(int i = 0; i<6;i++)
         {
             chantsModelArrayList.add(new ChantsModel("Vedas","contactvedas@gmail.com"));
 
         }
+    }*/
+
+    public void loadContactsOnSeparateThread() {
+        // run on separate thread
+        HandlerThread handlerThread = new HandlerThread("fetchContacts");
+        handlerThread.start();
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                ExecutorService taskExecutor = Executors.newFixedThreadPool(1);
+                try {
+                    Runnable backgroundTask = new Runnable() {
+                        @Override
+                        public void run() {
+                            // ContactsDataController.getInstance().getPhoneDetailsFromDeviceContacts();
+                            getPhoneDetailsFromDeviceContacts();
+                        }
+                    };
+                    taskExecutor.submit(backgroundTask);
+                    taskExecutor.shutdown();
+                    taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+                } catch (InterruptedException e) {
+
+                }
+            }
+        });
+
+    }
+
+    public void getPhoneDetailsFromDeviceContacts() {
+
+        //run on saparat thrad.
+        //  contactsArrary = new ArrayList<ContactModel>();
+        ///
+        Context context = getApplicationContext();
+        ContentResolver cr = context.getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+
+        if (cur.getCount() > 0) {
+            while (cur.moveToNext()) {
+                String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                Cursor cur1 = cr.query(
+                        ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,
+                        ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
+                        new String[]{id}, null);
+
+                while (cur1.moveToNext()) {
+                    //to get the contact names
+                    String name = cur1.getString(cur1.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                    Log.e("Name:", "" + name);
+                    String email = cur1.getString(cur1.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                    Log.e("Email", "" + email);
+                    String image_uri = cur1.getString(cur1.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
+
+                    Integer hasPhone = cur1.getInt(cur1.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+
+                    if (email != null) {
+                     /* ContactModel contactModel = new ContactModel();
+                      contactModel.setEmail(email);
+                      contactModel.setName(name);*/
+                        chantsModelArrayList.add(new ChantsModel(name, email));
+
+
+                        // get the user's phone image
+
+
+                        Log.e("contactsArrary", "call" + chantsModelArrayList.size());
+                    }
+                }
+                cur1.close();
+            }
+
+            //call api
+            // contactApiExecution();
+        }
     }
 
     ///////Adding the chants and send to server
-    public void addChants()
-    {
-       AddChantServerObject addChantObj = new AddChantServerObject();
-       addChantObj.chantName = chantname.trim();
-       addChantObj.chantDescription = chantDescription.trim();
-       addChantObj.createdBy = createdBy.trim();
-       addChantObj.privacy = radioButtonText.trim();
-       addChantObj.timestamp = timestamp.trim();
-       addChantObj.created_email = "vedas@gmail.com".trim();
+    public void addChants() {
+        displayProgressDialog();
+        friendsArrayList = new ArrayList<>();
+        AddChantServerObject addChantObj = new AddChantServerObject();
+        addChantObj.chantName = chantname.trim();
+        addChantObj.chantDescription = chantDescription.trim();
+        addChantObj.createdBy = createdBy.trim();
+        addChantObj.timestamp = timestamp.trim();
+        addChantObj.created_email = createdEmail.trim();
+        if(radioButtonText.equals("Public"))
+        {
+            addChantObj.privacy = radioButtonText.trim();
+        }
+        else if(radioButtonText.equals("Friend"))
+        {
+             Log.e("selectedFriendsSize"," "+mSelectedFriendsEmail.size()+mSelectedFriendsName);
+            Contact contact = new Contact();
+            for(int i =0;i<mSelectedFriendsEmail.size();i++)
+            {
+                contact.setName(mSelectedFriendsName.get(i));
+                contact.setMail(mSelectedFriendsEmail.get(i));
+                friendsArrayList.add(contact);
+
+            }
+
+            Log.e("addchnatfrnds"," "+friendsArrayList.size());
+            addChantObj.privacy = radioButtonText.trim();
+            addChantObj.contacts = friendsArrayList;
+
+        }
+
+        Log.e("addchnatffff"," "+addChantObj);
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
         ServerApiInterface api = retrofit.create(ServerApiInterface.class);
         Call<AddChantServerObject> addChants = api.addChants(addChantObj);
         addChants.enqueue(new Callback<AddChantServerObject>() {
             @Override
-            public void onResponse(Call<AddChantServerObject> call, Response<AddChantServerObject> response)
-            {
-                   if(response.body()!=null)
-                   {
-                       Log.e("addchantStatuscode"," "+response.body().response);
-                   }
+            public void onResponse(Call<AddChantServerObject> call, Response<AddChantServerObject> response) {
+                if (response.body() != null) {
+                    Log.e("addchantStatuscode", " " + response.body().response);
+                    String addchantStatuscode = response.body().response;
+                    if(addchantStatuscode.equals("3"))
+                    {
+                        startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+                        finish();
+                        hideProgressDialog();
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<AddChantServerObject> call, Throwable t) {
-
+                Log.e("addchant"," failed");
+                hideProgressDialog();
             }
         });
 
     }
 
     @Override
-    public void onNetworkConnectionChanged(boolean connect)
-    {
+    public void onNetworkConnectionChanged(boolean connect) {
         isConnected = connect;
 
-        if (!isConnected)
-        {
+        if (!isConnected) {
             Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+        } else {
             Toast.makeText(this, " Connected to internet ", Toast.LENGTH_SHORT).show();
 
         }
     }
 
-    private void checkConnection()
-    {
+    private void checkConnection() {
         isConnected = ConnectionReceiver.isConnected();
         if (!isConnected) {
             Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
@@ -266,31 +367,74 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         TestApplication.getInstance().setConnectionListener(this);
         super.onResume();
     }
 
 
+    class AddChantAdapter extends RecyclerView.Adapter<AddChantAdapter.ViewHolder> {
 
-    class AddChantAdapter extends RecyclerView.Adapter<AddChantAdapter.ViewHolder>
-    {
+
+
+        public AddChantAdapter() {
+
+            mSelectedFriendsEmail = new ArrayList<String>();
+            mSelectedFriendsName = new ArrayList<>();
+        }
 
         @NonNull
         @Override
-        public AddChantAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
-        {
+        public AddChantAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_add_chant_friendslist, null);
             final AddChantActivity.AddChantAdapter.ViewHolder viewHolder = new AddChantActivity.AddChantAdapter.ViewHolder(v, getApplicationContext());
             return viewHolder;
         }
 
         @Override
-        public void onBindViewHolder(@NonNull AddChantAdapter.ViewHolder holder, int position)
-        {
+        public void onBindViewHolder(@NonNull final AddChantAdapter.ViewHolder holder, final int position) {
             holder.name.setText(chantsModelArrayList.get(position).getName());
             holder.email.setText(chantsModelArrayList.get(position).getUser());
+            final ChantsModel chantsModel = chantsModelArrayList.get(position);
+            holder.btninvite.setBackgroundResource(chantsModel.isSelected() ? R.color.colorOrange : R.color.colorLightGray);
+            holder.btninvite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    chantsModel.setSelected(!chantsModel.isSelected());
+                    holder.btninvite.setBackgroundResource(chantsModel.isSelected() ? R.color.colorOrange : R.color.colorLightGray);
+                    Log.e("SelectedStatus"," "+chantsModel.isSelected()+" "+holder.getAdapterPosition());
+                    if(chantsModel.isSelected())
+                    {
+                      Log.e("email"," "+chantsModelArrayList.get(holder.getAdapterPosition()).getUser());
+                       if(chantsModelArrayList.get(holder.getAdapterPosition()).getUser().isEmpty())
+                       {
+                         Toast.makeText(getApplicationContext(),"Email is not avialable for this contact",Toast.LENGTH_SHORT).show();
+
+                       }
+                       else
+                       {
+                           mSelectedFriendsEmail.add(chantsModelArrayList.get(holder.getAdapterPosition()).getUser());
+                           mSelectedFriendsName.add(chantsModelArrayList.get(holder.getAdapterPosition()).getName());
+
+
+
+                       }
+                      Log.e("selectedFreinds"," "+mSelectedFriendsEmail+" "+mSelectedFriendsEmail.size()+" "+mSelectedFriendsName+" "+mSelectedFriendsName.size());
+                    }
+                    else
+                    {
+                        mSelectedFriendsEmail.remove(chantsModelArrayList.get(holder.getAdapterPosition()).getUser());
+                        mSelectedFriendsName.remove(chantsModelArrayList.get(holder.getAdapterPosition()).getName());
+
+
+
+                        Log.e("unselectedFreinds"," "+mSelectedFriendsEmail+" "+mSelectedFriendsEmail.size()+" "+mSelectedFriendsName+" "+mSelectedFriendsName.size());
+                    }
+
+
+
+                }
+            });
 
         }
 
@@ -299,16 +443,54 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
             return chantsModelArrayList.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder
-        {
-           TextViewRegular name,email;
 
-            public ViewHolder(View itemView, Context applicationContext)
-            {
+
+
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            TextViewRegular name, email;
+            ButtonBold btninvite;
+
+            public ViewHolder(View itemView, Context applicationContext) {
                 super(itemView);
                 name = itemView.findViewById(R.id.text_friend_name);
                 email = itemView.findViewById(R.id.text_friend_mail);
+                btninvite = itemView.findViewById(R.id.btn_invite);
+
             }
         }
+    }
+
+    public void displayProgressDialog()
+    {
+        mProgress = new MaterialDialog.Builder(AddChantActivity.this).content("Loading").canceledOnTouchOutside(false).progress(true, 0).show();
+
+    }
+
+    private void hideProgressDialog()
+    {
+
+        if (mProgress != null && mProgress.isShowing()) {
+            mProgress.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        hideProgressDialog();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        hideProgressDialog();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        hideProgressDialog();
     }
 }

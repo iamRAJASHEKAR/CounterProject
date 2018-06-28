@@ -2,6 +2,9 @@ package com.example.mypc.counterapp.Activities.Fragments;
 
 public class ChantsModel
 {
+
+
+
     public String getName() {
         return name;
     }
@@ -26,5 +29,13 @@ public class ChantsModel
 
     String name;
     String user;
+    public boolean isSelected = false;
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 }

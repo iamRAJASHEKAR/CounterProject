@@ -131,7 +131,7 @@
             android:visibility="gone"
             android:id="@+id/addchant_recyclerview"
             android:layout_below="@+id/rl_name_email"
-            android:layout_height="120dp">
+            android:layout_height="130dp">
         </android.support.v7.widget.RecyclerView>
 
    <RelativeLayout

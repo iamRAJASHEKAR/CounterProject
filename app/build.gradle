@@ -37,6 +37,8 @@ dependencies
 
             implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
 
+            implementation 'com.nabinbhandari.android:permissions:3.5'
+
             implementation 'com.google.firebase:firebase-core:16.0.1'
             implementation 'com.google.firebase:firebase-messaging:17.0.0'
             implementation fileTree(dir: 'libs', include: ['*.jar'])

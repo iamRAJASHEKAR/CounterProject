@@ -1,6 +1,7 @@
 package com.example.mypc.counterapp.ServerApiInterface;
 
 import com.example.mypc.counterapp.ServerObject.AddChantServerObject;
+import com.example.mypc.counterapp.ServerObject.AddFriendServerObject;
 import com.example.mypc.counterapp.ServerObject.AddRelegionObject;
 import com.example.mypc.counterapp.ServerObject.ChantFriendList;
 import com.example.mypc.counterapp.ServerObject.CounterServerObject;
@@ -52,4 +53,7 @@ public interface ServerApiInterface {
 //adding hh 
     @POST("friends")
     Call<ChantFriendList> fetchchant_friends(@Body ChantFriendList chantFriendList);
+
+    @POST("addfriend")
+    Call<AddFriendServerObject> addFriend(@Body AddFriendServerObject addFriendObj);
 }
