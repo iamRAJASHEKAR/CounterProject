@@ -71,6 +71,8 @@ public class ReligionActivity extends AppCompatActivity {
         religionarraylist = CounterController.getInstance().religionArrayList;
         religionAdapter = new ReligionAdapter();
         recyclerViewReligion.setAdapter(religionAdapter);
+        religionAdapter.notifyDataSetChanged();
+
 
     }
 
