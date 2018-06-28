@@ -338,7 +338,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         Log.e("logout_data", device_id + user_email);
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
-
+//hello
         ServerApiInterface apiInterface = retrofit.create(ServerApiInterface.class);
         Call<LogoutServerObjects> logout_call = apiInterface.logout_user(logoutServerObjects);
         logout_call.enqueue(new Callback<LogoutServerObjects>() {
