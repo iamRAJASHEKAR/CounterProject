@@ -40,7 +40,7 @@ public interface ServerApiInterface {
     @POST("login")
     Call<UserLoginObjects> login_user(@Body UserLoginObjects login_user);
 
-    @POST("login")
+    @POST("logout")
     Call<LogoutServerObjects> logout_user(@Body LogoutServerObjects logout_user);
 
     @POST("public ")
@@ -49,7 +49,7 @@ public interface ServerApiInterface {
     @POST("friend")
     Call<FetchingFriendsChants> fetch_friends(@Body FetchingFriendsChants fetch_friends);
 
-
+//adding
     @POST("friends")
     Call<ChantFriendList> fetchchant_friends(@Body ChantFriendList chantFriendList);
 }
