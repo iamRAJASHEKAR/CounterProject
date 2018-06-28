@@ -9,6 +9,7 @@ import com.example.mypc.counterapp.ServerObject.FetchingFriendsChants;
 import com.example.mypc.counterapp.ServerObject.FetchingPublicChant;
 import com.example.mypc.counterapp.ServerObject.HelpusServerObject;
 import com.example.mypc.counterapp.ServerObject.LogoutServerObjects;
+import com.example.mypc.counterapp.ServerObject.MegaCount;
 import com.example.mypc.counterapp.ServerObject.UserLoginObjects;
 
 import org.json.JSONObject;
@@ -44,16 +45,21 @@ public interface ServerApiInterface {
     @POST("logout")
     Call<LogoutServerObjects> logout_user(@Body LogoutServerObjects logout_user);
 
-    @POST("public ")
+    @POST("public")
     Call<FetchingPublicChant> fetch_public(@Body FetchingPublicChant fetch_public);
 
     @POST("friend")
     Call<FetchingFriendsChants> fetch_friends(@Body FetchingFriendsChants fetch_friends);
 
-//adding hh 
+    //adding hh
     @POST("friends")
     Call<ChantFriendList> fetchchant_friends(@Body ChantFriendList chantFriendList);
 
     @POST("addfriend")
     Call<AddFriendServerObject> addFriend(@Body AddFriendServerObject addFriendObj);
+
+    @POST("megacount")
+    Call<MegaCount> mega_count(@Body MegaCount megacount);
+
+
 }

@@ -321,8 +321,8 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
                     Log.e("addchantStatuscode", " " + response.body().response);
                     String addchantStatuscode = response.body().response;
                     if (addchantStatuscode.equals("3")) {
-                      /*  startActivity(new Intent(getApplicationContext(),HomeActivity.class));
-                        finish();*/
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        finish();
                         hideProgressDialog();
                     }
                 }
@@ -400,7 +400,7 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
                         contact.setMail(chantsModelArrayList.get(holder.getAdapterPosition()).getUser());
                         contact.setName(chantsModelArrayList.get(holder.getAdapterPosition()).getName());
                         friendsArrayList.add(contact);
-                        Log.e("friendsArrayList"," "+" "+friendsArrayList.size());
+                        Log.e("friendsArrayList", " " + " " + friendsArrayList.size());
                     } else {
                         Log.e("arraypos", "call" + position);
 

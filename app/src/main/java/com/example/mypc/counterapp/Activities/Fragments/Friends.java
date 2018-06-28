@@ -34,7 +34,6 @@ public class Friends extends Fragment {
     RecyclerView recyclerView;
     ArrayList<FriendsList> userarray;
     ChantsAdpater homeAdapter;
-    ButtonBold coountBtn;
 
 
     public Friends() {
@@ -46,8 +45,6 @@ public class Friends extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        coountBtn = view.findViewById(R.id.btn_count);
-        coountBtn.setOnClickListener(CountBtnClick);
         recyclerView = view.findViewById(R.id.recycler);
         userarray = new ArrayList<>();
         display_inactiive_friends();
@@ -56,12 +53,6 @@ public class Friends extends Fragment {
     }
 
     ////////click on count btn
-    View.OnClickListener CountBtnClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            startActivity(new Intent(getActivity(), CounterActivity.class));
-        }
-    };
 
     private class ChantsAdpater extends RecyclerView.Adapter<ViewHolder> {
         @NonNull

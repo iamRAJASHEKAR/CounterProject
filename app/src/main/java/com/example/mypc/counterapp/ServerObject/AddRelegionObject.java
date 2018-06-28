@@ -23,6 +23,4 @@ public class AddRelegionObject {
     public void setResponse(String response) {
         this.response = response;
     }
-
-
 }

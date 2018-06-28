@@ -1,6 +1,7 @@
 package com.example.mypc.counterapp.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -26,7 +27,9 @@ import com.example.mypc.counterapp.Activities.Fragments.ChantsModel;
 import com.example.mypc.counterapp.Activities.Fragments.Friends;
 import com.example.mypc.counterapp.Activities.Fragments.JoinedFriends;
 import com.example.mypc.counterapp.Controllers.Chantfriendscontroller;
+import com.example.mypc.counterapp.Counter.CounterActivity;
 import com.example.mypc.counterapp.Fonts.ButtonBold;
+import com.example.mypc.counterapp.Fonts.ButtonRegular;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
 import com.example.mypc.counterapp.R;
 
@@ -37,12 +40,12 @@ public class ChantsActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     TextView chantname, chantdescr;
-    String chant_name, chant_decr, chant_id, chant_privacy;
+    String chant_name, chant_decr, chant_id, chant_privacy, chant_created;
     RadioGroup radioGroup;
     RecyclerView recyclerView_peoples;
     RadioButton radioButton_friends, radioButton_public;
     RelativeLayout relativeLayout_tab, relativeLayout_public, relative_peopled_Joined, relativeName, relative_count_public;
-    ButtonBold button;
+    ButtonRegular btn_submit;
     Toolbar toolbar;
     Friends_Holder holder;
     ArrayList<ChantsModel> people_joined;
@@ -57,13 +60,11 @@ public class ChantsActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         people_joined = new ArrayList<>();
-        setData();
-
-
         //recyclerView_peoples = findViewById(R.id.recycler_people_joined);
         toolbar_text = findViewById(R.id.toolabr_title);
         toolbar_icon = findViewById(R.id.toolabar_icon);
         chantname = findViewById(R.id.the_mantra);
+        btn_submit = findViewById(R.id.button_submit);
         chantdescr = findViewById(R.id.the_mantra_lines);
         toolbar_icon.setImageResource(R.drawable.ic_back_arrow);
         toolbar_text.setText("Chants");
@@ -142,14 +143,15 @@ public class ChantsActivity extends AppCompatActivity {
         // int pos = radioGroup.getCheckedRadioButtonId();
         Chantfriendscontroller.getintance().fillcontext(getApplicationContext());
 
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submiting();
+            }
+        });
+
     }
 
-
-    public void setData() {
-        for (int i = 0; i < 10; i++) {
-            people_joined.add(new ChantsModel("Vedas", "vedas@gmail.com"));
-        }
-    }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -224,11 +226,13 @@ public class ChantsActivity extends AppCompatActivity {
         }
     }
 
+
     public void getIntentData() {
         chant_name = getIntent().getExtras().getString("chant_name");
         chant_decr = getIntent().getExtras().getString("chant_dec");
         chant_privacy = getIntent().getExtras().getString("chant_privacy");
         chant_id = getIntent().getExtras().getString("chant_id");
+        chant_created = getIntent().getExtras().getString("chant_created");
         chantname.setText(chant_name);
         chantdescr.setText(chant_decr);
         if (chant_privacy.equals("Friend")) {
@@ -237,4 +241,14 @@ public class ChantsActivity extends AppCompatActivity {
         }
         Log.e("vhvfdbsjb", chant_name + chant_decr + chant_privacy + chant_id);
     }
+
+    public void submiting() {
+
+        Intent intent = new Intent(getApplicationContext(), CounterActivity.class);
+        intent.putExtra("chant_id", chant_id);
+        intent.putExtra("chant_created", chant_created);
+        startActivity(intent);
+    }
+
+
 }

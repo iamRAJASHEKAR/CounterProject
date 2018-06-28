@@ -7,200 +7,202 @@
     tools:context=".Counter.CounterActivity">
 
     <include layout="@layout/activity_toolbar" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_below="@+id/toolBar"
-        android:layout_height="wrap_content">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/chantCard"
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:background="#ffffff">
+        android:layout_below="@+id/toolBar">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="10dp">
+            android:layout_height="wrap_content">
 
-            <com.example.mypc.counterapp.Fonts.TextViewBold
-                android:id="@+id/ChantName"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.CardView
+                android:id="@+id/chantCard"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="The Gayatri Mantra"
-                android:textColor="@color/black"
-                android:textSize="18dp" />
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="#ffffff">
 
-            <com.example.mypc.counterapp.Fonts.TextViewRegular
-                android:id="@+id/chantDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ChantName"
-                android:layout_marginTop="10dp"
-                android:text="Oṃ bhūr bhuvaḥ svaḥ tát savitúr váreṇyaṃ bhárgo devásya dhīmahi dhíyo yó naḥ pracodáyāt Oṃ bhūr bhuvaḥ svaḥ tát savitúr váreṇyaṃ bhárgo devásya dhīmahi dhíyo yó naḥ pracodáyāt Oṃ bhūr bhuvaḥ svaḥ tát savitúr váreṇyaṃ bhárgo devásya dhīmahi dhíyo yó naḥ pracodáyātOṃ bhūr bhuvaḥ svaḥ tát savitúr váreṇyaṃ bhárgo devásya dhīmahi dhíyo yó naḥ pracodáyāt"
-                android:textColor="@color/black" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="10dp">
 
-        </RelativeLayout>
+                    <com.example.mypc.counterapp.Fonts.TextViewBold
+                        android:id="@+id/ChantName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="The Gayatri Mantra"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
 
-    </android.support.v7.widget.CardView>
+                    <com.example.mypc.counterapp.Fonts.TextViewRegular
+                        android:id="@+id/chantDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:layout_below="@+id/ChantName"
+                        android:layout_marginTop="10dp"
+                        android:text="Oṃ bhūr bhuvaḥ svaḥ tát savitúr váreṇyaṃ bhárgo devásya dhīmahi dhíyo yó naḥ pracodáyāt Oṃ bhūr bhuvaḥ svaḥ tát savitúr váreṇyaṃ bhárgo devásya dhīmahi dhíyo yó naḥ pracodáyāt Oṃ bhūr bhuvaḥ svaḥ tát savitúr váreṇyaṃ bhárgo deváracodáyāt"
+                        android:textColor="@color/black" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
 
 
-
-    <RelativeLayout
-        android:id="@+id/relative_mega"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_below="@+id/chantCard">
-
-        <com.example.mypc.counterapp.Fonts.TextViewRegular
-            android:id="@+id/text_mega_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/black"
-            android:textSize="20dp" />
-
-        <com.robinhood.ticker.TickerView
-            android:id="@+id/tickerview"
-            android:layout_width="200dp"
-            android:layout_height="75dp"
-            android:layout_below="@+id/text_mega_count"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/orange_button"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="40dp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/relative_Counter"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_below="@+id/relative_mega"
-        android:layout_marginTop="20dp">
-
-        <ImageButton
-            android:id="@+id/minusimage"
-            android:layout_width="36dp"
-            android:layout_height="42dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="24dp"
-            android:background="@drawable/ic_minus" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true">
-
-            <LinearLayout
-                android:id="@+id/linear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
+            <RelativeLayout
+                android:id="@+id/relative_mega"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_below="@+id/chantCard">
 
                 <com.example.mypc.counterapp.Fonts.TextViewRegular
-                    android:id="@+id/text_LocalCount"
+                    android:id="@+id/text_mega_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_weight="1"
-                    android:text="@string/local_count"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/black"
                     android:textSize="20dp" />
 
                 <com.robinhood.ticker.TickerView
-                    android:id="@+id/ticker_localCount"
+                    android:id="@+id/tickerview"
+                    android:layout_width="200dp"
+                    android:layout_height="75dp"
+                    android:layout_below="@+id/text_mega_count"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/orange_button"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="40dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative_Counter"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_below="@+id/relative_mega"
+                android:layout_marginTop="20dp">
+
+                <ImageButton
+                    android:id="@+id/minusimage"
+                    android:layout_width="36dp"
+                    android:layout_height="42dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="24dp"
+                    android:background="@drawable/ic_minus" />
+
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true">
+
+                    <LinearLayout
+                        android:id="@+id/linear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <com.example.mypc.counterapp.Fonts.TextViewRegular
+                            android:id="@+id/text_LocalCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_weight="1"
+                            android:text="@string/local_count"
+                            android:textSize="20dp" />
+
+                        <com.robinhood.ticker.TickerView
+                            android:id="@+id/ticker_localCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:textColor="@color/colorOrange"
+                            android:textSize="30dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linea_mycontro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/linear"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <com.example.mypc.counterapp.Fonts.TextViewRegular
+                            android:id="@+id/text_mycontribution"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_weight="1"
+                            android:text="@string/my_contribution"
+                            android:textSize="20dp" />
+
+                        <com.robinhood.ticker.TickerView
+                            android:id="@+id/ticker_contribution"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:textColor="@color/colorGray"
+                            android:textSize="25dp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <ImageButton
+                    android:id="@+id/plusimage"
+                    android:layout_width="50dp"
+                    android:layout_height="55dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="24dp"
+                    android:background="@drawable/ic_plus" />
+            </RelativeLayout>
+
+            <com.example.mypc.counterapp.Fonts.ButtonBold
+                android:id="@+id/submitButton"
+                android:layout_width="200dp"
+                android:layout_height="45dp"
+                android:layout_below="@+id/relative_Counter"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/orange_button"
+                android:text="Submit"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/submitButton"
+                android:layout_marginBottom="20dp">
+
+                <com.example.mypc.counterapp.Fonts.TextViewRegular
+                    android:id="@+id/text_screenmode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:paddingBottom="20dp"
                     android:textColor="@color/colorOrange"
-                    android:textSize="30dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linea_mycontro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linear"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <com.example.mypc.counterapp.Fonts.TextViewRegular
-                    android:id="@+id/text_mycontribution"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_weight="1"
-                    android:text="@string/my_contribution"
-                    android:textSize="20dp" />
-
-                <com.robinhood.ticker.TickerView
-                    android:id="@+id/ticker_contribution"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorGray"
-                    android:textSize="25dp" />
-            </LinearLayout>
+                    android:textSize="18dp" />
+            </RelativeLayout>
         </RelativeLayout>
-
-        <ImageButton
-            android:id="@+id/plusimage"
-            android:layout_width="50dp"
-            android:layout_height="55dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="24dp"
-            android:background="@drawable/ic_plus" />
-    </RelativeLayout>
-
-    <com.example.mypc.counterapp.Fonts.ButtonBold
-        android:id="@+id/submitButton"
-        android:layout_width="200dp"
-        android:layout_height="45dp"
-        android:layout_below="@+id/relative_Counter"
-       android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/orange_button"
-        android:text="Submit"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        android:textColor="@color/white" />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_below="@+id/submitButton"
-        android:layout_marginBottom="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content">
-    <com.example.mypc.counterapp.Fonts.TextViewRegular
-        android:id="@+id/text_screenmode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:paddingBottom="20dp"
-        android:textColor="@color/colorOrange"
-        android:textSize="18dp" />
-    </RelativeLayout>
-    </RelativeLayout>
 
     </ScrollView>
 

@@ -32,48 +32,41 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddNewFriend extends Fragment implements ConnectionReceiver.ConnectionReceiverListener {
 
-    EditTextRegular addFriendName,addFriendEmail;
+    EditTextRegular addFriendName, addFriendEmail;
     ButtonRegular save;
     View view;
-    ButtonBold startCount;
     public boolean isConnected;
-    String frndname,friendEmail;
+    String frndname, friendEmail;
     MaterialDialog mProgress;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         view = inflater.inflate(R.layout.fragment_add_new_friend, container, false);
-       checkConnection();
-       init();
+        view = inflater.inflate(R.layout.fragment_add_new_friend, container, false);
+        checkConnection();
+        init();
         return view;
     }
 
 
-    public void init()
-    {
+    public void init() {
         addFriendName = view.findViewById(R.id.edit_name);
         addFriendEmail = view.findViewById(R.id.edit_email);
 
         save = view.findViewById(R.id.btn_save);
         save.setOnClickListener(ClickOnsaveBtn);
 
-        startCount = view.findViewById(R.id.btn_start_counting);
-        startCount.setOnClickListener(ClickOnButton);
     }
 
 
     ////click on save button
     View.OnClickListener ClickOnsaveBtn = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
-            if(isConnected)
-            {
-            Validations();
-            }
-            else
-            {
+        public void onClick(View view) {
+            if (isConnected) {
+                Validations();
+            } else {
                 Toast.makeText(getActivity(), "No Internet", Toast.LENGTH_SHORT).show();
 
             }
@@ -81,45 +74,27 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
     };
 
 
-    //////////click on counterbutton
-    View.OnClickListener ClickOnButton = new View.OnClickListener() {
-        @Override
-        public void onClick(View view)
-        {
-             startActivity(new Intent(getActivity(), CounterActivity.class));
-        }
-    };
-
-
-
-
-   ////////////EditText validations
-    public void Validations()
-    {
+    ////////////EditText validations
+    public void Validations() {
 
         frndname = addFriendName.getText().toString().trim();
         friendEmail = addFriendEmail.getText().toString().trim();
 
-        if (addFriendName.getText().toString().isEmpty())
-        {
+        if (addFriendName.getText().toString().isEmpty()) {
             addFriendName.setError("Name Can'not be empty");
-        }
-        else if (addFriendEmail.getText().toString().isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(addFriendEmail.getText().toString()).matches())
-        {
+        } else if (addFriendEmail.getText().toString().isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(addFriendEmail.getText().toString()).matches()) {
             addFriendEmail.setError("Enter Valid Email");
+        } else {
+            addFriendToChant();
         }
-        else
-            {
-                addFriendToChant();
-            }
 
 
     }
 
-    public void addFriendToChant()
-    {
+    public void addFriendToChant() {
 
         displayProgressDialog();
+
         AddFriendServerObject addFriendServerObject = new AddFriendServerObject();
         addFriendServerObject.chantId = "chant_2853";
         addFriendServerObject.name = frndname;
@@ -129,15 +104,12 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
         Call<AddFriendServerObject> addFriendServerObjectCall = api.addFriend(addFriendServerObject);
         addFriendServerObjectCall.enqueue(new Callback<AddFriendServerObject>() {
             @Override
-            public void onResponse(Call<AddFriendServerObject> call, Response<AddFriendServerObject> response)
-            {
+            public void onResponse(Call<AddFriendServerObject> call, Response<AddFriendServerObject> response) {
                 String addFriendResponse;
-                if(response.body()!= null)
-                {
-                    Log.e("addFriendResponse"," "+response.body().response);
+                if (response.body() != null) {
+                    Log.e("addFriendResponse", " " + response.body().response);
                     addFriendResponse = response.body().response;
-                    if(addFriendResponse.equals("3"))
-                    {
+                    if (addFriendResponse.equals("3")) {
                         hideProgressDialog();
                     }
 
@@ -145,10 +117,9 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
             }
 
             @Override
-            public void onFailure(Call<AddFriendServerObject> call, Throwable t)
-            {
-                  Log.e("addFriendFailure","Failed");
-                  hideProgressDialog();
+            public void onFailure(Call<AddFriendServerObject> call, Throwable t) {
+                Log.e("addFriendFailure", "Failed");
+                hideProgressDialog();
             }
         });
 
@@ -181,18 +152,16 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
     public void onResume() {
         TestApplication.getInstance().setConnectionListener(this);
         super.onResume();
-       // hideProgressDialog();
+        // hideProgressDialog();
     }
 
 
-    public void displayProgressDialog()
-    {
+    public void displayProgressDialog() {
         mProgress = new MaterialDialog.Builder(getActivity()).content("Loading").canceledOnTouchOutside(false).progress(true, 0).show();
 
     }
 
-    private void hideProgressDialog()
-    {
+    private void hideProgressDialog() {
 
         if (mProgress != null && mProgress.isShowing()) {
             mProgress.dismiss();

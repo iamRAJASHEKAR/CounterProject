@@ -37,8 +37,7 @@ public class FetchPublicChantController {
         context = context1;
     }
 
-    public void publicchant_data(final String user_email)
-    {
+    public void publicchant_data(final String user_email) {
 
         FetchingPublicChant logoutServerObjects = new FetchingPublicChant();
 
@@ -74,20 +73,17 @@ public class FetchPublicChantController {
 
             @Override
             public void onFailure(Call<FetchingPublicChant> call, Throwable t) {
-                Log.e("logoot_failure", t.getMessage());
+                //    Log.e("logoot_failure", t.getMessage());
             }
         });
     }
 
-    public void friendschant_data(final String user_email) {
-
+    public void friendschant_data(final String user_email)
+    {
         FetchingFriendsChants logoutServerObjects = new FetchingFriendsChants();
-
         logoutServerObjects.email = user_email;
         Log.e("fetchcontroller", user_email);
-
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
-
         ServerApiInterface apiInterface = retrofit.create(ServerApiInterface.class);
         Call<FetchingFriendsChants> logout_call = apiInterface.fetch_friends(logoutServerObjects);
         logout_call.enqueue(new Callback<FetchingFriendsChants>() {
@@ -103,8 +99,7 @@ public class FetchPublicChantController {
                     publicList.addAll(publicaray);
                     Log.e("friends", response.body().getResponse());
                     Log.e("arrayfriends", String.valueOf(publicList.size()));
-                    for (int i = 0; i < response.body().getPublicList().size(); i++)
-                    {
+                    for (int i = 0; i < response.body().getPublicList().size(); i++) {
                         Log.e("friendARRAYprofile", String.valueOf
                                 (response.body().getPublicList().get(i).chant_description) + "\n" +
                                 response.body().getPublicList().get(i).chant_id + "\n" +
@@ -113,8 +108,7 @@ public class FetchPublicChantController {
                                 response.body().getPublicList().get(i).created_email + "\n" +
                                 response.body().getPublicList().get(i).privacy + "\n");
                     }
-                } else
-                    {
+                } else {
                 }
             }
 
@@ -124,5 +118,4 @@ public class FetchPublicChantController {
             }
         });
     }
-
 }

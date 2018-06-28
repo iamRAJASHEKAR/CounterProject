@@ -6,8 +6,20 @@ public class LogoutServerObjects {
     @SerializedName("device_id")
     public String device_id;
 
+    @SerializedName("response")
+    public String response;
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
     public String getDevice_id() {
         return device_id;
+
     }
 
     public void setDevice_id(String device_id) {

@@ -1,6 +1,8 @@
 package com.example.mypc.counterapp.Counter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -8,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,11 +20,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mypc.counterapp.Activities.HomeActivity;
+import com.example.mypc.counterapp.Activities.LoginActivity;
 import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
 import com.example.mypc.counterapp.R;
+import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
+import com.example.mypc.counterapp.ServerObject.LogoutServerObjects;
+import com.example.mypc.counterapp.ServerObject.MegaCount;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CounterActivity extends AppCompatActivity {
     TextView text_screenmodes, text_megacount;
@@ -32,6 +46,7 @@ public class CounterActivity extends AppCompatActivity {
     ButtonBold submit_button;
     TickerView ticker_mega, ticker_local, ticker_mycontribution;
     Toolbar countertoolbar;
+    String chant_id, user_email, chant_created;
     ImageView toolbar_icon;
     TextViewBold conterText;
 
@@ -140,6 +155,7 @@ public class CounterActivity extends AppCompatActivity {
                 ticker_local.setText(String.valueOf(japam_count));
                 ticker_mega.setText(String.valueOf(my_contribution));
 
+                getintentdata();
             }
         });
     }
@@ -160,7 +176,6 @@ public class CounterActivity extends AppCompatActivity {
                     //deprecated in API 26
                     vibrator.vibrate(100);
                 }
-
             }
         } else {
 
@@ -217,5 +232,44 @@ public class CounterActivity extends AppCompatActivity {
     public void onBackPressed() {
         //   finish();
         super.onBackPressed();
+    }
+
+    public void count() {
+        String count = String.valueOf(my_contribution);
+        MegaCount megaCount = new MegaCount();
+        megaCount.mycount = count;
+        megaCount.chant_id = chant_id;
+        megaCount.email = chant_created;
+
+        Log.e("apidata", count + chant_id + chant_created);
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
+        ServerApiInterface apiInterface = retrofit.create(ServerApiInterface.class);
+        Call<MegaCount> logout_call = apiInterface.mega_count(megaCount);
+        logout_call.enqueue(new Callback<MegaCount>() {
+            @Override
+            public void onResponse(Call<MegaCount> call, Response<MegaCount> response) {
+                if (response.body() != null) {
+                    Log.e("responseoncounter", response.body().getResponse() + "\n" + response.body().getMegacount()
+                            + "\n" + response.body().getEmail()
+                            + "\n" + response.body().getMessage());
+                } else {
+                    //  Toast.makeText(HomeActivity.this, "Failed to logout", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MegaCount> call, Throwable t) {
+                Log.e("logoot_failure", t.getMessage());
+            }
+        });
+
+    }
+
+    public void getintentdata() {
+        chant_id = getIntent().getExtras().getString("chant_id");
+        chant_created = getIntent().getExtras().getString("chant_created");
+        Log.e("counterdata", chant_id + chant_created + my_contribution);
+        count();
     }
 }
