@@ -71,12 +71,10 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
     MaterialDialog mProgress;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_chant);
-        friendsArrayList = new ArrayList<>();
         checkConnection();
         loadContactsOnSeparateThread();
         SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
@@ -88,7 +86,6 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
         timestamp = String.valueOf(unixTime);
         Log.e("name timestamp", " " + createdBy + " " + timestamp);
 
-        chantsModelArrayList = new ArrayList<>();
         init();
     }
 
@@ -158,8 +155,7 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
         public void onClick(View view) {
             chantname = editChantname.getText().toString();
             chantDescription = editchantText.getText().toString();
-            if (isConnected)
-            {
+            if (isConnected) {
                 validations();
             } else {
                 Toast.makeText(AddChantActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
@@ -237,9 +233,9 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
 
     public void getPhoneDetailsFromDeviceContacts() {
 
-        //run on saparat thrad.
-        //  contactsArrary = new ArrayList<ContactModel>();
-        ///
+        chantsModelArrayList = new ArrayList<>();
+        friendsArrayList = new ArrayList<>();
+
         Context context = getApplicationContext();
         ContentResolver cr = context.getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -262,16 +258,11 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
 
                     Integer hasPhone = cur1.getInt(cur1.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
 
-                    if (email != null) {
-                     /* ContactModel contactModel = new ContactModel();
-                      contactModel.setEmail(email);
-                      contactModel.setName(name);*/
-                        chantsModelArrayList.add(new ChantsModel(name, email));
-
-
-                        // get the user's phone image
-
-
+                    if (!email.isEmpty() && !name.isEmpty()) {
+                        ChantsModel contactModel = new ChantsModel();
+                        contactModel.setUser(email);
+                        contactModel.setName(name);
+                        chantsModelArrayList.add(contactModel);
                         Log.e("contactsArrary", "call" + chantsModelArrayList.size());
                     }
                 }
@@ -286,36 +277,39 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
     ///////Adding the chants and send to server
     public void addChants() {
         displayProgressDialog();
-        friendsArrayList = new ArrayList<>();
+
         AddChantServerObject addChantObj = new AddChantServerObject();
         addChantObj.chantName = chantname.trim();
         addChantObj.chantDescription = chantDescription.trim();
         addChantObj.createdBy = createdBy.trim();
         addChantObj.timestamp = timestamp.trim();
         addChantObj.created_email = createdEmail.trim();
-        if(radioButtonText.equals("Public"))
-        {
+        if (radioButtonText.equals("Public")) {
             addChantObj.privacy = radioButtonText.trim();
-        }
-        else if(radioButtonText.equals("Friend"))
-        {
+        } else if (radioButtonText.equals("Friend")) {
+          /* // friendsArrayList.clear();
              Log.e("selectedFriendsSize"," "+mSelectedFriendsEmail.size()+mSelectedFriendsName);
-            Contact contact = new Contact();
-            for(int i =0;i<mSelectedFriendsEmail.size();i++)
+          //  Contact contact = new Contact();
+            for(int i =0;i<= mSelectedFriendsEmail.size();i++)
             {
-                contact.setName(mSelectedFriendsName.get(i));
-                contact.setMail(mSelectedFriendsEmail.get(i));
-                friendsArrayList.add(contact);
+                Log.e("stringarray"," "+mSelectedFriendsEmail.get(i));
+               // contact.setName(mSelectedFriendsName.get(i));
+                //contact.setMail(mSelectedFriendsEmail.get(i));
+                friendsArrayList.add(new Contact(mSelectedFriendsName.get(i),mSelectedFriendsEmail.get(i)));
 
             }
 
             Log.e("addchnatfrnds"," "+friendsArrayList.size());
+            for(int i =0;i<friendsArrayList.size();i++)
+            {
+                Log.e("ffffff"," "+friendsArrayList.get(i).getMail());
+            }*/
             addChantObj.privacy = radioButtonText.trim();
             addChantObj.contacts = friendsArrayList;
 
         }
 
-        Log.e("addchnatffff"," "+addChantObj);
+        Log.e("addchnatffff", " " + addChantObj);
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
         ServerApiInterface api = retrofit.create(ServerApiInterface.class);
@@ -326,10 +320,9 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
                 if (response.body() != null) {
                     Log.e("addchantStatuscode", " " + response.body().response);
                     String addchantStatuscode = response.body().response;
-                    if(addchantStatuscode.equals("3"))
-                    {
-                        startActivity(new Intent(getApplicationContext(),HomeActivity.class));
-                        finish();
+                    if (addchantStatuscode.equals("3")) {
+                      /*  startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+                        finish();*/
                         hideProgressDialog();
                     }
                 }
@@ -337,7 +330,7 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
 
             @Override
             public void onFailure(Call<AddChantServerObject> call, Throwable t) {
-                Log.e("addchant"," failed");
+                Log.e("addchant", " failed");
                 hideProgressDialog();
             }
         });
@@ -376,7 +369,6 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
     class AddChantAdapter extends RecyclerView.Adapter<AddChantAdapter.ViewHolder> {
 
 
-
         public AddChantAdapter() {
 
             mSelectedFriendsEmail = new ArrayList<String>();
@@ -393,6 +385,7 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
 
         @Override
         public void onBindViewHolder(@NonNull final AddChantAdapter.ViewHolder holder, final int position) {
+            final Contact contact = new Contact();
             holder.name.setText(chantsModelArrayList.get(position).getName());
             holder.email.setText(chantsModelArrayList.get(position).getUser());
             final ChantsModel chantsModel = chantsModelArrayList.get(position);
@@ -402,35 +395,22 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
                 public void onClick(View view) {
                     chantsModel.setSelected(!chantsModel.isSelected());
                     holder.btninvite.setBackgroundResource(chantsModel.isSelected() ? R.color.colorOrange : R.color.colorLightGray);
-                    Log.e("SelectedStatus"," "+chantsModel.isSelected()+" "+holder.getAdapterPosition());
-                    if(chantsModel.isSelected())
-                    {
-                      Log.e("email"," "+chantsModelArrayList.get(holder.getAdapterPosition()).getUser());
-                       if(chantsModelArrayList.get(holder.getAdapterPosition()).getUser().isEmpty())
-                       {
-                         Toast.makeText(getApplicationContext(),"Email is not avialable for this contact",Toast.LENGTH_SHORT).show();
+                    Log.e("SelectedStatus", " " + chantsModel.isSelected() + " " + holder.getAdapterPosition());
+                    if (chantsModel.isSelected()) {
+                        contact.setMail(chantsModelArrayList.get(holder.getAdapterPosition()).getUser());
+                        contact.setName(chantsModelArrayList.get(holder.getAdapterPosition()).getName());
+                        friendsArrayList.add(contact);
+                        Log.e("friendsArrayList"," "+" "+friendsArrayList.size());
+                    } else {
+                        Log.e("arraypos", "call" + position);
 
-                       }
-                       else
-                       {
-                           mSelectedFriendsEmail.add(chantsModelArrayList.get(holder.getAdapterPosition()).getUser());
-                           mSelectedFriendsName.add(chantsModelArrayList.get(holder.getAdapterPosition()).getName());
-
-
-
-                       }
-                      Log.e("selectedFreinds"," "+mSelectedFriendsEmail+" "+mSelectedFriendsEmail.size()+" "+mSelectedFriendsName+" "+mSelectedFriendsName.size());
+                        if (friendsArrayList.contains(contact)) {
+                            int index = friendsArrayList.indexOf(contact);
+                            Log.e("index", "call" + index);
+                            friendsArrayList.remove(index);
+                        }
+                        Log.e("unselectedFreinds", " " + mSelectedFriendsEmail + " " + mSelectedFriendsEmail.size() + " " + mSelectedFriendsName + " " + mSelectedFriendsName.size());
                     }
-                    else
-                    {
-                        mSelectedFriendsEmail.remove(chantsModelArrayList.get(holder.getAdapterPosition()).getUser());
-                        mSelectedFriendsName.remove(chantsModelArrayList.get(holder.getAdapterPosition()).getName());
-
-
-
-                        Log.e("unselectedFreinds"," "+mSelectedFriendsEmail+" "+mSelectedFriendsEmail.size()+" "+mSelectedFriendsName+" "+mSelectedFriendsName.size());
-                    }
-
 
 
                 }
@@ -442,9 +422,6 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
         public int getItemCount() {
             return chantsModelArrayList.size();
         }
-
-
-
 
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -461,14 +438,12 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
         }
     }
 
-    public void displayProgressDialog()
-    {
+    public void displayProgressDialog() {
         mProgress = new MaterialDialog.Builder(AddChantActivity.this).content("Loading").canceledOnTouchOutside(false).progress(true, 0).show();
 
     }
 
-    private void hideProgressDialog()
-    {
+    private void hideProgressDialog() {
 
         if (mProgress != null && mProgress.isShowing()) {
             mProgress.dismiss();

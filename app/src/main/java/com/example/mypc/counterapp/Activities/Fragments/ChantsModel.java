@@ -9,10 +9,10 @@ public class ChantsModel
         return name;
     }
 
-    public ChantsModel(String name, String user) {
+    /*public ChantsModel(String name, String user) {
         this.name = name;
         this.user = user;
-    }
+    }*/
 
     public void setName(String name) {
         this.name = name;

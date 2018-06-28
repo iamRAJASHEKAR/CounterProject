@@ -13,4 +13,6 @@ public class Contact
     public String getMail() { return this.mail; }
 
     public void setMail(String mail) { this.mail = mail; }
+
+
 }
