@@ -5,9 +5,12 @@ import com.example.mypc.counterapp.ServerObject.AddFriendServerObject;
 import com.example.mypc.counterapp.ServerObject.AddRelegionObject;
 import com.example.mypc.counterapp.ServerObject.ChantFriendList;
 import com.example.mypc.counterapp.ServerObject.CounterServerObject;
+import com.example.mypc.counterapp.ServerObject.DeleteChantServerObject;
+import com.example.mypc.counterapp.ServerObject.EditChantServerObject;
 import com.example.mypc.counterapp.ServerObject.FetchingFriendsChants;
 import com.example.mypc.counterapp.ServerObject.FetchingPublicChant;
 import com.example.mypc.counterapp.ServerObject.HelpusServerObject;
+import com.example.mypc.counterapp.ServerObject.InviteServerobject;
 import com.example.mypc.counterapp.ServerObject.LogoutServerObjects;
 import com.example.mypc.counterapp.ServerObject.MegaCount;
 import com.example.mypc.counterapp.ServerObject.UserLoginObjects;
@@ -60,6 +63,18 @@ public interface ServerApiInterface {
 
     @POST("megacount")
     Call<MegaCount> mega_count(@Body MegaCount megacount);
+
+    @POST("deletechant")
+    Call<DeleteChantServerObject>  deleteChant(@Body DeleteChantServerObject deleteChantServerObject);
+
+    ///editChant
+    @POST("updatechant")
+    Call<EditChantServerObject> editChant(@Body EditChantServerObject editObj);
+
+    ///invite friend
+    @POST("invite")
+    Call<InviteServerobject> inviteFriend(@Body InviteServerobject inviteObj);
+
 
 
 }

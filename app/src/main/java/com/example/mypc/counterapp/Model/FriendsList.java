@@ -70,4 +70,7 @@ public class FriendsList {
 
     @SerializedName("email")
     public String email;
+
+
+
 }

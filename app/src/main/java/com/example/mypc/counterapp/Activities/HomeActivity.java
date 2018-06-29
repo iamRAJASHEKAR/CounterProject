@@ -79,6 +79,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     NavigationView navigationView;
     MaterialDialog mProgress;
     GoogleApiClient googleApiClient;
+    public static String chantId;
 
 
     @Override
@@ -291,7 +292,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                         String chant_privacy = chantsArrayList.get(getAdapterPosition()).getPrivacy();
                         String chant_id = chantsArrayList.get(getAdapterPosition()).chant_id;
                         String chant_created = chantsArrayList.get(getAdapterPosition()).getCreated_by();
+                        String chant_creted_email = chantsArrayList.get(getAdapterPosition()).created_email;
                         Log.e("pos", " " + chant_name + chant_dec);
+                        chantId = chant_id;
 
                         if (chant_privacy.equals("Public")) {
                             Intent intent = new Intent(getApplicationContext(), ChantJoin.class);
@@ -306,6 +309,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                             intent.putExtra("chant_privacy", chant_privacy);
                             intent.putExtra("chant_id", chant_id);
                             intent.putExtra("chant_created", chant_created);
+                            intent.putExtra("chant_created_email",chant_creted_email);
                             startActivity(intent);
                         }
                         //  startActivity(new Intent(getApplicationContext(), ChantsActivity.class));

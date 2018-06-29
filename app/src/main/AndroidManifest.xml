@@ -77,6 +77,8 @@
 
         <activity android:name=".Activities.ChantJoin"></activity>
 
+        <activity android:name=".Activities.EditChantActivity"></activity>
+
 
         <service android:name=".PushNotification.GenerateToken">
             <intent-filter>

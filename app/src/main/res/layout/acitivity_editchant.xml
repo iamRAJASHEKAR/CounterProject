@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/addchant_toolbar"
+        layout="@layout/activity_toolbar"/>
+    <!-- <ScrollView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">-->
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/relative_chantName"
+        android:layout_margin="15dp"
+        android:layout_below="@+id/addchant_toolbar"
+        android:layout_height="wrap_content">
+        <com.example.mypc.counterapp.Fonts.TextViewBold
+            android:layout_width="match_parent"
+            android:id="@+id/text_chantname"
+            android:textColor="@android:color/black"
+            android:text="@string/txt_chant_name"
+            android:layout_height="wrap_content" />
+        <com.example.mypc.counterapp.Fonts.EditTextRegular
+            android:layout_width="match_parent"
+            android:id="@+id/edit_chantName"
+            android:layout_marginTop="5dp"
+            android:maxLines="1"
+            android:maxLength="30"
+            android:textColor="@android:color/black"
+            android:layout_below="@+id/text_chantname"
+            android:background="@drawable/rectangleshape"
+            android:layout_height="45dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/relative_chant"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_below="@+id/relative_chantName"
+        android:layout_height="wrap_content">
+        <com.example.mypc.counterapp.Fonts.TextViewBold
+            android:layout_width="match_parent"
+            android:id="@+id/text_chant"
+            android:textColor="@android:color/black"
+            android:text="@string/txt_chant"
+            android:layout_height="wrap_content" />
+        <com.example.mypc.counterapp.Fonts.EditTextRegular
+            android:layout_width="match_parent"
+            android:id="@+id/edit_chant"
+            android:layout_marginTop="5dp"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:layout_below="@+id/text_chant"
+            android:background="@drawable/rectangleshape"
+            android:layout_height="100dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+        <com.example.mypc.counterapp.Fonts.ButtonBold
+            android:layout_width="200dp"
+            android:id="@+id/btn_save"
+            android:background="@drawable/ovalshape_orange"
+            android:text="@string/txt_save"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            android:layout_marginBottom="4dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

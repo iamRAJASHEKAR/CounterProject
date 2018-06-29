@@ -168,7 +168,7 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
 
     View.OnTouchListener touchListener = new View.OnTouchListener() {
         public boolean onTouch(final View v, final MotionEvent motionEvent) {
-            if (v.getId() == R.id.edit_help) {
+            if (v.getId() == R.id.edit_chant) {
                 v.getParent().requestDisallowInterceptTouchEvent(true);
                 switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_UP:
@@ -203,7 +203,8 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
         }
     }*/
 
-    public void loadContactsOnSeparateThread() {
+    public void loadContactsOnSeparateThread()
+    {
         // run on separate thread
         HandlerThread handlerThread = new HandlerThread("fetchContacts");
         handlerThread.start();
@@ -231,7 +232,9 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
 
     }
 
-    public void getPhoneDetailsFromDeviceContacts() {
+    ///getting the phone contacts
+    public void getPhoneDetailsFromDeviceContacts()
+    {
 
         chantsModelArrayList = new ArrayList<>();
         friendsArrayList = new ArrayList<>();
