@@ -110,15 +110,25 @@ public class ReligionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String relegion = relegion_data.getText().toString().trim();
                 if (isNetworkAvailable() == true) {
+                    if (!relegion.equals("")) {
 
-                    add_relegion(relegion);
-                    Log.e("dialogueyes", "dialog yes" + relegion);
+                        add_relegion(relegion);
+                        Log.e("dialogueyes", "dialog yes" + relegion);
+                        dialog.dismiss();
+                    } else
+
+                    {
+                        Toast toast = Toast.makeText(ReligionActivity.this, " Enter Religion", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
+
                 } else {
                     Toast toast = Toast.makeText(ReligionActivity.this, " Check Internet Connection", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
+                    dialog.dismiss();
                 }
-                dialog.dismiss();
                 // startActivity(new Intent(getApplicationContext(),LoginActivity.class));
 
 
@@ -196,7 +206,8 @@ public class ReligionActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public void add_relegion(String relegion) {
+    public void add_relegion(String relegion)
+    {
 
         displayProgressDialog();
 

@@ -1,16 +1,23 @@
 package com.example.mypc.counterapp.Activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,10 +37,18 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+import com.example.mypc.counterapp.Activities.Fragments.AddNewFriend;
+import com.example.mypc.counterapp.Activities.Fragments.Friends;
+import com.example.mypc.counterapp.Activities.Fragments.FriendsFragment;
+import com.example.mypc.counterapp.Activities.Fragments.JoinedFriends;
+import com.example.mypc.counterapp.Activities.Fragments.PrivateFragment;
+import com.example.mypc.counterapp.Activities.Fragments.PublicFragment;
 import com.example.mypc.counterapp.Controllers.FetchPublicChantController;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
 import com.example.mypc.counterapp.Fonts.TextViewRegular;
 import com.example.mypc.counterapp.Model.PublicList;
+import com.example.mypc.counterapp.Network.ConnectionReceiver;
+import com.example.mypc.counterapp.Network.TestApplication;
 import com.example.mypc.counterapp.R;
 import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
 import com.example.mypc.counterapp.ServerObject.LogoutServerObjects;
@@ -45,12 +60,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -59,14 +78,16 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class HomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class HomeActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, ConnectionReceiver.ConnectionReceiverListener {
 
+    private TabLayout tabLayout;
     DrawerLayout drawerLayout;
     public static boolean check = true;
     public static boolean checked = false;
-    RecyclerView chantRecyclerview;
+    //RecyclerView chantRecyclerview;
     Toolbar toolbar;
     SessionsManager sessionsManager;
+    public boolean isConnected;
     TextView user_name;
     TextViewBold toolbar_text;
     ImageView toolabr_image;
@@ -74,18 +95,21 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     CircleImageView imageView_profile;
     ArrayList<PublicList> chantsArrayList;
     HomeAdapter homeAdapter;
+    private ViewPager viewPager;
     ImageButton floatingActionButton;
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
-    MaterialDialog mProgress;
+    public static MaterialDialog mProgress;
     GoogleApiClient googleApiClient;
-    public static String chantId;
 
+    public static String chantId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitvity_home);
+        viewPager = findViewById(R.id.viewpager);
+        tabLayout = findViewById(R.id.tabs);
         sessionsManager = new SessionsManager(this);
         navigationView = findViewById(R.id.navigation_view);
         imageView_profile = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
@@ -93,11 +117,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         //imageView_profile.setImageResource(R.drawable.ic_star);
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
+
         toolabr_image = findViewById(R.id.toolabar_icon);
         toolabr_image.setImageResource(R.drawable.ic_sidemenu);
         toolbar_text = findViewById(R.id.toolabr_title);
         toolbar_text.setText(R.string.avialble_chants);
-
+        checkConnection();
         drawerLayout = findViewById(R.id.drawerLayout);
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
@@ -158,6 +183,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         getuserData();
         set_profile(imageView_profile, user_name);
         // publicchant_data();
+        requestforPhoneContacts();
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
+        floatingActionButton = findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(AddChantBtn);
 
     }
 
@@ -168,7 +198,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         textView.setText(name);
     }
 
-    public void display_data() {
+ /*   public void display_data() {
         chantsArrayList = new ArrayList<>();
         chantsArrayList = FetchPublicChantController.getinstance().publicList;
         Log.e("kddbvjbs", String.valueOf(chantsArrayList.size()));
@@ -179,7 +209,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         chantRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         chantRecyclerview.setAdapter(homeAdapter);
         homeAdapter.notifyDataSetChanged();
-    }
+    }*/
 
 
     View.OnClickListener AddChantBtn = new View.OnClickListener() {
@@ -189,8 +219,49 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     };
 
-    public void logoutDialog() {
+    public void tryagain() {
+        TextViewRegular yes, no, title;
+        final Dialog dialog = new Dialog(HomeActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.activity_logout_dialog);
+        yes = dialog.findViewById(R.id.yes);
+        no = dialog.findViewById(R.id.no);
+        no.setVisibility(View.GONE);
+        yes.setText("Try Again");
+        title = dialog.findViewById(R.id.dialog_text);
+        title.setText("Failed to fetch chants");
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_background);
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                if (isConnected) {
+                    displayProgressDialog("Loading...");
+                    FetchPublicChantController.getinstance().publicchant_data(user_email);
+                } else {
+                    tryagain();
+                }
+            }
+        });
 
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("call", "dialog no");
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+
+    }
+
+
+    public void logoutDialog()
+    {
         TextViewRegular yes, no;
         final Dialog dialog = new Dialog(HomeActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -204,24 +275,28 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("call", "dialog yes");
+                if (isConnected) {
 
-                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(Status status) {
+                    Log.e("call", "dialog yes");
 
-                                if (sessionsManager.isLoggedIn()) {
-                                    sessionsManager.setLogin(false);
+                    Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
+                            new ResultCallback<Status>() {
+                                @Override
+                                public void onResult(Status status) {
 
+                                    if (sessionsManager.isLoggedIn()) {
+                                        sessionsManager.setLogin(false);
+
+                                    }
+
+                                    logout();
                                 }
-                                logout();
-                            }
-                        });
-                if (dialog.isShowing()) {
-                    dialog.dismiss();
+                            });
+                    if (dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
+                    drawerLayout.closeDrawers();
                 }
-                drawerLayout.closeDrawers();
             }
         });
 
@@ -243,6 +318,29 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean connect) {
+        isConnected = connect;
+        if (!isConnected) {
+            Toast.makeText(this, "check internet Connection...", Toast.LENGTH_SHORT).show();
+            //  Snackbar.make(findViewById(R.id.relative_login), "check internet Connection", Snackbar.LENGTH_SHORT).show();
+        } else {
+            // Snackbar.make(findViewById(R.id.relative_login), " internet Connection on", Snackbar.LENGTH_INDEFINITE).show();
+            //  Log.e("network status", " On");
+        }
+    }
+
+    private void checkConnection() {
+        isConnected = ConnectionReceiver.isConnected();
+        if (!isConnected) {
+            Toast.makeText(this, "check internet Connection..", Toast.LENGTH_SHORT).show();
+            Log.e("oncreate network status", " off");
+        } else {
+            Log.e("oncreate network status", " on");
+        }
+    }
+
+
     class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         @NonNull
@@ -257,7 +355,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         public void onBindViewHolder(@NonNull HomeAdapter.ViewHolder holder, int position) {
             holder.chantTitle.setText(chantsArrayList.get(position).getChant_name());
             holder.chantText.setText(chantsArrayList.get(position).getChant_description());
-
             holder.textCreated.setText(chantsArrayList.get(position).created_by);
             holder.textVisibility.setText(chantsArrayList.get(position).privacy);
         }
@@ -293,23 +390,25 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                         String chant_id = chantsArrayList.get(getAdapterPosition()).chant_id;
                         String chant_created = chantsArrayList.get(getAdapterPosition()).getCreated_by();
                         String chant_creted_email = chantsArrayList.get(getAdapterPosition()).created_email;
-                        Log.e("pos", " " + chant_name + chant_dec);
                         chantId = chant_id;
+                        Log.e("pos", " " + chant_name + chant_dec + chant_id);
 
                         if (chant_privacy.equals("Public")) {
                             Intent intent = new Intent(getApplicationContext(), ChantJoin.class);
-                            intent.putExtra("chant_name", chant_name);
-                            intent.putExtra("chant_dec", chant_dec);
-                            intent.putExtra("chant_privacy", chant_privacy);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(getApplicationContext(), ChantsActivity.class);
-                            intent.putExtra("chant_name", chant_name);
+                            intent.putExtra("chantname", chant_name);
                             intent.putExtra("chant_dec", chant_dec);
                             intent.putExtra("chant_privacy", chant_privacy);
                             intent.putExtra("chant_id", chant_id);
-                            intent.putExtra("chant_created", chant_created);
-                            intent.putExtra("chant_created_email",chant_creted_email);
+                            intent.putExtra("chant_created", chant_creted_email);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), ChantsActivity.class);
+                            intent.putExtra("chantname", chant_name);
+                            intent.putExtra("chant_dec", chant_dec);
+                            intent.putExtra("chant_privacy", chant_privacy);
+                            intent.putExtra("chant_id", chant_id);
+                            intent.putExtra("chant_created", chant_creted_email);
+                            intent.putExtra("chant_created_email", chant_creted_email);
                             startActivity(intent);
                         }
                         //  startActivity(new Intent(getApplicationContext(), ChantsActivity.class));
@@ -318,6 +417,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
 
             }
         }
+
     }
 
 
@@ -374,13 +474,20 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     protected void onStart() {
-        FetchPublicChantController.getinstance().publicchant_data(user_email);
-        displayProgressDialog("Fetching data...");
+        if (isConnected) {
+            displayProgressDialog("Loading...");
+            FetchPublicChantController.getinstance().publicchant_data(user_email);
+        } else {
+            tryagain();
+
+        }
+
         super.onStart();
     }
 
     @Override
     protected void onResume() {
+        TestApplication.getInstance().setConnectionListener(this);
         EventBus.getDefault().register(this);
         super.onResume();
     }
@@ -391,7 +498,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onPause();
     }
 
-    public void getuserData() {
+    public void getuserData()
+    {
         SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
         name = prefs.getString("name", "No name defined");
         url = prefs.getString("photo", "No name defined");
@@ -405,16 +513,103 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     public void displayProgressDialog(String msg) {
+
         mProgress = new MaterialDialog.Builder(HomeActivity.this).content(msg).canceledOnTouchOutside(false).progress(true, 0).show();
+
+        if (mProgress.isShowing()) {
+            mProgress.dismiss();
+        }
+        mProgress.show();
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(LoginActivity.MessageEvent event) {
-        Log.e("filesevent", "" + event.message);
+    public void onEventMainThread(LoginActivity.MessageEvent event)
+    {
+       /* Log.e("filesevent", "" + event.message);
         String resultData = event.message.trim();
-        if (resultData.equals("refreshchant")) {
+        if (resultData.equals("refreshchant"))
+        {
             hideProgressDialog();
-            display_data();
+            //display_data();
+        } else if (resultData.equals("error")) {
+            tryagain();
+            //    displayProgressDialog("Loading Chants...");
+
+        }*/
+    }
+
+    public void requestforPhoneContacts() {
+        Permissions.check(HomeActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, "We need Email id's of contacts for inviting the chant..", new Permissions.Options()
+                        .setRationaleDialogTitle("Info"),
+                new PermissionHandler() {
+                    @Override
+                    public void onGranted() {
+
+                    }
+
+                    @Override
+                    public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                        Toast.makeText(getApplicationContext(), "Permissions are necessary,Please grant the permission", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getPackageName(), null));
+                        startActivity(intent);
+                        Log.e("denied Permissions", Arrays.toString(deniedPermissions.toArray()));
+
+                    }
+
+                    @Override
+                    public boolean onBlocked(Context context, ArrayList<String> blockedList) {
+                        Toast.makeText(context, "read contacts blocked:\n" + Arrays.toString(blockedList.toArray()),
+                                Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                    @Override
+                    public void onJustBlocked(Context context, ArrayList<String> justBlockedList, ArrayList<String> deniedPermissions) {
+                        Toast.makeText(context, "Camera+Storage just blocked:\n" + Arrays.toString(deniedPermissions.toArray()),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
         }
     }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new FriendsFragment(), "Friends");
+        adapter.addFragment(new PublicFragment(), "Public");
+        adapter.addFragment(new PrivateFragment(), "Private");
+        viewPager.setAdapter(adapter);
+    }
+
+
 }

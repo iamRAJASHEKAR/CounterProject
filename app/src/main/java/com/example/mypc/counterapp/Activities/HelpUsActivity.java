@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.MotionEvent;
@@ -22,11 +21,7 @@ import com.example.mypc.counterapp.Network.ConnectionReceiver;
 import com.example.mypc.counterapp.Network.TestApplication;
 import com.example.mypc.counterapp.R;
 import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
-import com.example.mypc.counterapp.ServerObject.CounterServerObject;
 import com.example.mypc.counterapp.ServerObject.HelpusServerObject;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,8 +70,8 @@ public class HelpUsActivity extends AppCompatActivity implements ConnectionRecei
 
         scrollView = findViewById(R.id.scrollView);
         editName = findViewById(R.id.edit_name);
-        editEmail = findViewById(R.id.edit_email);
-        editPhone = findViewById(R.id.edit_phone);
+        editEmail = findViewById(R.id.edit_surname);
+        editPhone = findViewById(R.id.edit_firstname);
         editHelpMsg = findViewById(R.id.edit_help);
         editHelpMsg.setOnTouchListener(touchListener);
 

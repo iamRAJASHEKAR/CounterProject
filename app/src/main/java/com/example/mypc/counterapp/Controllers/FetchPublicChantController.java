@@ -3,6 +3,8 @@ package com.example.mypc.counterapp.Controllers;
 import android.content.Context;
 import android.util.Log;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.mypc.counterapp.Activities.HomeActivity;
 import com.example.mypc.counterapp.Activities.LoginActivity;
 import com.example.mypc.counterapp.Model.PublicList;
 import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
@@ -22,19 +24,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FetchPublicChantController {
     public static FetchPublicChantController obj;
     public ArrayList<PublicList> publicList;
-
+    public ArrayList<PublicList> nepublicList;
+    public ArrayList<PublicList> friendslist;
+    MaterialDialog mProgress;
     public Context context;
 
     public static FetchPublicChantController getinstance() {
         if (obj == null) {
             obj = new FetchPublicChantController();
             obj.publicList = new ArrayList<>();
+            obj.nepublicList = new ArrayList<>();
+            obj.friendslist = new ArrayList<>();
         }
         return obj;
     }
 
     public void fillContext(Context context1) {
-        context = context1;
+        this.context = context1;
     }
 
     public void publicchant_data(final String user_email) {
@@ -51,14 +57,16 @@ public class FetchPublicChantController {
         logout_call.enqueue(new Callback<FetchingPublicChant>() {
             @Override
             public void onResponse(Call<FetchingPublicChant> call, Response<FetchingPublicChant> response) {
-
                 if (response.body() != null) {
+                    nepublicList.clear();
+                    nepublicList = response.body().getPublicList();
                     publicList = response.body().getPublicList();
                     friendschant_data(user_email);
                     Log.e("logout", response.body().getResponse());
-                    Log.e("array", String.valueOf(publicList.size()));
+                    Log.e("arraypublicList", String.valueOf(nepublicList.size()));
                     for (int i = 0; i < response.body().getPublicList().size(); i++) {
-                        Log.e("publicprofile", String.valueOf(
+                        Log.e("publicprofil" +
+                                "le", String.valueOf(
                                 response.body().getPublicList().get(i).chant_description) + "\n" +
                                 response.body().getPublicList().get(i).chant_id + "\n" +
                                 response.body().getPublicList().get(i).chant_name + "\n" +
@@ -67,19 +75,21 @@ public class FetchPublicChantController {
                                 response.body().getPublicList().get(i).privacy + "\n");
                     }
                 } else {
-
+                    EventBus.getDefault().post(new LoginActivity.MessageEvent("error"));
                 }
+
             }
 
             @Override
             public void onFailure(Call<FetchingPublicChant> call, Throwable t) {
+                EventBus.getDefault().post(new LoginActivity.MessageEvent("error"));
+
                 //    Log.e("logoot_failure", t.getMessage());
             }
         });
     }
 
-    public void friendschant_data(final String user_email)
-    {
+    public void friendschant_data(final String user_email) {
         FetchingFriendsChants logoutServerObjects = new FetchingFriendsChants();
         logoutServerObjects.email = user_email;
         Log.e("fetchcontroller", user_email);
@@ -91,14 +101,15 @@ public class FetchPublicChantController {
             public void onResponse(Call<FetchingFriendsChants> call, Response<FetchingFriendsChants> response) {
 
                 if (response.body() != null) {
-                    EventBus.getDefault().post(new LoginActivity.MessageEvent("refreshchant"));
-                    Log.e("arrayfriends", String.valueOf(publicList.size()));
+                    HomeActivity.mProgress.dismiss();
+                    //Log.e("arrayfriends", String.valueOf(publicList.size()));
                     ArrayList<PublicList> publicaray = new ArrayList<>();
-
-                    publicaray = response.body().getPublicList();
-                    publicList.addAll(publicaray);
+                    friendslist.clear();
+                    friendslist = response.body().getPublicList();
+                    EventBus.getDefault().post(new LoginActivity.MessageEvent("refreshchant"));
+                    //publicList.addAll(publicaray);
                     Log.e("friends", response.body().getResponse());
-                    Log.e("arrayfriends", String.valueOf(publicList.size()));
+                    Log.e("arrayfriends", String.valueOf(friendslist.size()));
                     for (int i = 0; i < response.body().getPublicList().size(); i++) {
                         Log.e("friendARRAYprofile", String.valueOf
                                 (response.body().getPublicList().get(i).chant_description) + "\n" +
@@ -109,12 +120,13 @@ public class FetchPublicChantController {
                                 response.body().getPublicList().get(i).privacy + "\n");
                     }
                 } else {
+                    EventBus.getDefault().post(new LoginActivity.MessageEvent("error"));
                 }
             }
 
             @Override
             public void onFailure(Call<FetchingFriendsChants> call, Throwable t) {
-                Log.e("logoot_failure", t.getMessage());
+                EventBus.getDefault().post(new LoginActivity.MessageEvent("error"));
             }
         });
     }

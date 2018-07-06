@@ -3,25 +3,22 @@ package com.example.mypc.counterapp.ServerObject;
 import com.google.gson.annotations.SerializedName;
 
 public class MegaCount {
-    @SerializedName("chant_count")
-    public String chant_count;
+
+    @SerializedName("mycount")
+    public String mycount;
 
 
     @SerializedName("chant_id")
     public String chant_id;
-
     @SerializedName("email")
     public String email;
 
-    @SerializedName("megacount")
-    public String megacount;
-
-    public String getChant_count() {
-        return chant_count;
+    public String getMycount() {
+        return mycount;
     }
 
-    public void setChant_count(String chant_count) {
-        this.chant_count = chant_count;
+    public void setMycount(String mycount) {
+        this.mycount = mycount;
     }
 
     public String getChant_id() {
@@ -56,14 +53,6 @@ public class MegaCount {
         this.response = response;
     }
 
-    public String getMycount() {
-        return mycount;
-    }
-
-    public void setMycount(String mycount) {
-        this.mycount = mycount;
-    }
-
     public String getMessage() {
         return message;
     }
@@ -72,10 +61,11 @@ public class MegaCount {
         this.message = message;
     }
 
+    @SerializedName("megacount")
+
+    public String megacount;
     @SerializedName("response")
     public String response;
-    @SerializedName("mycount")
-    public String mycount;
     @SerializedName("message")
     public String message;
 

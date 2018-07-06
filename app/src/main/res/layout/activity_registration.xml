@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_rectangle"
+    android:orientation="vertical"
+    tools:context=".Activities.RegistrationActivity">
+
+    <include layout="@layout/activity_toolbar" />
+
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp">
+
+                <com.example.mypc.counterapp.Fonts.EditTextRegular
+                    android:id="@+id/edit_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/rectangleshape"
+                    android:drawableLeft="@drawable/ic_mandatory"
+                    android:hint="@string/txt_name"
+                    android:imeOptions="actionNext"
+                    android:maxLength="25"
+                    android:maxLines="1"
+                    android:paddingLeft="5dp" />
+
+                <com.example.mypc.counterapp.Fonts.EditTextRegular
+                    android:id="@+id/edit_surname"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/edit_name"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape"
+                    android:hint="@string/txt_surname"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="25"
+                    android:maxLines="1"
+                    android:paddingLeft="5dp" />
+
+                <com.example.mypc.counterapp.Fonts.EditTextRegular
+                    android:id="@+id/edit_firstname"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/edit_surname"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape"
+                    android:hint="@string/txt_fname"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:paddingLeft="5dp" />
+
+                <com.example.mypc.counterapp.Fonts.EditTextRegular
+                    android:id="@+id/edit_lastname"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/edit_firstname"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape"
+                    android:hint="@string/txt_lname"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:paddingLeft="5dp" />
+
+                <com.example.mypc.counterapp.Fonts.EditTextRegular
+                    android:id="@+id/edit_fathers"
+                    android:layout_width="339dp"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/edit_lastname"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape"
+                    android:hint="@string/txt_fathersname"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:paddingLeft="5dp" />
+
+                <com.example.mypc.counterapp.Fonts.EditTextRegular
+                    android:id="@+id/edit_mothers"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/edit_fathers"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape"
+                    android:hint="@string/txt_mothername"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:paddingLeft="5dp" />
+
+                <RelativeLayout
+                    android:id="@+id/relative_religion"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/edit_mothers"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape">
+
+                    <TextView
+                        android:id="@+id/text_spin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:drawableRight="@drawable/ic_mandatory"
+                        android:fontFamily="verdana"
+                        android:textColor="#000" />
+
+                    <Spinner
+                        android:id="@+id/spinner_religion"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/iamge_down"
+                        android:layout_toRightOf="@+id/text_spin"
+                        android:background="@null"
+                        android:dropDownVerticalOffset="35dp"
+                        android:spinnerMode="dropdown">
+
+                    </Spinner>
+
+                    <TextView
+                        android:id="@+id/text_religion_display3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toLeftOf="@+id/iamge_down"
+                        android:layout_toRightOf="@+id/text_spin"
+                        android:text="Select Religion"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <ImageButton
+                        android:id="@+id/iamge_down"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_down" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relative_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/relative_religion"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape">
+
+                    <TextView
+                        android:id="@+id/text_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:drawableRight="@drawable/ic_mandatory"
+                        android:fontFamily="verdana"
+                        android:textColor="#000" />
+
+                    <com.example.mypc.counterapp.Fonts.TextViewRegular
+                        android:id="@+id/text_displaydate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/text_date"
+                        android:text="@string/txt_birthday"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <ImageButton
+                        android:id="@+id/image_calender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_calender" />
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/relative_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/relative_date"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape">
+
+                    <TextView
+                        android:id="@+id/text_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:drawableRight="@drawable/ic_mandatory"
+                        android:fontFamily="verdana"
+                        android:textColor="#000" />
+
+                    <com.example.mypc.counterapp.Fonts.EditTextRegular
+                        android:id="@+id/edit_mobile_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/text_phone"
+                        android:background="@null"
+                        android:hint="Mobile Number"
+                        android:inputType="number" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/relative_marital"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/relative_phone"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape">
+
+                    <TextView
+                        android:id="@+id/marital_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="Marital Status"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <RadioGroup
+                        android:id="@+id/radioprofile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radiosingle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@drawable/radio_button_selector"
+                            android:checked="true"
+                            android:paddingLeft="10dp"
+                            android:text="Single" />
+
+                        <RadioButton
+                            android:id="@+id/radiomarried"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:button="@drawable/radio_button_selector"
+                            android:paddingLeft="10dp"
+                            android:text="Married" />
+                    </RadioGroup>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relative_aniv"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/relative_marital"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/text_aniv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:drawableRight="@drawable/ic_mandatory"
+                        android:fontFamily="verdana"
+                        android:textColor="#000" />
+
+                    <com.example.mypc.counterapp.Fonts.TextViewRegular
+                        android:id="@+id/displaydate_anniv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/text_aniv"
+                        android:text="@string/txt_aniversary"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <ImageButton
+                        android:id="@+id/calender_annive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_calender" />
+                </RelativeLayout>
+
+
+                <com.example.mypc.counterapp.Fonts.EditTextRegular
+                    android:id="@+id/edit_gothra"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/relative_aniv"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape"
+                    android:hint="@string/txt_gothra"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:paddingLeft="5dp" />
+
+                <RelativeLayout
+                    android:id="@+id/relative_nakshatra"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/edit_gothra"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape">
+
+                    <Spinner
+                        android:id="@+id/spinner_nakshatra"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/downarow_nakshatra"
+                        android:background="@null"
+                        android:dropDownVerticalOffset="40dp"
+                        android:spinnerMode="dropdown">
+
+                    </Spinner>
+
+                    <ImageButton
+                        android:id="@+id/downarow_nakshatra"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_down" />
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/relative_pada"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/relative_nakshatra"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangleshape">
+
+
+                    <Spinner
+                        android:id="@+id/spinner_pada"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/downarow_pada"
+                        android:background="@null"
+                        android:dropDownVerticalOffset="35dp"
+                        android:spinnerMode="dropdown">
+
+                    </Spinner>
+
+                    <ImageButton
+                        android:id="@+id/downarow_pada"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_down" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <com.example.mypc.counterapp.Fonts.ButtonRegular
+                android:id="@+id/submit_register"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/ovalshape_orange"
+                android:text="Join Count"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

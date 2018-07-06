@@ -3,6 +3,7 @@ package com.example.mypc.counterapp.ServerApiInterface;
 import com.example.mypc.counterapp.ServerObject.AddChantServerObject;
 import com.example.mypc.counterapp.ServerObject.AddFriendServerObject;
 import com.example.mypc.counterapp.ServerObject.AddRelegionObject;
+import com.example.mypc.counterapp.ServerObject.ChantCount;
 import com.example.mypc.counterapp.ServerObject.ChantFriendList;
 import com.example.mypc.counterapp.ServerObject.CounterServerObject;
 import com.example.mypc.counterapp.ServerObject.DeleteChantServerObject;
@@ -13,6 +14,7 @@ import com.example.mypc.counterapp.ServerObject.HelpusServerObject;
 import com.example.mypc.counterapp.ServerObject.InviteServerobject;
 import com.example.mypc.counterapp.ServerObject.LogoutServerObjects;
 import com.example.mypc.counterapp.ServerObject.MegaCount;
+import com.example.mypc.counterapp.ServerObject.RegistrationObjects;
 import com.example.mypc.counterapp.ServerObject.UserLoginObjects;
 
 import org.json.JSONObject;
@@ -23,7 +25,8 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
-public interface ServerApiInterface {
+public interface ServerApiInterface
+{
     public static String Base_Url = "http://107.175.83.105/CounterApp/webapi/counter/";
 
     //@helpus
@@ -65,7 +68,7 @@ public interface ServerApiInterface {
     Call<MegaCount> mega_count(@Body MegaCount megacount);
 
     @POST("deletechant")
-    Call<DeleteChantServerObject>  deleteChant(@Body DeleteChantServerObject deleteChantServerObject);
+    Call<DeleteChantServerObject> deleteChant(@Body DeleteChantServerObject deleteChantServerObject);
 
     ///editChant
     @POST("updatechant")
@@ -75,6 +78,11 @@ public interface ServerApiInterface {
     @POST("invite")
     Call<InviteServerobject> inviteFriend(@Body InviteServerobject inviteObj);
 
+    @POST("count")
+    Call<ChantCount> chant_count(@Body ChantCount chantcount);
 
+
+    @POST("register")
+    Call<RegistrationObjects> register_user(@Body RegistrationObjects register);
 
 }

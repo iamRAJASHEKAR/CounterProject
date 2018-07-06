@@ -1,167 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <include
         android:id="@+id/addchant_toolbar"
-        layout="@layout/activity_toolbar"/>
-   <!-- <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">-->
+        layout="@layout/activity_toolbar" />
+    <!-- <ScrollView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">-->
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/relative_chantName"
-        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/addchant_toolbar"
-        android:layout_height="wrap_content">
+        android:layout_margin="15dp">
+
         <com.example.mypc.counterapp.Fonts.TextViewBold
-            android:layout_width="match_parent"
             android:id="@+id/text_chantname"
-            android:textColor="@android:color/black"
-            android:text="@string/txt_chant_name"
-            android:layout_height="wrap_content" />
-        <com.example.mypc.counterapp.Fonts.EditTextRegular
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_chant_name"
+            android:textColor="@android:color/black" />
+
+        <com.example.mypc.counterapp.Fonts.EditTextRegular
             android:id="@+id/edit_chantName"
-            android:layout_marginTop="5dp"
-            android:maxLines="1"
-            android:maxLength="30"
-            android:textColor="@android:color/black"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
             android:layout_below="@+id/text_chantname"
+            android:layout_marginTop="5dp"
             android:background="@drawable/rectangleshape"
-            android:layout_height="45dp" />
+            android:maxLength="30"
+            android:maxLines="1"
+            android:textColor="@android:color/black" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/relative_chant"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/relative_chantName"
-        android:layout_height="wrap_content">
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
         <com.example.mypc.counterapp.Fonts.TextViewBold
-            android:layout_width="match_parent"
             android:id="@+id/text_chant"
-            android:textColor="@android:color/black"
-            android:text="@string/txt_chant"
-            android:layout_height="wrap_content" />
-        <com.example.mypc.counterapp.Fonts.EditTextRegular
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_chant"
+            android:textColor="@android:color/black" />
+
+        <com.example.mypc.counterapp.Fonts.EditTextRegular
             android:id="@+id/edit_chant"
-            android:layout_marginTop="5dp"
-            android:inputType="textMultiLine"
-            android:gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             android:layout_below="@+id/text_chant"
+            android:layout_marginTop="5dp"
             android:background="@drawable/rectangleshape"
-            android:layout_height="100dp" />
+            android:gravity="top"
+            android:inputType="textMultiLine" />
 
     </RelativeLayout>
 
 
-        
-        <RelativeLayout
+    <RelativeLayout
+        android:id="@+id/relative_radio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relative_chant"
+        android:layout_margin="15dp">
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
             android:layout_width="match_parent"
-            android:layout_margin="15dp"
-            android:id="@+id/relative_radio"
-            android:layout_below="@+id/relative_chant"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
 
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:id="@+id/radioGroup"
-                android:layout_marginLeft="10dp"
-                android:layout_height="wrap_content">
-                <RadioButton
-                    android:id="@+id/rdbPublic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:textColor="@android:color/black"
-                    android:button="@drawable/radio_button_selector"
-                    android:text="@string/txt_public" />
-                <RadioButton
-                    android:id="@+id/rdbFriends"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:textColor="@android:color/black"
-                    android:button="@drawable/radio_button_selector"
-                    android:layout_marginLeft="30dp"
-                    android:text="@string/txt_friend" />
-
-            </RadioGroup>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:id="@+id/rl_name_email"
-            android:visibility="gone"
-            android:layout_below="@+id/relative_radio"
-            android:background="@color/colorGray"
-            android:layout_height="40dp">
-      <com.example.mypc.counterapp.Fonts.TextViewBold
-          android:layout_width="wrap_content"
-          android:id="@+id/txt_name"
-          android:text="Name"
-          android:textColor="@android:color/black"
-          android:layout_centerVertical="true"
-          android:layout_marginLeft="25dp"
-          android:layout_height="wrap_content" />
-            <com.example.mypc.counterapp.Fonts.TextViewBold
+            <RadioButton
+                android:id="@+id/rdbPublic"
                 android:layout_width="wrap_content"
-                android:id="@+id/txt_email"
-                android:text="Email"
-                android:textColor="@android:color/black"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="25dp"
-                android:layout_centerHorizontal="true"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:button="@drawable/radio_button_selector"
+                android:padding="10dp"
+                android:text="@string/txt_public"
+                android:textColor="@android:color/black" />
 
-  </RelativeLayout>
+            <RadioButton
+                android:id="@+id/rdbFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:button="@drawable/radio_button_selector"
+                android:padding="10dp"
+                android:text="@string/txt_friend"
+                android:textColor="@android:color/black" />
+        </RadioGroup>
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:id="@+id/addchant_recyclerview"
-            android:layout_below="@+id/rl_name_email"
-            android:layout_height="130dp">
-        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_alignParentBottom="true"
-       android:layout_height="wrap_content">
-       <com.example.mypc.counterapp.Fonts.ButtonBold
-        android:layout_width="200dp"
-           android:id="@+id/btn_save"
-        android:background="@drawable/ovalshape_orange"
-        android:text="@string/txt_save"
-        android:textAllCaps="false"
-           android:textSize="15sp"
-           android:layout_marginBottom="4dp"
-           android:layout_centerHorizontal="true"
-           android:textColor="@android:color/white"
-        android:layout_height="wrap_content" />
-   </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_name_email"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/relative_radio"
+        android:background="@color/colorGray"
+        android:visibility="gone">
+
+        <com.example.mypc.counterapp.Fonts.TextViewBold
+            android:id="@+id/txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="25dp"
+            android:text="Name"
+            android:textColor="@android:color/black" />
+
+        <com.example.mypc.counterapp.Fonts.TextViewBold
+            android:id="@+id/txt_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="25dp"
+            android:text="Email"
+            android:textColor="@android:color/black" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/addchant_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_below="@+id/rl_name_email"
+        android:visibility="gone">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <com.example.mypc.counterapp.Fonts.ButtonBold
+            android:id="@+id/btn_save"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/ovalshape_orange"
+            android:text="@string/txt_save"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
 
 
-
-
-
-
-
-
-
-
-
-   <!-- </ScrollView>-->
+    <!-- </ScrollView>-->
 
 
 </RelativeLayout>

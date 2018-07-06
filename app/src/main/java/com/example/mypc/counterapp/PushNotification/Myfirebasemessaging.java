@@ -2,6 +2,9 @@ package com.example.mypc.counterapp.PushNotification;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -35,6 +38,15 @@ public class Myfirebasemessaging extends FirebaseMessagingService {
             Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
 
             try {
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                r.play();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
                 JSONObject json = new JSONObject(remoteMessage.getData().toString());
                 handleDataMessage(json);
             } catch (Exception e) {
@@ -50,6 +62,8 @@ public class Myfirebasemessaging extends FirebaseMessagingService {
 
         } else {
 
+            Notificationutils notificationUtils = new Notificationutils(getApplicationContext());
+            notificationUtils.playNotificationSound();
             // If the app is in background, firebase itself handles the notification
         }
     }
@@ -80,14 +94,24 @@ public class Myfirebasemessaging extends FirebaseMessagingService {
                 Intent pushNotification = new Intent(Constants.PUSH_NOTIFICATION);
                 pushNotification.putExtra("message", message);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-
                 // play notification sound
                 Notificationutils notificationUtils = new Notificationutils(getApplicationContext());
                 notificationUtils.playNotificationSound();
             } else {
+                try {
+                    Log.e("nosound", "herecode");
+                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                    r.play();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 // app is in background, show the notification in notification tray
                 Intent resultIntent = new Intent(getApplicationContext(), ReligionActivity.class);
                 resultIntent.putExtra("message", message);
+
                 // check for image attachment
                 if (TextUtils.isEmpty(imageUrl)) {
                     showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);

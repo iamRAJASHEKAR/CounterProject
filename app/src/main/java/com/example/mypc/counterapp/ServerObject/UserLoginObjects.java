@@ -8,10 +8,20 @@ public class UserLoginObjects {
     public String device_token;
     @SerializedName("response")
     public String response;
+
+    @SerializedName("Religion")
+    public String Religion;
+
+    public String getReligion() {
+        return Religion;
+    }
+
+    public void setReligion(String religion) {
+        Religion = religion;
+    }
+
     @SerializedName("email")
     public String email;
-    @SerializedName("name")
-    public String name;
     @SerializedName("device_id")
     public String device_id;
 
@@ -21,14 +31,6 @@ public class UserLoginObjects {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDevice_id() {

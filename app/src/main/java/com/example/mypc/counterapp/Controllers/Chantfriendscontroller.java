@@ -59,10 +59,12 @@ public class Chantfriendscontroller {
                     inactive_friends.clear();
                     chants_Friends = response.body().getFriendsList();
                     for (FriendsList friends_active : chants_Friends) {
-                        if (friends_active.isactive.equals("1")) {
+                        if (friends_active.isactive.equals("1"))
+                        {
                             active_friends.add(friends_active);
                             Log.e("friendsactive", String.valueOf(active_friends.size()));
-                        } else {
+                        } else
+                            {
                             inactive_friends.add(friends_active);
                             Log.e("inactivefriends", String.valueOf(inactive_friends.size()));
                         }
@@ -75,7 +77,8 @@ public class Chantfriendscontroller {
                         String mail = response.body().getFriendsList().get(i).email;
                         Log.e("chantarraydata", mail + "\n" + active);
                     }
-                } else {
+                } else
+                    {
                 }
             }
 

@@ -1,8 +1,5 @@
 package com.example.mypc.counterapp.Activities.Fragments;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,9 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.example.mypc.counterapp.Activities.AddChantActivity;
-import com.example.mypc.counterapp.Counter.CounterActivity;
-import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.ButtonRegular;
 import com.example.mypc.counterapp.Fonts.EditTextRegular;
 import com.example.mypc.counterapp.Network.ConnectionReceiver;
@@ -52,7 +46,7 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
 
     public void init() {
         addFriendName = view.findViewById(R.id.edit_name);
-        addFriendEmail = view.findViewById(R.id.edit_email);
+        addFriendEmail = view.findViewById(R.id.edit_surname);
 
         save = view.findViewById(R.id.btn_save);
         save.setOnClickListener(ClickOnsaveBtn);

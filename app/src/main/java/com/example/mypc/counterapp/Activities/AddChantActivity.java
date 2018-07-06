@@ -203,8 +203,7 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
         }
     }*/
 
-    public void loadContactsOnSeparateThread()
-    {
+    public void loadContactsOnSeparateThread() {
         // run on separate thread
         HandlerThread handlerThread = new HandlerThread("fetchContacts");
         handlerThread.start();
@@ -233,8 +232,7 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
     }
 
     ///getting the phone contacts
-    public void getPhoneDetailsFromDeviceContacts()
-    {
+    public void getPhoneDetailsFromDeviceContacts() {
 
         chantsModelArrayList = new ArrayList<>();
         friendsArrayList = new ArrayList<>();
@@ -271,9 +269,6 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
                 }
                 cur1.close();
             }
-
-            //call api
-            // contactApiExecution();
         }
     }
 
@@ -333,7 +328,7 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
 
             @Override
             public void onFailure(Call<AddChantServerObject> call, Throwable t) {
-                Log.e("addchant", " failed");
+                Log.e("addchantfailure", " failed");
                 hideProgressDialog();
             }
         });

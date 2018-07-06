@@ -50,7 +50,7 @@ public class Notificationutils {
 
 
         // notification icon
-        final int icon = R.mipmap.ic_launcher;
+        final int icon = R.drawable.app_icon;
 
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final PendingIntent resultPendingIntent =
@@ -63,10 +63,15 @@ public class Notificationutils {
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                 mContext);
+// check here for sound here
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+       /* Ringtone r = RingtoneManager.getRingtone(mContext, notification);
+        r.play();
+*/
 
-        final Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
+      /*  final Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
                 + "://" + mContext.getPackageName() + "/raw/notification");
-
+*/
         if (!TextUtils.isEmpty(imageUrl)) {
 
             if (imageUrl != null && imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
@@ -153,9 +158,10 @@ public class Notificationutils {
     // Playing notification sound
     public void playNotificationSound() {
         try {
-            Uri alarmSound = Uri.parse("android.resource://" + mContext.getPackageName() + "/" + "/raw/des");
-            Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(mContext, notification);
             r.play();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

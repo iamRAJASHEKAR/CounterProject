@@ -23,7 +23,17 @@
     <string name="txt_add_chant">Add Chants</string>
     <string name="txt_name">Name</string>
     <string name="txt_email">Email</string>
+    <string name="txt_surname">Surname</string>
     <string name="txt_phone">Phone</string>
+    <string name="txt_fname">First Name</string>
+    <string name="txt_subject">Subject</string>
+    <string name="txt_mothername">Mother\'s Name</string>
+    <string name="txt_lname">Last Name</string>
+    <string name="txt_fathersname">Father\'s Name</string>
+    <string name="txt_gothra">Gothra</string>
+    <string name="txt_birthday">Birth Date</string>
+    <string name="txt_html"><h1>Birth Date</h1></string>
+    <string name="txt_aniversary">Anniversary Date</string>
     <string name="txt_help">How do you want to help us</string>
     <string name="txt_send">Send</string>
     <string name="txt_yes">YES</string>
@@ -35,5 +45,9 @@
     <string name="people_joined">People Joined</string>
     <string name="local_count">Local Count</string>
     <string name="my_contribution">My Contribution</string>
+
+    <string name="title_activity_fullscreen">RegistrationActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>

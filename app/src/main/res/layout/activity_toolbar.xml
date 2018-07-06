@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toolBar"
-    android:background="@drawable/ic_rectangle"
-    android:layout_height="75dp">
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:background="@drawable/ic_rectangle">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-        android:layout_width="20dp"
-        android:id="@+id/toolabar_icon"
+        <RelativeLayout
+
+            android:layout_width="75dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/toolabar_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+
+        <com.example.mypc.counterapp.Fonts.TextViewBold
+            android:id="@+id/toolabr_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_height="20dp" />
-    <com.example.mypc.counterapp.Fonts.TextViewBold
-        android:layout_width="wrap_content"
-        android:id="@+id/toolabr_title"
-        android:textColor="@android:color/black"
-        android:layout_centerVertical="true"
-        android:textSize="20sp"
-        android:layout_centerHorizontal="true" android:layout_height="wrap_content" />
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
     </RelativeLayout>
 
 </android.support.v7.widget.Toolbar>

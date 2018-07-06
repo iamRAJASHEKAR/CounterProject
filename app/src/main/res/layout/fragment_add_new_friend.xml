@@ -49,7 +49,7 @@
                 android:textSize="15dp" />
 
             <com.example.mypc.counterapp.Fonts.EditTextRegular
-                android:id="@+id/edit_email"
+                android:id="@+id/edit_surname"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_below="@+id/user_email"
@@ -64,7 +64,7 @@
                 android:id="@+id/btn_save"
                 android:layout_width="150dp"
                 android:layout_height="40dp"
-                android:layout_below="@+id/edit_email"
+                android:layout_below="@+id/edit_surname"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/round_button"
                 android:text="SAVE"

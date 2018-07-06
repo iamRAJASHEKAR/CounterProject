@@ -57,7 +57,7 @@ public class ChantsActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     TextView chantname, chantdescr;
-    String chant_name, chant_decr, chant_id, chant_privacy, chant_created,createdEmail,creted_By_Email;
+    String chant_name, chant_decr, chant_id, chant_privacy, chant_created, createdEmail, creted_By_Email;
     RadioGroup radioGroup;
     RecyclerView recyclerView_peoples;
     RadioButton radioButton_friends, radioButton_public;
@@ -131,7 +131,8 @@ public class ChantsActivity extends AppCompatActivity {
         /*radioButton_friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (radioButton_friends.isChecked()) {
+                if (radioButton_friends.isChecked())
+                {
 
                     relativeLayout_tab.setVisibility(View.VISIBLE);
                     relativeLayout_public.setVisibility(View.GONE);
@@ -170,7 +171,6 @@ public class ChantsActivity extends AppCompatActivity {
         });
 
     }
-
 
 
     private void setupViewPager(ViewPager viewPager) {
@@ -248,7 +248,7 @@ public class ChantsActivity extends AppCompatActivity {
 
 
     public void getIntentData() {
-        chant_name = getIntent().getExtras().getString("chant_name");
+        chant_name = getIntent().getExtras().getString("chantname");
         chant_decr = getIntent().getExtras().getString("chant_dec");
         chant_privacy = getIntent().getExtras().getString("chant_privacy");
         chant_id = getIntent().getExtras().getString("chant_id");
@@ -262,7 +262,7 @@ public class ChantsActivity extends AppCompatActivity {
             radioButton_friends.setChecked(true);
             Chantfriendscontroller.getintance().fetch_chantFriends(chant_id);
         }
-        Log.e("vhvfdbsjb", chant_name + chant_decr + chant_privacy + chant_id);
+        Log.e("vhvfdbsjb", chant_name + chant_decr + chant_privacy + chant_id + createdEmail);
     }
 
     public void submiting() {
@@ -270,29 +270,25 @@ public class ChantsActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), CounterActivity.class);
         intent.putExtra("chant_id", chant_id);
         intent.putExtra("chant_created", chant_created);
+        intent.putExtra("chantname", chant_name);
+        intent.putExtra("chant_decrp", chant_decr);
+        Log.e("chgejhbj", chant_id + chant_created + chant_name + chant_decr);
         startActivity(intent);
     }
 
 
-
-    View.OnClickListener DeleteChantClick = new View.OnClickListener()
-    {
+    View.OnClickListener DeleteChantClick = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
+        public void onClick(View view) {
 
-            Log.e("deleteEmails"," "+creted_By_Email+" "+createdEmail);
-            if(createdEmail.equals(creted_By_Email))
-            {
+            Log.e("deleteEmails", " " + creted_By_Email + " " + createdEmail);
+            if (createdEmail.equals(creted_By_Email)) {
                 deleteChantDialog();
+            } else {
+                Toast toast = Toast.makeText(getApplicationContext(), "chant created by others you can't delete", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
             }
-            else
-                {
-                    Toast toast = Toast.makeText(getApplicationContext(),"chant created by others you can't delete",Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.CENTER,0,0);
-                    toast.show();
-                }
-
 
 
         }
@@ -301,7 +297,7 @@ public class ChantsActivity extends AppCompatActivity {
 
     public void deleteChantDialog() {
 
-        TextViewRegular yes, no,text_dialog;
+        TextViewRegular yes, no, text_dialog;
         final Dialog dialog = new Dialog(ChantsActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCanceledOnTouchOutside(false);
@@ -315,8 +311,7 @@ public class ChantsActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_background);
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Log.e("call", "dialog yes");
 
                 deleteChant();
@@ -343,8 +338,7 @@ public class ChantsActivity extends AppCompatActivity {
 
 
     /////server api for delete
-    public void deleteChant()
-    {
+    public void deleteChant() {
         DeleteChantServerObject deleteObj = new DeleteChantServerObject();
         deleteObj.chantId = chant_id;
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
@@ -352,25 +346,21 @@ public class ChantsActivity extends AppCompatActivity {
         Call<DeleteChantServerObject> deletechant = api.deleteChant(deleteObj);
         deletechant.enqueue(new Callback<DeleteChantServerObject>() {
             @Override
-            public void onResponse(Call<DeleteChantServerObject> call, Response<DeleteChantServerObject> response)
-            {
+            public void onResponse(Call<DeleteChantServerObject> call, Response<DeleteChantServerObject> response) {
                 String deleteStatus;
-                if(response.body()!=null)
-                {
+                if (response.body() != null) {
                     deleteStatus = response.body().response;
-                    Log.e("deleteStatus"," "+deleteStatus);
-                    if(deleteStatus.equals("3"))
-                    {
-                        startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+                    Log.e("deleteStatus", " " + deleteStatus);
+                    if (deleteStatus.equals("3")) {
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
 
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<DeleteChantServerObject> call, Throwable t)
-            {
-                  Log.e("deletestatus","Failed");
+            public void onFailure(Call<DeleteChantServerObject> call, Throwable t) {
+                Log.e("deletestatus", "Failed");
             }
         });
 
@@ -380,8 +370,7 @@ public class ChantsActivity extends AppCompatActivity {
 
     View.OnClickListener EditChantClick = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
+        public void onClick(View view) {
             Intent intent = new Intent(getApplicationContext(), EditChantActivity.class);
             intent.putExtra("chant_name", chant_name);
             intent.putExtra("chant_dec", chant_decr);

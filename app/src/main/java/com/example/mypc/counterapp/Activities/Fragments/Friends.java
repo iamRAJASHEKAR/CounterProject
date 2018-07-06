@@ -64,7 +64,7 @@ public class Friends extends Fragment {
     MaterialDialog mProgress;
     ArrayList<FriendsList> inviteFriends;
     String chantid;
-    String friendName,friendemail;
+    String friendName, friendemail;
 
 
     public Friends() {
@@ -77,7 +77,7 @@ public class Friends extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
         chantid = HomeActivity.chantId;
-        Log.e("chantID"," "+chantid);
+        Log.e("chantID", " " + chantid);
         inviteFriends = new ArrayList<>();
         displayProgressDialog();
         loadContactsOnSeparateThread();
@@ -88,7 +88,7 @@ public class Friends extends Fragment {
 
     }
 
-    ////////click on count btn
+    ////////click on submit_count btn
 
     private class ChantsAdpater extends RecyclerView.Adapter<ViewHolder> {
 
@@ -102,18 +102,16 @@ public class Friends extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final ViewHolder holder, final int position)
-        {
+        public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
             holder.name.setText(allFriendsArraylist.get(position).getName());
             holder.user.setText(allFriendsArraylist.get(position).getEmail());
-             holder.invite.setOnClickListener(new View.OnClickListener() {
+            holder.invite.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view)
-                {
-                   holder.invite.setBackgroundResource(R.color.colorOrange);
-                   friendName = allFriendsArraylist.get(position).getName();
-                   friendemail = allFriendsArraylist.get(position).getEmail();
-                   inviteFriend();
+                public void onClick(View view) {
+                    holder.invite.setBackgroundResource(R.color.colorOrange);
+                    friendName = allFriendsArraylist.get(position).getName();
+                    friendemail = allFriendsArraylist.get(position).getEmail();
+                    inviteFriend();
                 }
             });
 
@@ -121,12 +119,9 @@ public class Friends extends Fragment {
 
         @Override
         public int getItemCount() {
-            if(allFriendsArraylist!=null)
-            {
+            if (allFriendsArraylist != null) {
                 return allFriendsArraylist.size();
-            }
-            else
-            {
+            } else {
                 return 0;
             }
         }
@@ -172,32 +167,29 @@ public class Friends extends Fragment {
 
     private void display_inactiive_friends() {
         userarray = Chantfriendscontroller.getintance().inactive_friends;
-        if(userarray !=null && contactsArraylist!=null)
-        {
+        if (userarray != null && contactsArraylist != null) {
+
             mergeContactInactivearrays();
-            if(allFriendsArraylist!=null)
-            {
+            if (allFriendsArraylist != null) {
                 hideProgressDialog();
+            } else {
+                Toast toast = Toast.makeText(getActivity(), "Unable to fetch the all friends please try again", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
             }
-            else
-                {
-                    Toast toast = Toast.makeText(getActivity(),"Unable to fetch the all friends please try again",Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.CENTER,0,0);
-                    toast.show();
-                }
         }
+
         if (userarray.size() > 0) {
             homeAdapter = new ChantsAdpater();
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(homeAdapter);
             homeAdapter.notifyDataSetChanged();
         }
-        Log.e("usersize"," "+userarray.size());
+        Log.e("usersize", " " + userarray.size());
 
     }
 
-    public void loadContactsOnSeparateThread()
-    {
+    public void loadContactsOnSeparateThread() {
         // run on separate thread
 
         HandlerThread handlerThread = new HandlerThread("fetchContacts");
@@ -228,8 +220,7 @@ public class Friends extends Fragment {
 
 
     ///getting the phone contacts
-    public void getPhoneDetailsFromDeviceContacts()
-    {
+    public void getPhoneDetailsFromDeviceContacts() {
 
         contactsArraylist = new ArrayList<>();
         Context context = getActivity();
@@ -274,23 +265,16 @@ public class Friends extends Fragment {
 
 
     //////////merging contacts array list and inactive arraylist
-    public void mergeContactInactivearrays()
-    {
-
-
-        Log.e("user"," "+userarray.size()+" "+contactsArraylist.size());
-       allFriendsArraylist = new ArrayList<>();
-       allFriendsArraylist.addAll(contactsArraylist);
-       for(FriendsList friendsList:userarray)
-       {
-           if(!allFriendsArraylist.contains(friendsList))
-           {
-               allFriendsArraylist.add(friendsList);
-           }
-       }
-
-        Log.e("allfriends"," "+allFriendsArraylist.size());
-
+    public void mergeContactInactivearrays() {
+        Log.e("user", " " + userarray.size() + " " + contactsArraylist.size());
+        allFriendsArraylist = new ArrayList<>();
+        allFriendsArraylist.addAll(contactsArraylist);
+        for (FriendsList friendsList : userarray) {
+            if (!allFriendsArraylist.contains(friendsList)) {
+                allFriendsArraylist.add(friendsList);
+            }
+        }
+        Log.e("allfriends", " " + allFriendsArraylist.size());
     }
 
 
@@ -306,41 +290,35 @@ public class Friends extends Fragment {
         }
     }
 
-  ///////////inviteFriendApi
-    public void inviteFriend()
-    {
-       displayProgressDialog();
+    ///////////inviteFriendApi
+    public void inviteFriend() {
+        displayProgressDialog();
         InviteServerobject inviteServerobject = new InviteServerobject();
-       inviteServerobject.chantID = chantid;
-       inviteServerobject.name = friendName;
-       inviteServerobject.email = friendemail;
+        inviteServerobject.chantID = chantid;
+        inviteServerobject.name = friendName;
+        inviteServerobject.email = friendemail;
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
         ServerApiInterface api = retrofit.create(ServerApiInterface.class);
         Call<InviteServerobject> inviteObj = api.inviteFriend(inviteServerobject);
         inviteObj.enqueue(new Callback<InviteServerobject>() {
             @Override
-            public void onResponse(Call<InviteServerobject> call, Response<InviteServerobject> response)
-            {
-               String invitestatus;
-               if(response.body()!=null)
-               {
-                   invitestatus  =  response.body().response;
-                   Log.e("inviteStatus"," "+invitestatus);
-                   if(invitestatus.equals("3"))
-                   {
-                       startActivity(new Intent(getActivity(),HomeActivity.class));
-                       hideProgressDialog();
-                   }
-               }
+            public void onResponse(Call<InviteServerobject> call, Response<InviteServerobject> response) {
+                String invitestatus;
+                if (response.body() != null) {
+                    invitestatus = response.body().response;
+                    Log.e("inviteStatus", " " + invitestatus);
+                    if (invitestatus.equals("3")) {
+                        startActivity(new Intent(getActivity(), HomeActivity.class));
+                        hideProgressDialog();
+                    }
+                }
             }
 
             @Override
-            public void onFailure(Call<InviteServerobject> call, Throwable t)
-            {
-                Log.e("inviteStatus","failed");
+            public void onFailure(Call<InviteServerobject> call, Throwable t) {
+                Log.e("inviteStatus", "failed");
             }
         });
-
     }
 
     @Override

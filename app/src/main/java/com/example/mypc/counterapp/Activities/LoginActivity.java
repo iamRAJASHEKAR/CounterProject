@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -94,6 +95,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
         setContentView(R.layout.activity_login);
         fetchData();
         init();
@@ -103,13 +105,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         sessionsManager = new SessionsManager(getApplicationContext());
         editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 
-        if (sessionsManager.isLoggedIn())
-        {
-            FetchPublicChantController.getinstance().fillContext(getApplicationContext());
-            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -192,9 +187,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void hide_login_ProgressDialog() {
-
         if (progress_login != null && progress_login.isShowing()) {
-
             progress_login.dismiss();
         }
 
@@ -206,9 +199,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             Log.e("displaying", "display name: " + account.getDisplayName());
             String personName = account.getDisplayName();
             String email = account.getEmail();
+
             user_email = email;
             user_name = personName;
-            //  login(user_email, user_name);
+            //  login(user_surname, user_name);
             editor.putString("name", account.getDisplayName());
             editor.putString("email", String.valueOf(account.getEmail()));
             editor.putString("photo", String.valueOf(account.getPhotoUrl()));
@@ -309,7 +303,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     editor.commit();
                                     user_email = email;
                                     user_name = name;
-                                    // login(user_email, user_name);
+                                    // login(user_surname, user_name);
 
 
                                     //sharedPreferencesEditor.commit();
@@ -438,15 +432,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     public void login(String email, String name) {
+
         display_login_Progress("Registering...");
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(Constants.SHARED_PREF, 0);
         String token = prefs.getString("regId", "No name defined");
         @SuppressLint("HardwareIds") String device_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-
         UserLoginObjects userLogin = new UserLoginObjects();
         userLogin.email = email;
-        userLogin.name = name;
         userLogin.device_id = device_id;
         userLogin.device_token = token;
 
@@ -465,14 +458,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (response.body() != null) {
                     status_code = Integer.parseInt(response.body().getResponse());
                     Log.e("lloginuser", " " + status_code);
-                    if (status_code == 3)
-                    {
+                    if (status_code == 3) {
                         sessionsManager.setLogin(true);
                         Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
+                        startActivity(intent);
                     }
                 }
             }
@@ -534,16 +527,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     ///fetchdata
     public void fetchData() {
-        CounterController.getInstance().fetchReligions();
+        // CounterController.getInstance().fetchReligions();
     }
 
 
-    public static class MessageEvent
-    {
+    public static class MessageEvent {
         public final String message;
 
-        public MessageEvent(String message)
-        {
+        public MessageEvent(String message) {
             this.message = message;
         }
 
