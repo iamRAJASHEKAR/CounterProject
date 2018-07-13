@@ -19,6 +19,82 @@ public class AddChantServerObject
     @SerializedName("created_email")
     public String created_email;
 
+
+    @SerializedName("religion")
+    public String religion;
+
+    public String getChantName() {
+        return chantName;
+    }
+
+    public void setChantName(String chantName) {
+        this.chantName = chantName;
+    }
+
+    public String getChantDescription() {
+        return chantDescription;
+    }
+
+    public void setChantDescription(String chantDescription) {
+        this.chantDescription = chantDescription;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getCreated_email() {
+        return created_email;
+    }
+
+    public void setCreated_email(String created_email) {
+        this.created_email = created_email;
+    }
+
+    public String getReligion() {
+        return religion;
+    }
+
+    public void setReligion(String religion) {
+        this.religion = religion;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getPrivacy() {
+        return privacy;
+    }
+
+    public void setPrivacy(String privacy) {
+        this.privacy = privacy;
+    }
+
+    public ArrayList<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(ArrayList<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
     @SerializedName("time_stamp")
     public String timestamp;
 

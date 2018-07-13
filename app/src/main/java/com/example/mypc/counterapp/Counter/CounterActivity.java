@@ -16,10 +16,12 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,12 +51,13 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
     int state = 0;
     ImageButton minus_button, plus_button;
     int japam_count;
+    RelativeLayout relative_back;
     int my_contribution;
     TextView chantname, chantdesc;
     ButtonBold submit_button;
     TickerView ticker_mega, ticker_local, ticker_mycontribution;
     Toolbar countertoolbar;
-    String chant_countid, chant_created, chant_name, chant_desc;
+    String chant_countid, chant_created, chant_name, chant_desc, send_count;
     ImageView toolbar_icon;
     TextViewBold conterText;
     MaterialDialog mProgress;
@@ -74,15 +77,8 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
         conterText = findViewById(R.id.toolabr_title);
         toolbar_icon.setImageResource(R.drawable.ic_back_arrow);
         conterText.setText("Counter");
-
+        relative_back = findViewById(R.id.relative_back);
         chantdesc.setMovementMethod(new ScrollingMovementMethod());
-        toolbar_icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
         text_screenmodes = findViewById(R.id.text_screenmode);
         text_megacount = findViewById(R.id.text_mega_count);
         ticker_mega = findViewById(R.id.tickerview);
@@ -104,6 +100,12 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
         counter();
         getintentdata();
         chant_count();
+        relative_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void screen_modes() {
@@ -163,6 +165,7 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
             public void onClick(View v) {
                 if (japam_count > 0) {
                     int contribute = japam_count;
+                    send_count = String.valueOf(contribute);
                     int countribution_count = my_contribution + contribute;
                     my_contribution = countribution_count;
                     ticker_mycontribution.setText(String.valueOf(my_contribution));
@@ -225,6 +228,15 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (action == KeyEvent.ACTION_DOWN) {
                     if (state == 1) {
+                        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                        // Vibrate for 1000 milliseconds
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
+                        } else {
+                            //deprecated in API 26
+                            vibrator.vibrate(100);
+                        }
+
                         plus();
                     }
                 }
@@ -232,6 +244,14 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 if (action == KeyEvent.ACTION_UP) {
                     if (state == 1) {
+                        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                        // Vibrate for 1000 milliseconds
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
+                        } else {
+                            //deprecated in API 26
+                            vibrator.vibrate(100);
+                        }
                         minus();
                     }
                 }
@@ -248,46 +268,52 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
     }
 
     public void submit_count() {
-        if (isConnected) {
-            displayProgressDialog("Updating...");
-            String count = String.valueOf(my_contribution);
-            MegaCount megaCount = new MegaCount();
-            megaCount.mycount = count;
-            megaCount.chant_id = chant_countid;
-            megaCount.email = chant_created;
-            Log.e("apidata", count + chant_countid + chant_created);
-            Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
-            ServerApiInterface apiInterface = retrofit.create(ServerApiInterface.class);
-            Call<MegaCount> logout_call = apiInterface.mega_count(megaCount);
-            logout_call.enqueue(new Callback<MegaCount>() {
-                @Override
-                public void onResponse(Call<MegaCount> call, Response<MegaCount> response) {
-                    hide_login_ProgressDialog();
-                    if (response.body() != null) {
-                        if (response.body().getResponse().equals("3")) {
-                            Log.e("counterdata", response.body().getMegacount());
-                            ticker_mega.setText(response.body().getMegacount());
-                            Toast.makeText(CounterActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(CounterActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                        Log.e("responseoncounter", response.body().getResponse() + "\n" + response.body().getMegacount()
-                                + "\n" + response.body().getEmail()
-                                + "\n" + response.body().getMessage());
-                    } else {
-                        //  Toast.makeText(HomeActivity.this, "Failed to logout", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<MegaCount> call, Throwable t) {
-                    hide_login_ProgressDialog();
-                    Log.e("logoot_failure", t.getMessage());
-                }
-            });
+        if (chant_countid.equals("private")) {
+            ticker_mega.setText(String.valueOf(my_contribution));
+            ticker_mycontribution.setVisibility(View.GONE);
         } else {
+            if (isConnected) {
+                displayProgressDialog("Updating...");
+                String count = String.valueOf(my_contribution);
+                MegaCount megaCount = new MegaCount();
+                megaCount.mycount = send_count;
+                megaCount.chant_id = chant_countid;
+                megaCount.email = chant_created;
+                Log.e("apidata", count + chant_countid + chant_created);
+                Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
+                ServerApiInterface apiInterface = retrofit.create(ServerApiInterface.class);
+                Call<MegaCount> logout_call = apiInterface.mega_count(megaCount);
+                logout_call.enqueue(new Callback<MegaCount>() {
+                    @Override
+                    public void onResponse(Call<MegaCount> call, Response<MegaCount> response) {
+                        hide_login_ProgressDialog();
+                        if (response.body() != null) {
+                            if (response.body().getResponse().equals("3")) {
+                                Log.e("counterdata", response.body().getMegacount());
+                                ticker_mega.setText(response.body().getMegacount());
+                                ticker_mycontribution.setText(response.body().getMycount());
+                                Toast.makeText(CounterActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(CounterActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                            Log.e("responseoncounter", response.body().getResponse() + "\n" + response.body().getMegacount()
+                                    + "\n" + response.body().getEmail()
+                                    + "\n" + response.body().getMessage());
+                        } else {
+                            //  Toast.makeText(HomeActivity.this, "Failed to logout", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-            try_submit();
+                    @Override
+                    public void onFailure(Call<MegaCount> call, Throwable t) {
+                        hide_login_ProgressDialog();
+                        Log.e("logoot_failure", t.getMessage());
+                    }
+                });
+            } else {
+
+                try_submit();
+            }
         }
     }
 
@@ -298,48 +324,54 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
         chant_desc = getIntent().getExtras().getString("chant_decrp");
         chantname.setText(chant_name);
         chantdesc.setText(chant_desc);
-
         Log.e("counterdata", chant_countid + chant_created + my_contribution + chant_name + chant_desc);
     }
 
     public void chant_count() {
-        if (isConnected) {
-            displayProgressDialog("Getting Mega Count..");
-            ChantCount chantCount = new ChantCount();
-            chantCount.chantid = chant_countid;
-            Log.e("chanid", chant_countid);
-            Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
-            ServerApiInterface apiInterface = retrofit.create(ServerApiInterface.class);
-            Call<ChantCount> chant_call = apiInterface.chant_count(chantCount);
-            chant_call.enqueue(new Callback<ChantCount>() {
-                @Override
-                public void onResponse(Call<ChantCount> call, Response<ChantCount> response) {
-                    hide_login_ProgressDialog();
-                    if (response.body() != null) {
-                        if (response.body().getResponse().equals("3")) {
-                            Log.e("chantapicount", response.body().getMegacount());
-                            ticker_mega.setText(response.body().getMegacount());
-                        } else {
-                            Toast.makeText(CounterActivity.this, "Fetching Failed", Toast.LENGTH_SHORT).show();
-                        }
-
-                    } else {
-
-                        //  Toast.makeText(HomeActivity.this, "Failed to logout", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ChantCount> call, Throwable t) {
-                    hide_login_ProgressDialog();
-
-                    Log.e("logoot_failure", t.getMessage());
-                }
-            });
-
+        if (chant_countid.equals("private")) {
+            //do nothing
         } else {
-            tryagain();
+
+            if (isConnected) {
+
+                displayProgressDialog("Getting Mega Count..");
+                ChantCount chantCount = new ChantCount();
+                chantCount.chantid = chant_countid;
+                Log.e("chanid", chant_countid);
+                Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
+                ServerApiInterface apiInterface = retrofit.create(ServerApiInterface.class);
+                Call<ChantCount> chant_call = apiInterface.chant_count(chantCount);
+                chant_call.enqueue(new Callback<ChantCount>() {
+                    @Override
+                    public void onResponse(Call<ChantCount> call, Response<ChantCount> response) {
+                        hide_login_ProgressDialog();
+                        if (response.body() != null) {
+                            if (response.body().getResponse().equals("3")) {
+                                Log.e("chantapicount", response.body().getMegacount());
+                                ticker_mega.setText(response.body().getMegacount());
+                            } else {
+                                Toast.makeText(CounterActivity.this, "Fetching Failed", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+
+                            //  Toast.makeText(HomeActivity.this, "Failed to logout", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ChantCount> call, Throwable t) {
+                        hide_login_ProgressDialog();
+
+                        Log.e("logoot_failure", t.getMessage());
+                    }
+                });
+
+            } else {
+                tryagain();
+            }
         }
+
     }
 
     public void displayProgressDialog(String msg) {

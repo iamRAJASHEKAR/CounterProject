@@ -44,6 +44,8 @@ import com.example.mypc.counterapp.Activities.Fragments.JoinedFriends;
 import com.example.mypc.counterapp.Activities.Fragments.PrivateFragment;
 import com.example.mypc.counterapp.Activities.Fragments.PublicFragment;
 import com.example.mypc.counterapp.Controllers.FetchPublicChantController;
+import com.example.mypc.counterapp.Database.DatabaseManager;
+import com.example.mypc.counterapp.Database.Userdata;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
 import com.example.mypc.counterapp.Fonts.TextViewRegular;
 import com.example.mypc.counterapp.Model.PublicList;
@@ -91,7 +93,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     TextView user_name;
     TextViewBold toolbar_text;
     ImageView toolabr_image;
-    String user_email, name, url;
+    String user_email, name, url, religion;
     CircleImageView imageView_profile;
     ArrayList<PublicList> chantsArrayList;
     HomeAdapter homeAdapter;
@@ -188,7 +190,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         tabLayout.setupWithViewPager(viewPager);
         floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(AddChantBtn);
-
+        FetchPublicChantController.getinstance().fillContext(HomeActivity.this);
     }
 
     public void set_profile(CircleImageView imageView, TextView textView) {
@@ -238,8 +240,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onClick(View view) {
                 dialog.dismiss();
                 if (isConnected) {
-                    displayProgressDialog("Loading...");
-                    FetchPublicChantController.getinstance().publicchant_data(user_email);
+                    FetchPublicChantController.getinstance().publicchant_data(user_email, religion);
                 } else {
                     tryagain();
                 }
@@ -260,8 +261,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
 
-    public void logoutDialog()
-    {
+    public void logoutDialog() {
         TextViewRegular yes, no;
         final Dialog dialog = new Dialog(HomeActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -275,6 +275,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ArrayList<Userdata> userdatadd = new ArrayList<>();
+                userdatadd = DatabaseManager.getInstance().getalluser();
+
+                DatabaseManager.getInstance().delete_allusers(userdatadd);
                 if (isConnected) {
 
                     Log.e("call", "dialog yes");
@@ -283,12 +287,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                             new ResultCallback<Status>() {
                                 @Override
                                 public void onResult(Status status) {
-
                                     if (sessionsManager.isLoggedIn()) {
                                         sessionsManager.setLogin(false);
-
                                     }
-
                                     logout();
                                 }
                             });
@@ -399,7 +400,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                             intent.putExtra("chant_dec", chant_dec);
                             intent.putExtra("chant_privacy", chant_privacy);
                             intent.putExtra("chant_id", chant_id);
-                            intent.putExtra("chant_created", chant_creted_email);
+                            intent.putExtra("chant_created_email", chant_creted_email);
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(getApplicationContext(), ChantsActivity.class);
@@ -407,7 +408,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                             intent.putExtra("chant_dec", chant_dec);
                             intent.putExtra("chant_privacy", chant_privacy);
                             intent.putExtra("chant_id", chant_id);
-                            intent.putExtra("chant_created", chant_creted_email);
+                            intent.putExtra("chant_created_email", chant_creted_email);
                             intent.putExtra("chant_created_email", chant_creted_email);
                             startActivity(intent);
                         }
@@ -475,8 +476,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onStart() {
         if (isConnected) {
-            displayProgressDialog("Loading...");
-            FetchPublicChantController.getinstance().publicchant_data(user_email);
+            FetchPublicChantController.getinstance().publicchant_data(user_email, religion);
         } else {
             tryagain();
 
@@ -498,12 +498,13 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onPause();
     }
 
-    public void getuserData()
-    {
+    public void getuserData() {
         SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
         name = prefs.getString("name", "No name defined");
         url = prefs.getString("photo", "No name defined");
         user_email = prefs.getString("email", "No name defined");
+        religion = prefs.getString("religion", "No name defined");
+        Log.e("fetchdetails", user_email + religion);
     }
 
     private void hideProgressDialog() {
@@ -524,19 +525,15 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(LoginActivity.MessageEvent event)
-    {
-       /* Log.e("filesevent", "" + event.message);
+    public void onEventMainThread(LoginActivity.MessageEvent event) {
+        Log.e("filesevent", "" + event.message);
         String resultData = event.message.trim();
-        if (resultData.equals("refreshchant"))
-        {
-            hideProgressDialog();
-            //display_data();
+        if (resultData.equals("refreshchant")) {
         } else if (resultData.equals("error")) {
             tryagain();
             //    displayProgressDialog("Loading Chants...");
 
-        }*/
+        }
     }
 
     public void requestforPhoneContacts() {
@@ -605,8 +602,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new FriendsFragment(), "Friends");
         adapter.addFragment(new PublicFragment(), "Public");
+        adapter.addFragment(new FriendsFragment(), "Friends");
         adapter.addFragment(new PrivateFragment(), "Private");
         viewPager.setAdapter(adapter);
     }

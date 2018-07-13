@@ -60,6 +60,7 @@ public class RegistrationActivity extends AppCompatActivity {
     TextView text_dob, displaydate_anniv, text_religion_display3;
     MaterialDialog mProgress;
     Button button_register;
+    TextView toolbar_title;
     RadioButton radio_married, radiosingle;
     RelativeLayout relative_aniv;
     Boolean isNetworkAvailable = true;
@@ -114,8 +115,8 @@ public class RegistrationActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(this, "Select DOB", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
-        } else if (mobile_number.equals("")) {
-            editmobile_number.setError("Enter Number");
+        } else if (mobile_number.equals("") || mobile_number.length() < 10) {
+            editmobile_number.setError("Invalid Number");
         } else if (radio_married.isChecked() && dateofanniversary.equals("")) {
             Toast toast = Toast.makeText(this, "Enter Anniversary date", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
@@ -258,7 +259,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     user_religion = item.toString();
                     text_religion_display3.setText(user_religion);
                     Log.e("religion", user_religion);
-                    if (user_religion.contains("Not Found ? Add here..")) {
+                    if (user_religion.contains("Not Found ? Please add..")) {
                         user_religion = "";
                         text_religion_display3.setText("Select Region");
                         showReligiondialog();
@@ -423,6 +424,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
     public void add_relegion(String relegion) {
+        displayProgressDialog("Adding religion...");
         AddRelegionObject relegion_object = new AddRelegionObject();
         relegion_object.relegion = relegion;
 
@@ -434,6 +436,7 @@ public class RegistrationActivity extends AppCompatActivity {
         helpus.enqueue(new Callback<AddRelegionObject>() {
             @Override
             public void onResponse(Call<AddRelegionObject> call, Response<AddRelegionObject> response) {
+                hideProgressDialog();
                 if (response.body() != null)
                     Log.e("responsecalling", " " + response.body().getResponse());
                 String status_code = response.body().getResponse();
@@ -463,6 +466,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
                 Log.e("helpFailure", "Failed");
+                hideProgressDialog();
             }
         });
 
@@ -521,8 +525,10 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void intialise_ui() {
-        html = "<font color='#FF6600'><b>" + "Not Found ? Add here.." + " </b></font>";
+        html = "<font color='#FF6600'><b>" + "Not Found ? Please add.." + " </b></font>";
         relative_aniv = findViewById(R.id.relative_aniv);
+        toolbar_title = findViewById(R.id.toolabr_title);
+        toolbar_title.setText("Registration");
         calender_button = findViewById(R.id.image_calender);
         calender_annive = findViewById(R.id.calender_annive);
         radio_married = findViewById(R.id.radiomarried);
@@ -570,6 +576,7 @@ public class RegistrationActivity extends AppCompatActivity {
         spinner_religion = findViewById(R.id.spinner_religion);
         spinner_pada = findViewById(R.id.spinner_pada);
         spinner_nakshatra = findViewById(R.id.spinner_nakshatra);
+        onclickactions();
     }
 
     public void onclickactions() {
@@ -638,7 +645,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     Log.e("lloginuser", " " + response.body().getMessage());
                     Log.e("llogistatus", " " + response.body().getResponse());
                     if (status_code == 3) {
-                        Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
@@ -653,6 +660,4 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

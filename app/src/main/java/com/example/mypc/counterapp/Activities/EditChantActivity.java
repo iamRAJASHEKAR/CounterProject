@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.mypc.counterapp.Database.DatabaseManager;
+import com.example.mypc.counterapp.Database.Userdata;
 import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.EditTextRegular;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
@@ -29,35 +31,34 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class EditChantActivity extends AppCompatActivity implements ConnectionReceiver.ConnectionReceiverListener
-{
+public class EditChantActivity extends AppCompatActivity implements ConnectionReceiver.ConnectionReceiverListener {
 
-    EditTextRegular editChantName,editChantDescription;
+    EditTextRegular editChantName, editChantDescription;
     Toolbar toolbar;
     TextViewBold tooltiltle;
     ImageView toolbarIcon;
     ButtonBold save;
-    String email,chantName,chantdes,chantID;
+    Userdata userdata;
+    String email, chantName, timestamp, chantdes, chantID, user_id, privacy;
     public boolean isConnected;
     MaterialDialog mProgress;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_editchant);
         SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
-        email =  prefs.getString("email", "No name defined");
-        Log.e("editemail"," "+email);
+        email = prefs.getString("email", "No name defined");
         getIntentData();
+        Log.e("editemail", " " + email + user_id);
+
         checkConnection();
         init();
 
 
     }
 
-    public void init()
-    {
+    public void init() {
         toolbar = findViewById(R.id.toolBar);
         tooltiltle = findViewById(R.id.toolabr_title);
         toolbarIcon = findViewById(R.id.toolabar_icon);
@@ -84,7 +85,6 @@ public class EditChantActivity extends AppCompatActivity implements ConnectionRe
     }
 
 
-
     View.OnTouchListener touchListener = new View.OnTouchListener() {
         public boolean onTouch(final View v, final MotionEvent motionEvent) {
             if (v.getId() == R.id.edit_chant) {
@@ -100,49 +100,48 @@ public class EditChantActivity extends AppCompatActivity implements ConnectionRe
     };
 
 
-    public void getIntentData()
-    {
+    public void getIntentData() {
+        long unixTime = System.currentTimeMillis() / 1000L;
+        timestamp = String.valueOf(unixTime);
         chantName = getIntent().getExtras().getString("chant_name");
         chantdes = getIntent().getExtras().getString("chant_dec");
         chantID = getIntent().getExtras().getString("chant_id");
+        user_id = getIntent().getExtras().getString("userid");
+        Log.e("chanteditdata", timestamp + chantName + chantdes + chantID + privacy);
     }
 
 
-
-
-
-    View.OnClickListener saveBtnClick = new View.OnClickListener()
-    {
+    View.OnClickListener saveBtnClick = new View.OnClickListener() {
         @Override
-        public void onClick(View view)
-        {
-             chantName = editChantName.getText().toString();
-             chantdes = editChantDescription.getText().toString();
-             if(isConnected)
-             {
-                 validations();
-             }
-             else {
-                 Toast.makeText(EditChantActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
+        public void onClick(View view) {
+            chantName = editChantName.getText().toString();
+            chantdes = editChantDescription.getText().toString();
 
-             }
+
+            if (isConnected) {
+                validations();
+            } else {
+                Toast.makeText(EditChantActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
+
+            }
 
         }
     };
 
 
-
-    public void validations()
-    {
+    public void validations() {
         if (chantName.length() == 0) {
             editChantName.setError("Enter chant name");
         } else if (chantdes.length() == 0) {
             editChantDescription.setError("Enter the chant");
+        } else if (chantID.equals("private")) {
+            String chant_name = editChantName.getText().toString().trim();
+            String chantdec = editChantDescription.getText().toString().trim();
+            DatabaseManager.getInstance().update_user(chant_name, chantdec, timestamp, email, user_id);
+            finish();
         } else {
             editChants();
         }
-
-
     }
 
 
@@ -176,9 +175,8 @@ public class EditChantActivity extends AppCompatActivity implements ConnectionRe
 
     }
 
-    public void editChants()
-    {
-       displayProgressDialog();
+    public void editChants() {
+        displayProgressDialog();
         EditChantServerObject editChantServerObject = new EditChantServerObject();
         editChantServerObject.ChantName = chantName;
         editChantServerObject.chantdescription = chantdes;
@@ -190,25 +188,19 @@ public class EditChantActivity extends AppCompatActivity implements ConnectionRe
         Call<EditChantServerObject> addChants = api.editChant(editChantServerObject);
         addChants.enqueue(new Callback<EditChantServerObject>() {
             @Override
-            public void onResponse(Call<EditChantServerObject> call, Response<EditChantServerObject> response)
-            {
-                if(response.body()!= null)
-                {
+            public void onResponse(Call<EditChantServerObject> call, Response<EditChantServerObject> response) {
+                if (response.body() != null) {
                     String editstatuscode = response.body().reposnse;
-                    Log.e("editchantresponse"," "+editstatuscode);
+                    Log.e("editchantresponse", " " + editstatuscode);
 
-                    if(editstatuscode.equals("3"))
-                    {
-                        startActivity(new Intent(getApplicationContext(),HomeActivity.class));
-                        Toast.makeText(getApplicationContext(),response.body().message,Toast.LENGTH_SHORT).show();
+                    if (editstatuscode.equals("3")) {
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        Toast.makeText(getApplicationContext(), response.body().message, Toast.LENGTH_SHORT).show();
                         hideProgressDialog();
 
-                    }
-
-                    else if(editstatuscode.equals("0"))
-                    {
-                        startActivity(new Intent(getApplicationContext(),HomeActivity.class));
-                        Toast.makeText(getApplicationContext(),response.body().message,Toast.LENGTH_SHORT).show();
+                    } else if (editstatuscode.equals("0")) {
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        Toast.makeText(getApplicationContext(), response.body().message, Toast.LENGTH_SHORT).show();
                         hideProgressDialog();
 
                     }
@@ -216,9 +208,8 @@ public class EditChantActivity extends AppCompatActivity implements ConnectionRe
             }
 
             @Override
-            public void onFailure(Call<EditChantServerObject> call, Throwable t)
-            {
-                Log.e("editchantresponse","Failed");
+            public void onFailure(Call<EditChantServerObject> call, Throwable t) {
+                Log.e("editchantresponse", "Failed");
                 hideProgressDialog();
             }
         });

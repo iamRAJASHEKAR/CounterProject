@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
+            android:maxLength="25"
             android:text="Vedas"
             android:textColor="@android:color/black"
             android:textSize="15dp" />
@@ -23,10 +24,13 @@
             android:id="@+id/user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:textColor="@android:color/black"
+            android:layout_marginRight="10dp"
+            android:maxLength="30"
             android:text="Vedas@gmail.com"
+            android:textColor="@android:color/black"
             android:textSize="15dp" />
 
     </RelativeLayout>

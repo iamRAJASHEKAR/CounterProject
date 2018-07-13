@@ -53,24 +53,46 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".Activities.LoginActivity" />
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.ReligionActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".Activities.HomeActivity" />
+        <activity
+            android:name=".Activities.HomeActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.AddChantActivity"
+            android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".Activities.HelpUsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Activities.ChantsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".Counter.CounterActivity" />
-        <activity android:name=".Activities.ChantJoin" />
-        <activity android:name=".Activities.EditChantActivity" />
+        <activity
+            android:name=".Counter.CounterActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.ChantJoin"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.EditChantActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
 
         <service android:name=".PushNotification.GenerateToken">
             <intent-filter>
@@ -83,7 +105,11 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Activities.SplashScreen">
+        <activity
+            android:name=".Activities.SplashScreen"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -94,8 +120,9 @@
             android:name=".Activities.RegistrationActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.mypc.counterapp.Controllers;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
@@ -7,6 +8,7 @@ import com.example.mypc.counterapp.Activities.LoginActivity;
 import com.example.mypc.counterapp.Model.FriendsList;
 import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
 import com.example.mypc.counterapp.ServerObject.ChantFriendList;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -24,6 +26,7 @@ public class Chantfriendscontroller {
     public ArrayList<FriendsList> active_friends;
     public ArrayList<FriendsList> inactive_friends;
     Context context;
+    ProgressDialog pDialog;
 
     public static Chantfriendscontroller getintance() {
         if (obj == null) {
@@ -37,20 +40,29 @@ public class Chantfriendscontroller {
 
 
     public void fillcontext(Context context) {
-        context = context;
+        this.context = context;
 
     }
 
     public void fetch_chantFriends(final String chant_id) {
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Please wait...");
+        pDialog.setCancelable(false);
+
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.dismiss();
+        }
+        pDialog.show();
         ChantFriendList friendList = new ChantFriendList();
         friendList.chant_id = chant_id;
         Log.e("chantidlog", chant_id);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
         ServerApiInterface apiInterface = retrofit.create(ServerApiInterface.class);
-        Call<ChantFriendList> chant_friend = apiInterface.fetchchant_friends(friendList);
+        final Call<ChantFriendList> chant_friend = apiInterface.fetchchant_friends(friendList);
         chant_friend.enqueue(new Callback<ChantFriendList>() {
             @Override
             public void onResponse(Call<ChantFriendList> call, Response<ChantFriendList> response) {
+                /*    Log.e("json", Gson.class);*/
                 Log.e("chantresponse", response.body().getResponse());
                 if (response.body() != null) {
                     Log.e("chantsfriends", response.body().getResponse());
@@ -58,32 +70,40 @@ public class Chantfriendscontroller {
                     active_friends.clear();
                     inactive_friends.clear();
                     chants_Friends = response.body().getFriendsList();
+                    Log.e("chantssizer", String.valueOf(response.body().getFriendsList().size()));
+
                     for (FriendsList friends_active : chants_Friends) {
-                        if (friends_active.isactive.equals("1"))
-                        {
+                        if (friends_active.isactive.equals("1")) {
                             active_friends.add(friends_active);
                             Log.e("friendsactive", String.valueOf(active_friends.size()));
-                        } else
-                            {
+                        } else {
                             inactive_friends.add(friends_active);
                             Log.e("inactivefriends", String.valueOf(inactive_friends.size()));
                         }
-                        EventBus.getDefault().post(new LoginActivity.MessageEvent("active_friends"));
                     }
-
+                    EventBus.getDefault().post(new LoginActivity.MessageEvent("active_friends"));
                     Log.e("chantarray", String.valueOf(chants_Friends.size()));
                     for (int i = 0; i < response.body().getFriendsList().size(); i++) {
                         String active = response.body().getFriendsList().get(i).isactive;
                         String mail = response.body().getFriendsList().get(i).email;
-                        Log.e("chantarraydata", mail + "\n" + active);
+                        Log.e("dataarray", mail + "\n" + active);
                     }
-                } else
-                    {
+
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.dismiss();
+                    }
+                } else {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.dismiss();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ChantFriendList> call, Throwable t) {
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.dismiss();
+                }
                 Log.e("logoot_failure", t.getMessage());
             }
         });

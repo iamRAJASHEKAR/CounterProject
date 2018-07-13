@@ -51,8 +51,7 @@ public class JoinedFriends extends Fragment {
     }
 
 
-    public void display_actiive_friends()
-    {
+    public void display_actiive_friends() {
         userarray = Chantfriendscontroller.getintance().active_friends;
         Log.e("joinfriends", String.valueOf(userarray.size()));
         if (userarray.size() > 0) {

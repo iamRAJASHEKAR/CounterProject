@@ -1,15 +1,19 @@
 package com.example.mypc.counterapp.Activities.Fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.mypc.counterapp.Activities.LoginActivity;
+import com.example.mypc.counterapp.Controllers.Chantfriendscontroller;
 import com.example.mypc.counterapp.Fonts.ButtonRegular;
 import com.example.mypc.counterapp.Fonts.EditTextRegular;
 import com.example.mypc.counterapp.Network.ConnectionReceiver;
@@ -24,13 +28,15 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class AddNewFriend extends Fragment implements ConnectionReceiver.ConnectionReceiverListener {
 
     EditTextRegular addFriendName, addFriendEmail;
     ButtonRegular save;
     View view;
     public boolean isConnected;
-    String frndname, friendEmail;
+    String frndname, chant_id, friendEmail;
     MaterialDialog mProgress;
 
     @Override
@@ -47,10 +53,11 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
     public void init() {
         addFriendName = view.findViewById(R.id.edit_name);
         addFriendEmail = view.findViewById(R.id.edit_surname);
-
         save = view.findViewById(R.id.btn_save);
         save.setOnClickListener(ClickOnsaveBtn);
-
+        SharedPreferences prefs = getActivity().getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
+        chant_id = prefs.getString("chant_id", "No name defined");
+        Log.e("user_chantid", chant_id);
     }
 
 
@@ -81,16 +88,12 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
         } else {
             addFriendToChant();
         }
-
-
     }
 
     public void addFriendToChant() {
-
         displayProgressDialog();
-
         AddFriendServerObject addFriendServerObject = new AddFriendServerObject();
-        addFriendServerObject.chantId = "chant_2853";
+        addFriendServerObject.chantId = chant_id;
         addFriendServerObject.name = frndname;
         addFriendServerObject.email = friendEmail;
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
@@ -101,12 +104,22 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
             public void onResponse(Call<AddFriendServerObject> call, Response<AddFriendServerObject> response) {
                 String addFriendResponse;
                 if (response.body() != null) {
-                    Log.e("addFriendResponse", " " + response.body().response);
+                    Log.e("addFriendResponse", " " + response.body().response + response.body().message);
                     addFriendResponse = response.body().response;
                     if (addFriendResponse.equals("3")) {
                         hideProgressDialog();
-                    }
+                        Toast toast = Toast.makeText(getActivity(), "Friend added Successfully", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        addFriendName.setText("");
+                        addFriendEmail.setText("");
 
+                        Chantfriendscontroller.getintance().fetch_chantFriends(chant_id);
+
+                    } else {
+                        hideProgressDialog();
+                        Toast.makeText(getActivity(), "Failed to add friend", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
@@ -128,7 +141,6 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
             Toast.makeText(getActivity(), "check internet Connection", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getActivity(), " Connected to internet ", Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -156,7 +168,6 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
     }
 
     private void hideProgressDialog() {
-
         if (mProgress != null && mProgress.isShowing()) {
             mProgress.dismiss();
         }

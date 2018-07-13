@@ -10,4 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/text_nodata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:text="@string/txt_nodataFound"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:visibility="visible" />
+
+
 </FrameLayout>

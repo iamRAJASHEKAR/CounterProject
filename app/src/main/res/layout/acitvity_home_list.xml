@@ -1,72 +1,97 @@
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="60dp">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="12dp"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="12dp">
 
-        <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.example.mypc.counterapp.Fonts.TextViewBold
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/chant_title"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="8dp"
-            android:gravity="start"
-            android:textSize="15dp"/>
-        <com.example.mypc.counterapp.Fonts.TextViewRegular
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/chant_title"
-            android:id="@+id/chant_text"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="6dp"
-            android:gravity="start"
-            android:paddingBottom="8dp"
-            android:textSize="15dp"/>
-            
-            <com.example.mypc.counterapp.Fonts.TextViewRegular
-                android:layout_width="wrap_content"
-                android:id="@+id/text_visiible"
-                android:layout_below="@+id/chant_text"
-                android:text="Visible to Friends"
-                android:paddingBottom="6dp"
-                android:layout_marginLeft="5dp"
-                android:layout_height="wrap_content" />
-            <com.example.mypc.counterapp.Fonts.TextViewRegular
-                android:layout_width="wrap_content"
-                android:id="@+id/text_created"
-                android:text="Created By"
-                android:paddingRight="3dp"
-                android:paddingBottom="3dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_height="wrap_content" />
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/relative_chant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.example.mypc.counterapp.Fonts.TextViewBold
+                    android:id="@+id/chant_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="start"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp" />
+
+                <com.example.mypc.counterapp.Fonts.TextViewRegular
+                    android:id="@+id/chant_text"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/chant_title"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="6dp"
+                    android:gravity="start"
+                    android:maxLines="4"
+                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp" />
+
+                <com.example.mypc.counterapp.Fonts.TextViewRegular
+                    android:id="@+id/text_visiible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/chant_text"
+                    android:layout_marginLeft="5dp"
+                    android:paddingBottom="6dp"
+                    android:text="privacy" />
+
+                <com.example.mypc.counterapp.Fonts.TextViewRegular
+                    android:id="@+id/text_created"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:paddingBottom="3dp"
+                    android:paddingRight="3dp"
+                    android:text="Created By" />
 
 
-        <ImageView
-            android:layout_width="15dp"
-            android:id="@+id/right_arrow"
-            android:layout_height="15dp"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_rightarrow"
-            android:layout_marginRight="10dp"
-            android:layout_centerVertical="true"
-            />
-    </RelativeLayout>
+                <ImageView
+                    android:id="@+id/right_arrow"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_rightarrow" />
+            </RelativeLayout>
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.example.mypc.counterapp.Fonts.TextViewRegular
+                    android:id="@+id/timestamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="3dp"
+                    android:text="time here"
+                    android:textColor="@color/black" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
 
     </android.support.v7.widget.CardView>
 

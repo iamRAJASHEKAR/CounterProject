@@ -13,6 +13,17 @@ public class FetchingPublicChant {
     @SerializedName("email")
     public String email;
 
+    @SerializedName("religion")
+    public String religion;
+
+    public String getReligion() {
+        return religion;
+    }
+
+    public void setReligion(String religion) {
+        this.religion = religion;
+    }
+
     @SerializedName("response")
     public String response;
 

@@ -14,7 +14,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +31,8 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.mypc.counterapp.Activities.Fragments.ChantsModel;
+import com.example.mypc.counterapp.Database.DatabaseManager;
+import com.example.mypc.counterapp.Database.Userdata;
 import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.EditTextRegular;
 import com.example.mypc.counterapp.Fonts.TextViewRegular;
@@ -40,6 +44,8 @@ import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
 import com.example.mypc.counterapp.ServerObject.AddChantServerObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -56,14 +62,17 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
     ImageView toolbarIconback;
     TextView toolText;
     Button saveBtn;
+    boolean privacy;
+    Userdata userdata;
     EditTextRegular editChantname, editchantText;
     RadioGroup radioGroup;
-    RadioButton radioPublic, radioFriends;
+    RadioButton radioPublic, radioFriends, rdb_private;
     RecyclerView addchantRecyclerview;
     AddChantAdapter addChantAdapter;
+    RelativeLayout relative_back;
     ArrayList<ChantsModel> chantsModelArrayList;
     RelativeLayout nameEmailLayout;
-    String radioButtonText, chantname, chantDescription, createdBy, createdEmail, timestamp;
+    String radioButtonText, chantname, chantDescription, createdBy, user_name, createdEmail, timestamp, religion;
     public boolean isConnected;
     ArrayList<String> mSelectedFriendsEmail = new ArrayList<String>();
     ArrayList<String> mSelectedFriendsName = new ArrayList<>();
@@ -78,20 +87,22 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
         checkConnection();
         loadContactsOnSeparateThread();
         SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
-
+        privacy = false;
         createdBy = prefs.getString("name", "No name defined");
         createdEmail = prefs.getString("email", "No name defined");
-
-        long unixTime = System.currentTimeMillis() / 1000L;
-        timestamp = String.valueOf(unixTime);
-        Log.e("name timestamp", " " + createdBy + " " + timestamp);
-
+        user_name = prefs.getString("name", "No name defined");
+        long unixdata = System.currentTimeMillis();
+        timestamp = String.valueOf(unixdata);
+        Log.e("nametimestamp", " " + createdBy + " " + timestamp);
         init();
+        getuserData();
     }
 
     public void init() {
+
         addChantToolbar = findViewById(R.id.toolBar);
         setSupportActionBar(addChantToolbar);
+        relative_back = findViewById(R.id.relative_back);
 
         toolbarIconback = findViewById(R.id.toolabar_icon);
         toolbarIconback.setImageResource(R.drawable.ic_back_arrow);
@@ -104,47 +115,47 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
 
         toolText = findViewById(R.id.toolabr_title);
         toolText.setText(R.string.txt_add_chant);
-
         editChantname = findViewById(R.id.edit_chantName);
         editchantText = findViewById(R.id.edit_chant);
         editchantText.setOnTouchListener(touchListener);
-
         radioGroup = findViewById(R.id.radioGroup);
+        rdb_private = findViewById(R.id.rdb_private);
         radioPublic = findViewById(R.id.rdbPublic);
         radioFriends = findViewById(R.id.rdbFriends);
-
         saveBtn = findViewById(R.id.btn_save);
         saveBtn.setOnClickListener(SaveBtnClick);
-
         nameEmailLayout = findViewById(R.id.rl_name_email);
-
-        //  setData();
-        //  getNameEmailDetails();
-
         addchantRecyclerview = findViewById(R.id.addchant_recyclerview);
         addchantRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         addChantAdapter = new AddChantAdapter();
         addchantRecyclerview.setAdapter(addChantAdapter);
 
-
         radioPublic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 radioButtonText = "Public";
+                privacy = true;
                 if (radioPublic.isChecked()) {
                     addchantRecyclerview.setVisibility(View.INVISIBLE);
                 }
-
             }
         });
-
         radioFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                privacy = true;
                 radioButtonText = "Friend";
                 if (radioFriends.isChecked())
                     addchantRecyclerview.setVisibility(View.VISIBLE);
                 nameEmailLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        relative_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -187,21 +198,35 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
             editChantname.setError("Enter chant name");
         } else if (editchantText.length() == 0) {
             editchantText.setError("Enter the chant");
+        } else if (rdb_private.isChecked()) {
+            add_data();
+            Toast toast = Toast.makeText(this, "Private Chant Added Successfully ", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            finish();
+        } else if (privacy == false) {
+            Toast toast = Toast.makeText(this, "Check chant privacy", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        } else if (radioFriends.isChecked() && friendsArrayList.size() < 1) {
+            Toast toast = Toast.makeText(this, "Friends are Empty", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+
         } else {
             addChants();
         }
-
-
     }
 
-  /*  public void setData()
-    {
-        for(int i = 0; i<6;i++)
-        {
-            chantsModelArrayList.add(new ChantsModel("Vedas","contactvedas@gmail.com"));
-
-        }
-    }*/
+    public void add_data() {
+        userdata = new Userdata();
+        userdata.setFirstname(chantname);
+        userdata.setLastname(chantDescription);
+        userdata.setEmail(createdEmail);
+        userdata.setUsername(timestamp);
+        userdata.setId(DatabaseManager.getInstance().users.size() + 1);
+        DatabaseManager.getInstance().add_user(userdata);
+    }
 
     public void loadContactsOnSeparateThread() {
         // run on separate thread
@@ -275,36 +300,18 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
     ///////Adding the chants and send to server
     public void addChants() {
         displayProgressDialog();
-
         AddChantServerObject addChantObj = new AddChantServerObject();
         addChantObj.chantName = chantname.trim();
         addChantObj.chantDescription = chantDescription.trim();
         addChantObj.createdBy = createdBy.trim();
         addChantObj.timestamp = timestamp.trim();
         addChantObj.created_email = createdEmail.trim();
+        addChantObj.religion = religion.trim();
         if (radioButtonText.equals("Public")) {
             addChantObj.privacy = radioButtonText.trim();
         } else if (radioButtonText.equals("Friend")) {
-          /* // friendsArrayList.clear();
-             Log.e("selectedFriendsSize"," "+mSelectedFriendsEmail.size()+mSelectedFriendsName);
-          //  Contact contact = new Contact();
-            for(int i =0;i<= mSelectedFriendsEmail.size();i++)
-            {
-                Log.e("stringarray"," "+mSelectedFriendsEmail.get(i));
-               // contact.setName(mSelectedFriendsName.get(i));
-                //contact.setMail(mSelectedFriendsEmail.get(i));
-                friendsArrayList.add(new Contact(mSelectedFriendsName.get(i),mSelectedFriendsEmail.get(i)));
-
-            }
-
-            Log.e("addchnatfrnds"," "+friendsArrayList.size());
-            for(int i =0;i<friendsArrayList.size();i++)
-            {
-                Log.e("ffffff"," "+friendsArrayList.get(i).getMail());
-            }*/
             addChantObj.privacy = radioButtonText.trim();
             addChantObj.contacts = friendsArrayList;
-
         }
 
         Log.e("addchnatffff", " " + addChantObj);
@@ -442,7 +449,6 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
     }
 
     private void hideProgressDialog() {
-
         if (mProgress != null && mProgress.isShowing()) {
             mProgress.dismiss();
         }
@@ -466,4 +472,12 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
         finish();
         hideProgressDialog();
     }
+
+
+    public void getuserData() {
+        SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
+        religion = prefs.getString("religion", "No name defined");
+        Log.e("addchantreligion", religion);
+    }
+
 }

@@ -42,7 +42,8 @@ public class CounterController {
 
     ////////////Fetching the religions Apis
 
-    public void fetchReligions() {
+    public void fetchReligions()
+    {
         final ProgressDialog pDialog = new ProgressDialog(context);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);

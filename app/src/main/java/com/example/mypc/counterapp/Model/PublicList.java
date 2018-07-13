@@ -2,7 +2,8 @@ package com.example.mypc.counterapp.Model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PublicList {
+public class PublicList
+{
     @SerializedName("time_stamp")
     public String time_stamp;
     @SerializedName("created_email")

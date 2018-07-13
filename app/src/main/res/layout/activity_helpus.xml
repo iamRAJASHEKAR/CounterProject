@@ -42,7 +42,6 @@
                     android:hint="@string/txt_email"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
-                    android:maxLength="25"
                     android:maxLines="1"
                     android:paddingLeft="5dp" />
 
@@ -60,7 +59,7 @@
                     android:paddingLeft="5dp" />
 
                 <com.example.mypc.counterapp.Fonts.EditTextRegular
-                    android:id="@+id/edit_lastname"
+                    android:id="@+id/edit_subject"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_below="@id/edit_firstname"
@@ -96,6 +95,7 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/rectangleshape"
                     android:gravity="top"
+                    android:hint="@string/txt_helpnote"
                     android:imeOptions="actionDone"
                     android:inputType="textMultiLine"
                     android:isScrollContainer="true"

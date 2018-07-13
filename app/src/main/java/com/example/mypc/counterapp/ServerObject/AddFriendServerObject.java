@@ -15,4 +15,9 @@ public class AddFriendServerObject
 
         @SerializedName("response")
         public String response;
+        @SerializedName("message")
+        public String message;
+
+
+
 }

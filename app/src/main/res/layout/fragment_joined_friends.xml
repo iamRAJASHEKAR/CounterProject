@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:background="#BDC3C7"
-        >
+        android:background="#BDC3C7">
 
         <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
@@ -25,7 +24,8 @@
         <com.example.mypc.counterapp.Fonts.TextViewBold
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_marginRight="100dp"
+            android:gravity="right|center_vertical"
             android:text="Email"
             android:textColor="#000000"
             android:textStyle="bold" />

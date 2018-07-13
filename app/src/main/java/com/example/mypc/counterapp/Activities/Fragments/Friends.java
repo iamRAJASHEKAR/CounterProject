@@ -4,6 +4,7 @@ package com.example.mypc.counterapp.Activities.Fragments;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,6 +39,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -50,6 +52,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
@@ -63,6 +66,8 @@ public class Friends extends Fragment {
     ArrayList<FriendsList> allFriendsArraylist;
     MaterialDialog mProgress;
     ArrayList<FriendsList> inviteFriends;
+    ArrayList<FriendsList> active;
+    ArrayList<FriendsList> intersection;
     String chantid;
     String friendName, friendemail;
 
@@ -76,15 +81,25 @@ public class Friends extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        chantid = HomeActivity.chantId;
-        Log.e("chantID", " " + chantid);
+
+        userarray = new ArrayList<>();
         inviteFriends = new ArrayList<>();
-        displayProgressDialog();
         loadContactsOnSeparateThread();
         recyclerView = view.findViewById(R.id.recycler);
-        userarray = new ArrayList<>();
-        display_inactiive_friends();
+        //display_inactiive_friends();
+
         return view;
+    }
+
+    public void display_progress(String msg) {
+        mProgress = new MaterialDialog.Builder(getActivity()).content(msg).canceledOnTouchOutside(false).progress(true, 0).show();
+
+    }
+
+    public void hide_progress() {
+        if (mProgress != null && mProgress.isShowing()) {
+            mProgress.dismiss();
+        }
 
     }
 
@@ -114,7 +129,6 @@ public class Friends extends Fragment {
                     inviteFriend();
                 }
             });
-
         }
 
         @Override
@@ -156,30 +170,148 @@ public class Friends extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(LoginActivity.MessageEvent event) {
-        Log.e("activeevent", "" + event.message);
+        Log.e("active", "" + event.message);
         String resultData = event.message.trim();
         if (resultData.equals("active_friends")) {
             display_inactiive_friends();
-
+            //checker();
         }
+    }
 
+    public void checker() {
+        userarray = new ArrayList<>();
+        allFriendsArraylist = new ArrayList<>();
+//a
+        userarray = Chantfriendscontroller.getintance().active_friends;
+//b
+        allFriendsArraylist.addAll(contactsArraylist);
+
+        //un
+        active = new ArrayList<>(userarray);
+
+        active.addAll(allFriendsArraylist);
+
+        intersection = new ArrayList<>(userarray);
+        intersection.retainAll(allFriendsArraylist);
+
+
+        ArrayList<FriendsList> sumetric = new ArrayList<>(active);
+        sumetric.removeAll(intersection);
+        allFriendsArraylist.clear();
+        Log.e("hjhshjsv", String.valueOf(active.size() + "\n" + allFriendsArraylist.size()));
+
+        allFriendsArraylist = sumetric;
+        Log.e("lasterdata", String.valueOf(active.size() + "\n" + allFriendsArraylist.size()));
+
+        set_data();
+        /*       Log.e("hjhshjsv", String.valueOf(active.size() + "\n" + allFriendsArraylist.size()));
+
+        HashSet hs = new HashSet();
+        hs.addAll(allFriendsArraylist);
+        allFriendsArraylist.clear();
+
+        Log.e("checkclear", String.valueOf(allFriendsArraylist.size()));
+
+
+        allFriendsArraylist.addAll(hs);
+
+
+        Log.e("hashmap", String.valueOf(allFriendsArraylist.size()));
+        set_data();*/
     }
 
     private void display_inactiive_friends() {
+        active = new ArrayList<>();
+        active = Chantfriendscontroller.getintance().active_friends;
+        userarray = new ArrayList<>();
+        allFriendsArraylist = new ArrayList<>();
         userarray = Chantfriendscontroller.getintance().inactive_friends;
-        if (userarray != null && contactsArraylist != null) {
-
+        Log.e("jshdbvjsvb", String.valueOf(userarray.size()));
+        if (userarray.size() > 0 && contactsArraylist != null) {
+            Log.e("hellwith", "takeaction");
             mergeContactInactivearrays();
-            if (allFriendsArraylist != null) {
-                hideProgressDialog();
-            } else {
-                Toast toast = Toast.makeText(getActivity(), "Unable to fetch the all friends please try again", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
+        } else if (active != null && contactsArraylist != null) {
+            Log.e("hellwith", "takeaction");
+            allFriendsArraylist.addAll(contactsArraylist);
+
+
+            HashSet hs = new HashSet();
+            hs.addAll(allFriendsArraylist);
+            allFriendsArraylist.clear();
+            Log.e("checkclear", String.valueOf(allFriendsArraylist.size()));
+            allFriendsArraylist.addAll(hs);
+
+            /*    for (FriendsList friendsList : active) {
+                if (!allFriendsArraylist.contains(friendsList)) {
+                    allFriendsArraylist.add(friendsList);
+                }
+            }
+        */
+            set_data();
+        } else {
+            if (contactsArraylist != null && contactsArraylist.size() > 0) {
+                Log.e("kokokokoko", String.valueOf(contactsArraylist.size()));
+                contact_onlyphone();
             }
         }
 
-        if (userarray.size() > 0) {
+    } //////////merging contacts array list and inactive arraylist
+
+    public void contact_onlyphone() {
+        allFriendsArraylist.addAll(contactsArraylist);
+        Log.e("onlyserverdata", String.valueOf(allFriendsArraylist.size()));
+
+
+        HashSet hs = new HashSet();
+        hs.addAll(allFriendsArraylist);
+        allFriendsArraylist.clear();
+        Log.e("checkclear", String.valueOf(allFriendsArraylist.size()));
+        allFriendsArraylist.addAll(hs);
+
+
+/*
+
+        for (FriendsList friendsList : userarray) {
+            if (allFriendsArraylist.contains(friendsList)) {
+            } else {
+                Log.e("elsepart", "execute");
+                allFriendsArraylist.add(friendsList);
+            }
+        }
+*/
+        Log.e("onlyphone", String.valueOf(allFriendsArraylist.size()));
+        set_data();
+    }
+
+    public void mergeContactInactivearrays() {
+        Log.e("userdataaray", " " + userarray.size() + " " + contactsArraylist.size());
+        allFriendsArraylist = new ArrayList<>();
+        allFriendsArraylist.addAll(contactsArraylist);
+        allFriendsArraylist.addAll(userarray);
+
+        HashSet hs = new HashSet();
+        hs.addAll(allFriendsArraylist);
+        allFriendsArraylist.clear();
+        Log.e("checkclear", String.valueOf(allFriendsArraylist.size()));
+        allFriendsArraylist.addAll(hs);
+
+/*
+
+        for (FriendsList friendsList : userarray) {
+            if (!allFriendsArraylist.contains(friendsList)) {
+                allFriendsArraylist.add(friendsList);
+            }
+        }
+*/
+        Log.e("allfriends", " " + allFriendsArraylist.size());
+        set_data();
+    }
+
+
+    public void set_data() {
+        if (allFriendsArraylist.size() > 0) {
+
+
             homeAdapter = new ChantsAdpater();
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(homeAdapter);
@@ -222,6 +354,8 @@ public class Friends extends Fragment {
     ///getting the phone contacts
     public void getPhoneDetailsFromDeviceContacts() {
 
+        Log.e("checkcontacts", "start");
+
         contactsArraylist = new ArrayList<>();
         Context context = getActivity();
         ContentResolver cr = context.getContentResolver();
@@ -242,9 +376,8 @@ public class Friends extends Fragment {
                     String email = cur1.getString(cur1.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
                     Log.e("Email", "" + email);
                     String image_uri = cur1.getString(cur1.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
-
                     Integer hasPhone = cur1.getInt(cur1.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-
+                    Log.e("checkcontacts", "startgoing");
                     if (!email.isEmpty() && !name.isEmpty()) {
                         FriendsList contactModel = new FriendsList();
                         contactModel.setEmail(email);
@@ -256,47 +389,23 @@ public class Friends extends Fragment {
                 cur1.close();
             }
 
-            //call api
-            // contactApiExecution();
         }
 
 
     }
 
-
-    //////////merging contacts array list and inactive arraylist
-    public void mergeContactInactivearrays() {
-        Log.e("user", " " + userarray.size() + " " + contactsArraylist.size());
-        allFriendsArraylist = new ArrayList<>();
-        allFriendsArraylist.addAll(contactsArraylist);
-        for (FriendsList friendsList : userarray) {
-            if (!allFriendsArraylist.contains(friendsList)) {
-                allFriendsArraylist.add(friendsList);
-            }
-        }
-        Log.e("allfriends", " " + allFriendsArraylist.size());
-    }
-
-
-    public void displayProgressDialog() {
-        mProgress = new MaterialDialog.Builder(getActivity()).content("Loading").canceledOnTouchOutside(false).progress(true, 0).show();
-
-    }
-
-    private void hideProgressDialog() {
-
-        if (mProgress != null && mProgress.isShowing()) {
-            mProgress.dismiss();
-        }
-    }
 
     ///////////inviteFriendApi
     public void inviteFriend() {
-        displayProgressDialog();
+        SharedPreferences prefs = getActivity().getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
+        chantid = prefs.getString("chant_id", "No name defined");
+
+        display_progress("Inviting...");
         InviteServerobject inviteServerobject = new InviteServerobject();
         inviteServerobject.chantID = chantid;
         inviteServerobject.name = friendName;
         inviteServerobject.email = friendemail;
+        Log.e("chantinvitation", chantid + friendName + friendemail);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
         ServerApiInterface api = retrofit.create(ServerApiInterface.class);
         Call<InviteServerobject> inviteObj = api.inviteFriend(inviteServerobject);
@@ -304,18 +413,35 @@ public class Friends extends Fragment {
             @Override
             public void onResponse(Call<InviteServerobject> call, Response<InviteServerobject> response) {
                 String invitestatus;
+                hide_progress();
                 if (response.body() != null) {
                     invitestatus = response.body().response;
                     Log.e("inviteStatus", " " + invitestatus);
                     if (invitestatus.equals("3")) {
-                        startActivity(new Intent(getActivity(), HomeActivity.class));
-                        hideProgressDialog();
+                        Toast toast = Toast.makeText(getActivity(), "Friend Invited", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+
+                        Chantfriendscontroller.getintance().fetch_chantFriends(chantid);
+
+                        //       startActivity(new Intent(getActivity(), HomeActivity.class));
+
+                    } else {
+                        Toast toast = Toast.makeText(getActivity(), "Friend Invitation Failed", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<InviteServerobject> call, Throwable t) {
+                hide_progress();
+                Toast toast = Toast.makeText(getActivity(), "Friend Invitation Failed", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+
                 Log.e("inviteStatus", "failed");
             }
         });
@@ -324,12 +450,10 @@ public class Friends extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        hideProgressDialog();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        hideProgressDialog();
     }
 }

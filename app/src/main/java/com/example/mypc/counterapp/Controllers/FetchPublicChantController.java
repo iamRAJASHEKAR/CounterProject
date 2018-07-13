@@ -1,5 +1,6 @@
 package com.example.mypc.counterapp.Controllers;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
@@ -28,6 +29,7 @@ public class FetchPublicChantController {
     public ArrayList<PublicList> friendslist;
     MaterialDialog mProgress;
     public Context context;
+    ProgressDialog pDialog;
 
     public static FetchPublicChantController getinstance() {
         if (obj == null) {
@@ -43,11 +45,19 @@ public class FetchPublicChantController {
         this.context = context1;
     }
 
-    public void publicchant_data(final String user_email) {
+    public void publicchant_data(final String user_email, final String religion) {
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Please wait...");
+        pDialog.setCancelable(false);
+        if (pDialog != null && pDialog.isShowing()) {
+            pDialog.dismiss();
+        }
+        pDialog.show();
 
         FetchingPublicChant logoutServerObjects = new FetchingPublicChant();
 
         logoutServerObjects.email = user_email;
+        logoutServerObjects.religion = religion;
         Log.e("fetchcontroller", user_email);
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
@@ -58,11 +68,13 @@ public class FetchPublicChantController {
             @Override
             public void onResponse(Call<FetchingPublicChant> call, Response<FetchingPublicChant> response) {
                 if (response.body() != null) {
+
+
                     nepublicList.clear();
                     nepublicList = response.body().getPublicList();
                     publicList = response.body().getPublicList();
-                    friendschant_data(user_email);
-                    Log.e("logout", response.body().getResponse());
+                    friendschant_data(user_email, religion);
+                    Log.e("publicresponse", response.body().getResponse());
                     Log.e("arraypublicList", String.valueOf(nepublicList.size()));
                     for (int i = 0; i < response.body().getPublicList().size(); i++) {
                         Log.e("publicprofil" +
@@ -75,6 +87,9 @@ public class FetchPublicChantController {
                                 response.body().getPublicList().get(i).privacy + "\n");
                     }
                 } else {
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.dismiss();
+                    }
                     EventBus.getDefault().post(new LoginActivity.MessageEvent("error"));
                 }
 
@@ -84,14 +99,18 @@ public class FetchPublicChantController {
             public void onFailure(Call<FetchingPublicChant> call, Throwable t) {
                 EventBus.getDefault().post(new LoginActivity.MessageEvent("error"));
 
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.dismiss();
+                }
                 //    Log.e("logoot_failure", t.getMessage());
             }
         });
     }
 
-    public void friendschant_data(final String user_email) {
+    public void friendschant_data(final String user_email, final String religion) {
         FetchingFriendsChants logoutServerObjects = new FetchingFriendsChants();
         logoutServerObjects.email = user_email;
+        logoutServerObjects.religion = religion;
         Log.e("fetchcontroller", user_email);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
         ServerApiInterface apiInterface = retrofit.create(ServerApiInterface.class);
@@ -101,12 +120,15 @@ public class FetchPublicChantController {
             public void onResponse(Call<FetchingFriendsChants> call, Response<FetchingFriendsChants> response) {
 
                 if (response.body() != null) {
-                    HomeActivity.mProgress.dismiss();
                     //Log.e("arrayfriends", String.valueOf(publicList.size()));
                     ArrayList<PublicList> publicaray = new ArrayList<>();
                     friendslist.clear();
                     friendslist = response.body().getPublicList();
                     EventBus.getDefault().post(new LoginActivity.MessageEvent("refreshchant"));
+
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.dismiss();
+                    }
                     //publicList.addAll(publicaray);
                     Log.e("friends", response.body().getResponse());
                     Log.e("arrayfriends", String.valueOf(friendslist.size()));
@@ -121,12 +143,19 @@ public class FetchPublicChantController {
                     }
                 } else {
                     EventBus.getDefault().post(new LoginActivity.MessageEvent("error"));
+
+                    if (pDialog != null && pDialog.isShowing()) {
+                        pDialog.dismiss();
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<FetchingFriendsChants> call, Throwable t) {
                 EventBus.getDefault().post(new LoginActivity.MessageEvent("error"));
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.dismiss();
+                }
             }
         });
     }

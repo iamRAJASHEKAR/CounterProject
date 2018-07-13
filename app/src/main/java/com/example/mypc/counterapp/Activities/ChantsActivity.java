@@ -27,22 +27,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.mypc.counterapp.Activities.Fragments.AddNewFriend;
 import com.example.mypc.counterapp.Activities.Fragments.ChantsModel;
 import com.example.mypc.counterapp.Activities.Fragments.Friends;
 import com.example.mypc.counterapp.Activities.Fragments.JoinedFriends;
 import com.example.mypc.counterapp.Controllers.Chantfriendscontroller;
 import com.example.mypc.counterapp.Counter.CounterActivity;
-import com.example.mypc.counterapp.Fonts.ButtonBold;
 import com.example.mypc.counterapp.Fonts.ButtonRegular;
 import com.example.mypc.counterapp.Fonts.TextViewBold;
 import com.example.mypc.counterapp.Fonts.TextViewRegular;
 import com.example.mypc.counterapp.R;
 import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
 import com.example.mypc.counterapp.ServerObject.DeleteChantServerObject;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +54,7 @@ public class ChantsActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     TextView chantname, chantdescr;
-    String chant_name, chant_decr, chant_id, chant_privacy, chant_created, createdEmail, creted_By_Email;
+    String chant_name, chant_decr, chant_id, chant_privacy, chant_created_email, createdEmail, creted_By_Email;
     RadioGroup radioGroup;
     RecyclerView recyclerView_peoples;
     RadioButton radioButton_friends, radioButton_public;
@@ -67,7 +64,9 @@ public class ChantsActivity extends AppCompatActivity {
     Friends_Holder holder;
     ArrayList<ChantsModel> people_joined;
     TextViewBold toolbar_text;
+    MaterialDialog mprogress;
     ImageView toolbar_icon;
+    RelativeLayout relative_toolbar;
     ImageView editImage, deleteImage;
 
     @Override
@@ -86,12 +85,7 @@ public class ChantsActivity extends AppCompatActivity {
         toolbar_icon.setImageResource(R.drawable.ic_back_arrow);
         toolbar_text.setText("Chants");
 
-        toolbar_icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        relative_toolbar = findViewById(R.id.relative_back);
 
         radioGroup = findViewById(R.id.radioprofile);
         radioButton_friends = findViewById(R.id.radioFriends);
@@ -107,18 +101,12 @@ public class ChantsActivity extends AppCompatActivity {
         deleteImage = findViewById(R.id.image_delete);
         deleteImage.setOnClickListener(DeleteChantClick);
 
-        //  button = findViewById(R.id.count_public);
-       /* button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), CounterActivity.class));
-            }
-        });*/
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
         getIntentData();
 
         if (radioButton_friends.isChecked()) {
@@ -128,41 +116,6 @@ public class ChantsActivity extends AppCompatActivity {
 
         }
 
-        /*radioButton_friends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (radioButton_friends.isChecked())
-                {
-
-                    relativeLayout_tab.setVisibility(View.VISIBLE);
-                    relativeLayout_public.setVisibility(View.GONE);
-                    relative_count_public.setVisibility(View.GONE);
-                }
-            }
-        });*/
-/*
-
-        radioButton_public.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (radioButton_public.isChecked()) {
-                    relativeLayout_tab.setVisibility(View.GONE);
-                    relativeLayout_public.setVisibility(View.VISIBLE);
-                    recyclerView_peoples.setVisibility(View.VISIBLE);
-                    relative_peopled_Joined.setVisibility(View.VISIBLE);
-                    relativeName.setVisibility(View.VISIBLE);
-                    relative_count_public.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-*/
-
-        holder = new Friends_Holder();/*
-        recyclerView_peoples.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        recyclerView_peoples.setAdapter(holder);*/
-        // int pos = radioGroup.getCheckedRadioButtonId();
-        Chantfriendscontroller.getintance().fillcontext(getApplicationContext());
-
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,6 +123,19 @@ public class ChantsActivity extends AppCompatActivity {
             }
         });
 
+        toolbar_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        relative_toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 
@@ -252,7 +218,7 @@ public class ChantsActivity extends AppCompatActivity {
         chant_decr = getIntent().getExtras().getString("chant_dec");
         chant_privacy = getIntent().getExtras().getString("chant_privacy");
         chant_id = getIntent().getExtras().getString("chant_id");
-        chant_created = getIntent().getExtras().getString("chant_created");
+        chant_created_email = getIntent().getExtras().getString("chant_created_email");
         creted_By_Email = getIntent().getExtras().getString("chant_created_email");
         SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
         createdEmail = prefs.getString("email", "No name defined");
@@ -260,6 +226,7 @@ public class ChantsActivity extends AppCompatActivity {
         chantdescr.setText(chant_decr);
         if (chant_privacy.equals("Friend")) {
             radioButton_friends.setChecked(true);
+            Chantfriendscontroller.getintance().fillcontext(ChantsActivity.this);
             Chantfriendscontroller.getintance().fetch_chantFriends(chant_id);
         }
         Log.e("vhvfdbsjb", chant_name + chant_decr + chant_privacy + chant_id + createdEmail);
@@ -269,10 +236,10 @@ public class ChantsActivity extends AppCompatActivity {
 
         Intent intent = new Intent(getApplicationContext(), CounterActivity.class);
         intent.putExtra("chant_id", chant_id);
-        intent.putExtra("chant_created", chant_created);
+        intent.putExtra("chant_created_email", chant_created_email);
         intent.putExtra("chantname", chant_name);
         intent.putExtra("chant_decrp", chant_decr);
-        Log.e("chgejhbj", chant_id + chant_created + chant_name + chant_decr);
+        Log.e("chgejhbj", chant_id + chant_created_email + chant_name + chant_decr);
         startActivity(intent);
     }
 
@@ -336,11 +303,24 @@ public class ChantsActivity extends AppCompatActivity {
 
     }
 
+    public void display_Progress(String msg) {
+        mprogress = new MaterialDialog.Builder(ChantsActivity.this).content(msg).canceledOnTouchOutside(false).progress(true, 0).show();
+    }
+
+    private void hide_ProgressDialog() {
+        if (mprogress != null && mprogress.isShowing()) {
+            mprogress.dismiss();
+        }
+
+    }
 
     /////server api for delete
     public void deleteChant() {
+
+        display_Progress("Deleting...");
         DeleteChantServerObject deleteObj = new DeleteChantServerObject();
         deleteObj.chantId = chant_id;
+        deleteObj.email = chant_created_email;
         Retrofit retrofit = new Retrofit.Builder().baseUrl(ServerApiInterface.Base_Url).addConverterFactory(GsonConverterFactory.create()).build();
         ServerApiInterface api = retrofit.create(ServerApiInterface.class);
         Call<DeleteChantServerObject> deletechant = api.deleteChant(deleteObj);
@@ -348,7 +328,9 @@ public class ChantsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<DeleteChantServerObject> call, Response<DeleteChantServerObject> response) {
                 String deleteStatus;
+                hide_ProgressDialog();
                 if (response.body() != null) {
+
                     deleteStatus = response.body().response;
                     Log.e("deleteStatus", " " + deleteStatus);
                     if (deleteStatus.equals("3")) {
@@ -360,7 +342,8 @@ public class ChantsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<DeleteChantServerObject> call, Throwable t) {
-                Log.e("deletestatus", "Failed");
+                hide_ProgressDialog();
+                Toast.makeText(ChantsActivity.this, "Failed to delete", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -62,7 +62,6 @@ public class MegaCount {
     }
 
     @SerializedName("megacount")
-
     public String megacount;
     @SerializedName("response")
     public String response;

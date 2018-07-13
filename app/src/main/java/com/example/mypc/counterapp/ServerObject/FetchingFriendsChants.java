@@ -9,7 +9,7 @@ public class FetchingFriendsChants {
     @SerializedName("FriendList")
     ArrayList<PublicList> publicList;
 
-    public ArrayList<PublicList> getPublicList(){
+    public ArrayList<PublicList> getPublicList() {
         return publicList;
     }
 
@@ -34,8 +34,19 @@ public class FetchingFriendsChants {
     }
 
     @SerializedName("email")
-
     public String email;
+
+    @SerializedName("religion")
+    public String religion;
+
+    public String getReligion() {
+        return religion;
+    }
+
+    public void setReligion(String religion) {
+        this.religion = religion;
+    }
+    //religion
 
     @SerializedName("response")
     public String response;

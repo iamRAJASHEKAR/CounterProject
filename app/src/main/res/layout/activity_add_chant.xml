@@ -68,12 +68,14 @@
     </RelativeLayout>
 
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/relative_radio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/relative_chant"
-        android:layout_margin="15dp">
+        android:layout_margin="15dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <RadioGroup
             android:id="@+id/radioGroup"
@@ -86,6 +88,7 @@
                 android:id="@+id/rdbPublic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:button="@drawable/radio_button_selector"
                 android:padding="10dp"
                 android:text="@string/txt_public"
@@ -95,14 +98,26 @@
                 android:id="@+id/rdbFriends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_weight="1"
                 android:button="@drawable/radio_button_selector"
                 android:padding="10dp"
                 android:text="@string/txt_friend"
                 android:textColor="@android:color/black" />
+
+            <RadioButton
+                android:id="@+id/rdb_private"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@drawable/radio_button_selector"
+                android:padding="10dp"
+                android:text="@string/txt_private"
+                android:textColor="@android:color/black" />
+
+
         </RadioGroup>
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/rl_name_email"

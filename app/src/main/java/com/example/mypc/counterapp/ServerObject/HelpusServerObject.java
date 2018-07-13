@@ -2,18 +2,19 @@ package com.example.mypc.counterapp.ServerObject;
 
 import com.google.gson.annotations.SerializedName;
 
-public class HelpusServerObject
-{
-   @SerializedName("name")
-    public  String name;
+public class HelpusServerObject {
+    @SerializedName("name")
+    public String name;
 
-   @SerializedName("email")
+    @SerializedName("email")
     public String email;
 
-   @SerializedName("phone")
+    @SerializedName("phone")
     public String phone;
+    @SerializedName("subject")
+    public String subject;
 
-   @SerializedName("message")
+    @SerializedName("message")
     public String message;
 
     @SerializedName("response")

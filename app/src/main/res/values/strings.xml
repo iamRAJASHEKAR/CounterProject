@@ -19,6 +19,7 @@
     <string name="txt_chant">Chant</string>
     <string name="txt_public">Public</string>
     <string name="txt_friend">Friends</string>
+    <string name="txt_private">Private</string>
     <string name="txt_save">Save</string>
     <string name="txt_add_chant">Add Chants</string>
     <string name="txt_name">Name</string>
@@ -28,6 +29,7 @@
     <string name="txt_fname">First Name</string>
     <string name="txt_subject">Subject</string>
     <string name="txt_mothername">Mother\'s Name</string>
+    <string name="txt_nodataFound">No Data Found</string>
     <string name="txt_lname">Last Name</string>
     <string name="txt_fathersname">Father\'s Name</string>
     <string name="txt_gothra">Gothra</string>
@@ -38,6 +40,7 @@
     <string name="txt_send">Send</string>
     <string name="txt_yes">YES</string>
     <string name="txt_no">NO</string>
+    <string name="txt_helpnote">Give us details...</string>
     <string name="gplus_key">AIzaSyCEcs8K0fXV2dxZBJhQJYyMgPvNKGT7T0w</string>
 
     <!-- TODO: Remove or change this placeholder text -->

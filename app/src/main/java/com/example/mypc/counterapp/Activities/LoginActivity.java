@@ -459,13 +459,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     status_code = Integer.parseInt(response.body().getResponse());
                     Log.e("lloginuser", " " + status_code);
                     if (status_code == 3) {
+                        String religion = response.body().getReligion();
+                        Log.e("checkreligion", religion);
                         sessionsManager.setLogin(true);
-                        Intent intent = new Intent(getApplicationContext(), ReligionActivity.class);
+                        editor.putString("religion", religion);
+                        editor.commit();
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
-                        Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
-                        startActivity(intent);
+                        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+                                        Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
                     }
                 }
             }
@@ -501,14 +511,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         @Override
         protected void onPreExecute() {
             display_login_Progress("Registering...");
-            //    displayProgressDialog("Registering please wait ");
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-//            login(email, name);
-
             return null;
         }
 
@@ -518,6 +525,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             action();
             super.onPostExecute(aVoid);
         }
+
     }
 
     public void action() {
@@ -529,7 +537,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void fetchData() {
         // CounterController.getInstance().fetchReligions();
     }
-
 
     public static class MessageEvent {
         public final String message;
