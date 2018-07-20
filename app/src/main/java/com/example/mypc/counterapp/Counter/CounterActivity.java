@@ -37,6 +37,7 @@ import com.example.mypc.counterapp.R;
 import com.example.mypc.counterapp.ServerApiInterface.ServerApiInterface;
 import com.example.mypc.counterapp.ServerObject.ChantCount;
 import com.example.mypc.counterapp.ServerObject.MegaCount;
+import com.j256.ormlite.stmt.query.In;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
 
@@ -53,7 +54,7 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
     int japam_count;
     RelativeLayout relative_back;
     int my_contribution;
-    TextView chantname, chantdesc;
+    TextView chantname, chantdesc, text_ontribution;
     ButtonBold submit_button;
     TickerView ticker_mega, ticker_local, ticker_mycontribution;
     Toolbar countertoolbar;
@@ -75,6 +76,7 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
         chantdesc = findViewById(R.id.chantDescription);
         toolbar_icon = findViewById(R.id.toolabar_icon);
         conterText = findViewById(R.id.toolabr_title);
+        text_ontribution = findViewById(R.id.text_mycontribution);
         toolbar_icon.setImageResource(R.drawable.ic_back_arrow);
         conterText.setText("Counter");
         relative_back = findViewById(R.id.relative_back);
@@ -92,6 +94,7 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
         ticker_local.setCharacterLists(TickerUtils.provideAlphabeticalList());
         ticker_mycontribution.setCharacterLists(TickerUtils.provideAlphabeticalList());
         ticker_mega.setText("- - - -");
+        ticker_local.setText("0");
         final String mega_count = "<u>MEGA COUNT</u>";
         text_megacount.setText(Html.fromHtml(mega_count));
 
@@ -109,7 +112,6 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
     }
 
     public void screen_modes() {
-
         text_screenmodes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,9 +124,7 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
                     text_screenmodes.setTextColor(getResources().getColor(R.color.colorGray));
                     state = 1;
                 } else if (state == 1) {
-
                     text_screenmodes.setText(Html.fromHtml(htmlString));
-
                     text_screenmodes.setTextColor(getResources().getColor(R.color.colorOrange));
                     state = 0;
                 }
@@ -134,12 +134,10 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
     }
 
     public void counter() {
-
         plus_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (state == 0) {
-
                     plus();
                 }
             }
@@ -155,7 +153,6 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                     }
-
                 }
             }
         });
@@ -296,9 +293,6 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
                             } else {
                                 Toast.makeText(CounterActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                            Log.e("responseoncounter", response.body().getResponse() + "\n" + response.body().getMegacount()
-                                    + "\n" + response.body().getEmail()
-                                    + "\n" + response.body().getMessage());
                         } else {
                             //  Toast.makeText(HomeActivity.this, "Failed to logout", Toast.LENGTH_SHORT).show();
                         }
@@ -311,7 +305,6 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
                     }
                 });
             } else {
-
                 try_submit();
             }
         }
@@ -329,11 +322,11 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
 
     public void chant_count() {
         if (chant_countid.equals("private")) {
+            text_ontribution.setVisibility(View.INVISIBLE);
+            ticker_mycontribution.setVisibility(View.INVISIBLE);
             //do nothing
         } else {
-
             if (isConnected) {
-
                 displayProgressDialog("Getting Mega Count..");
                 ChantCount chantCount = new ChantCount();
                 chantCount.chantid = chant_countid;
@@ -354,7 +347,6 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
                             }
 
                         } else {
-
                             //  Toast.makeText(HomeActivity.this, "Failed to logout", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -362,32 +354,26 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
                     @Override
                     public void onFailure(Call<ChantCount> call, Throwable t) {
                         hide_login_ProgressDialog();
-
                         Log.e("logoot_failure", t.getMessage());
                     }
                 });
-
             } else {
                 tryagain();
             }
         }
-
     }
 
     public void displayProgressDialog(String msg) {
         mProgress = new MaterialDialog.Builder(CounterActivity.this).content(msg).canceledOnTouchOutside(false).progress(true, 0).show();
-
     }
 
     private void hide_login_ProgressDialog() {
         if (mProgress != null && mProgress.isShowing()) {
             mProgress.dismiss();
         }
-
     }
 
     public boolean condi() {
-
         int a = japam_count;
         int b = 108;
         if (a % b == 0) {
@@ -399,8 +385,6 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
 
     @Override
     public void onNetworkConnectionChanged(boolean connect) {
-
-
         isConnected = connect;
         if (!isConnected) {
             Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
@@ -413,10 +397,12 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
 
     private void checkConnection() {
         isConnected = ConnectionReceiver.isConnected();
-        if (!isConnected) {
+        if (!isConnected)
+        {
             Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
             Log.e("oncreate network status", " off");
-        } else {
+        } else
+            {
             Log.e("oncreate network status", " on");
         }
     }

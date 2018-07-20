@@ -10,8 +10,8 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/chantCard"
-        android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/toolBar"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
@@ -67,9 +67,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ChantName"
                 android:layout_marginTop="10dp"
+                android:maxLines="5"
+                android:scrollbars="vertical"
                 android:text="Oṃ bhūr bhuvaḥ svaḥ tát savitúr váreṇyaṃ bhárgo devásya dhīmahi dhíyo yó naḥ pracodáyāt"
                 android:textColor="@color/black" />
-
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 

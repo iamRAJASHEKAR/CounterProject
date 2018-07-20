@@ -13,7 +13,7 @@
 
         android:id="@+id/relate_mantra"
         android:layout_width="match_parent"
-        android:layout_height="95dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/toolBar"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="5dp"
@@ -22,7 +22,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="95dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:background="#ffff">
@@ -65,7 +65,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/the_mantra"
                 android:layout_marginTop="10dp"
-                android:text="The Gayatri Mantra aum bur buvswaha i dont know mamntra full so kindly execuse bro "
+                android:maxLines="5"
+                android:scrollbars="vertical"
+                android:text="The Gayatri Mantra aum bur buvswaha i dont know mamntra full so kindly execuse broaum bur buvswaha i dont know mamntra full so kindly execuse bro aum bur buvswaha i dont know mamntra full so kindly execuse bro"
                 android:textColor="#000000" />
 
         </RelativeLayout>
@@ -151,7 +153,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:background="@drawable/ovalshape_orange"
-        android:text="Join Count"
+        android:text="Join"
         android:textAllCaps="false"
         android:textColor="@android:color/white" />
 </RelativeLayout>

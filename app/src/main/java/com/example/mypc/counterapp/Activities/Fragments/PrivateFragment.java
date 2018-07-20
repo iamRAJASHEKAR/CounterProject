@@ -45,24 +45,24 @@ public class PrivateFragment extends Fragment {
         text_nodata = view.findViewById(R.id.text_nodata);
         SharedPreferences prefs = getActivity().getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);
         createdBy = prefs.getString("name", "No name defined");
-
-        /*set_data();*/
+        set_data();
         return view;
     }
 
     public void set_data() {
         privateArray = new ArrayList<>();
         privateArray = DatabaseManager.getInstance().getalluser();
-        Log.e("deletednot", String.valueOf(privateArray.size()));
         Collections.reverse(privateArray);
-        if (privateArray.size() > 0) {
-
+        if (privateArray.size() > 0)
+        {
             text_nodata.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
             privateAdapter = new PrivateAdapter();
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(privateAdapter);
             privateAdapter.notifyDataSetChanged();
-        } else {
+        } else
+            {
         }
     }
 
@@ -114,7 +114,8 @@ public class PrivateFragment extends Fragment {
             textCreated = itemView.findViewById(R.id.text_created);
             rightarrow = itemView.findViewById(R.id.right_arrow);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
                 public void onClick(View v) {
                     if (privateArray.size() > 0) {
@@ -140,8 +141,10 @@ public class PrivateFragment extends Fragment {
                         intent.putExtra("chant_createmail", chant_created);
                         startActivity(intent);
                         Log.e("pos", "" + idofaray);
-                    } else {
-                        Toast.makeText(getActivity(), "Data Not Found", Toast.LENGTH_SHORT).show();
+                    } else
+                        {
+                            recyclerView.setVisibility(View.GONE);
+                      //  Toast.makeText(getActivity(), "Data Not Found", Toast.LENGTH_SHORT).show();
                         privateAdapter.notifyDataSetChanged();
                         text_nodata.setVisibility(View.VISIBLE);
                     }

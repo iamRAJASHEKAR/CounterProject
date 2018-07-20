@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -59,6 +60,7 @@ public class ChantJoin extends AppCompatActivity {
         relative_toolbar = findViewById(R.id.relative_back);
         chantname = findViewById(R.id.ChantName);
         chantdesc = findViewById(R.id.chantDescription);
+        chantdesc.setMovementMethod(new ScrollingMovementMethod());
         toolbar_head.setText("Public Chants");
         tool_icon.setBackground(getResources().getDrawable(R.drawable.ic_back_arrow));
 
@@ -95,6 +97,11 @@ public class ChantJoin extends AppCompatActivity {
         chant_desc = getIntent().getExtras().getString("chant_dec");
         chantname.setText(chant_name);
         chantdesc.setText(chant_desc);
+
+        if (chant_countid.equals("private")) {
+            toolbar_head.setText("private Chants");
+
+        }
         Log.e("joinerrdata", chant_countid + chant_created + chant_name + chant_desc);
     }
 
@@ -108,6 +115,7 @@ public class ChantJoin extends AppCompatActivity {
         intent.putExtra("chant_decrp", chant_desc);
         Log.e("chgejhbj", chant_countid + chant_created + chant_name + chant_desc);
         startActivity(intent);
+        finish();
     }
 
 
@@ -241,8 +249,11 @@ public class ChantJoin extends AppCompatActivity {
         if (mprogress != null && mprogress.isShowing()) {
             mprogress.dismiss();
         }
-
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }

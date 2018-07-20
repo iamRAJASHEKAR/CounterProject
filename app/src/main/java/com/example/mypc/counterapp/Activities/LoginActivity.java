@@ -485,8 +485,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 Log.e("fhfabhfbd", t.getMessage());
 
                 hide_login_ProgressDialog();
-                Toast.makeText(LoginActivity.this, "Failed to register try again", Toast.LENGTH_SHORT).show();
-
+                Toast toast = Toast.makeText(LoginActivity.this, "Failed to register try again", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
             }
         });
     }

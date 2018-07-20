@@ -7,13 +7,6 @@
     tools:context=".Counter.CounterActivity">
 
     <include layout="@layout/activity_toolbar" />
-    <!--
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/toolBar">
-    -->
 
     <RelativeLayout
         android:layout_width="match_parent"

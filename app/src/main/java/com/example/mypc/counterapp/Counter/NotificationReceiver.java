@@ -13,7 +13,8 @@ public class NotificationReceiver extends WakefulBroadcastReceiver {
         playNotificationSound(context);
     }
 
-    public void playNotificationSound(Context context) {
+    public void playNotificationSound(Context context)
+    {
         try {
             Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             Ringtone r = RingtoneManager.getRingtone(context, notification);
@@ -21,5 +22,6 @@ public class NotificationReceiver extends WakefulBroadcastReceiver {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }

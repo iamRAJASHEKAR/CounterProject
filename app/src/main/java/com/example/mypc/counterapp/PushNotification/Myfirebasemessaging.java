@@ -9,6 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.mypc.counterapp.Activities.HomeActivity;
 import com.example.mypc.counterapp.Activities.ReligionActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -17,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Myfirebasemessaging extends FirebaseMessagingService {
+
     private static final String TAG = Myfirebasemessaging.class.getSimpleName();
 
     private Notificationutils notificationUtils;
@@ -29,22 +31,13 @@ public class Myfirebasemessaging extends FirebaseMessagingService {
             return;
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Log.e(TAG, "Notification Body: " + remoteMessage.getNotification().getBody());
+            Log.e("hellootage", "Notification Body: " + remoteMessage.getNotification().getBody());
             handleNotification(remoteMessage.getNotification().getBody());
         }
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
-
-            try {
-                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                r.play();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
             try {
                 JSONObject json = new JSONObject(remoteMessage.getData().toString());
@@ -59,21 +52,36 @@ public class Myfirebasemessaging extends FirebaseMessagingService {
 
     {
         if (!Notificationutils.isAppIsInBackground(getApplicationContext())) {
-
+        /*    if (message.contains("Device Unpaired")) {
+                Log.e("logoutExecuted", message);
+                Intent pushNotification_logout = new Intent(Constants.PUSH_NOTIFICATIONLOGOUT);
+                pushNotification_logout.putExtra("message", message);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification_logout);
+            } else if (message.contains("Files Deleted") || message.contains("Files Added")) {
+                Log.e("onpairingrequest", message);
+                MyUploadsController.getInstance().fetchvideos(getApplicationContext());
+                Intent pushNotification_file = new Intent(Constants.PUSH_NOTIFICATION_DATA);
+                pushNotification_file.putExtra("message", message);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification_file);
+            } else {
+                Log.e("ondatachanged", message);
+                Intent pushNotification = new Intent(Constants.PUSH_NOTIFICATION);
+                pushNotification.putExtra("message", message);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+            }
+            NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
+        */    //notificationUtils.playNotificationSound();
         } else {
 
-            Notificationutils notificationUtils = new Notificationutils(getApplicationContext());
-            notificationUtils.playNotificationSound();
             // If the app is in background, firebase itself handles the notification
         }
     }
 
-    private void handleDataMessage(JSONObject json) {
+    private void handleDataMessage(JSONObject json)
+    {
         Log.e(TAG, "push json: " + json.toString());
-
         try {
             JSONObject data = json.getJSONObject("data");
-
             String title = data.getString("title");
             String message = data.getString("message");
             boolean isBackground = data.getBoolean("is_background");
@@ -81,8 +89,8 @@ public class Myfirebasemessaging extends FirebaseMessagingService {
             String timestamp = data.getString("timestamp");
             JSONObject payload = data.getJSONObject("payload");
 
-            Log.e(TAG, "title: " + title);
-            Log.e(TAG, "message: " + message);
+            Log.e("titll", "title: " + title);
+            Log.e("hsvbjhsv", "message: " + message);
             Log.e(TAG, "isBackground: " + isBackground);
             Log.e(TAG, "payload: " + payload.toString());
             Log.e(TAG, "imageUrl: " + imageUrl);
@@ -94,24 +102,14 @@ public class Myfirebasemessaging extends FirebaseMessagingService {
                 Intent pushNotification = new Intent(Constants.PUSH_NOTIFICATION);
                 pushNotification.putExtra("message", message);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+
                 // play notification sound
                 Notificationutils notificationUtils = new Notificationutils(getApplicationContext());
                 notificationUtils.playNotificationSound();
             } else {
-                try {
-                    Log.e("nosound", "herecode");
-                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                    r.play();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
                 // app is in background, show the notification in notification tray
-                Intent resultIntent = new Intent(getApplicationContext(), ReligionActivity.class);
+                Intent resultIntent = new Intent(getApplicationContext(), HomeActivity.class);
                 resultIntent.putExtra("message", message);
-
                 // check for image attachment
                 if (TextUtils.isEmpty(imageUrl)) {
                     showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
@@ -144,5 +142,4 @@ public class Myfirebasemessaging extends FirebaseMessagingService {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
     }
-
 }

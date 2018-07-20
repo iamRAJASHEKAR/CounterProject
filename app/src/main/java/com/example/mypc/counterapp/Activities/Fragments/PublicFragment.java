@@ -58,27 +58,28 @@ public class PublicFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_public, container, false);
         text_nodata = view.findViewById(R.id.text_nodata);
         recyclerView = view.findViewById(R.id.public_recycler);
-        publicListsArray = new ArrayList<>();
         setdata();
         return view;
     }
 
     public void setdata() {
+        publicListsArray = new ArrayList<>();
         publicListsArray = FetchPublicChantController.getinstance().nepublicList;
         Log.e("publicfragment", String.valueOf(publicListsArray.size()));
-        if (publicListsArray.size() > 0) {
+        if (publicListsArray.size() > 0)
+        {
+            recyclerView.setVisibility(View.VISIBLE);
             text_nodata.setVisibility(View.GONE);
             adapter = new PublicAdapter();
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-
-        } else {
+        } else
+            {
+            recyclerView.setVisibility(View.GONE);
             text_nodata.setVisibility(View.VISIBLE);
         }
-
     }
-
 
     public class PublicAdapter extends RecyclerView.Adapter<PublicAdapter.ViewHolder> {
         @NonNull
@@ -100,8 +101,7 @@ public class PublicFragment extends Fragment {
         }
 
         @Override
-        public int getItemCount()
-        {
+        public int getItemCount() {
             return publicListsArray.size();
         }
 

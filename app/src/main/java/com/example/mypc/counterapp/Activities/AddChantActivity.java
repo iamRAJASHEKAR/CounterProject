@@ -136,13 +136,15 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
                 radioButtonText = "Public";
                 privacy = true;
                 if (radioPublic.isChecked()) {
+                    nameEmailLayout.setVisibility(View.INVISIBLE);
                     addchantRecyclerview.setVisibility(View.INVISIBLE);
                 }
             }
         });
         radioFriends.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 privacy = true;
                 radioButtonText = "Friend";
                 if (radioFriends.isChecked())
@@ -150,7 +152,15 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
                 nameEmailLayout.setVisibility(View.VISIBLE);
             }
         });
-
+        rdb_private.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rdb_private.isChecked()) {
+                    nameEmailLayout.setVisibility(View.INVISIBLE);
+                    addchantRecyclerview.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
         relative_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,10 +180,7 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
                 validations();
             } else {
                 Toast.makeText(AddChantActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
-
             }
-
-
         }
     };
 
@@ -190,7 +197,6 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
             return false;
         }
     };
-
 
     /////////Edit Text Validations
     public void validations() {

@@ -113,9 +113,7 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
                         toast.show();
                         addFriendName.setText("");
                         addFriendEmail.setText("");
-
                         Chantfriendscontroller.getintance().fetch_chantFriends(chant_id);
-
                     } else {
                         hideProgressDialog();
                         Toast.makeText(getActivity(), "Failed to add friend", Toast.LENGTH_SHORT).show();
@@ -132,11 +130,9 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
 
     }
 
-
     @Override
     public void onNetworkConnectionChanged(boolean connect) {
         isConnected = connect;
-
         if (!isConnected) {
             Toast.makeText(getActivity(), "check internet Connection", Toast.LENGTH_SHORT).show();
         } else {
@@ -158,13 +154,10 @@ public class AddNewFriend extends Fragment implements ConnectionReceiver.Connect
     public void onResume() {
         TestApplication.getInstance().setConnectionListener(this);
         super.onResume();
-        // hideProgressDialog();
     }
-
 
     public void displayProgressDialog() {
         mProgress = new MaterialDialog.Builder(getActivity()).content("Loading").canceledOnTouchOutside(false).progress(true, 0).show();
-
     }
 
     private void hideProgressDialog() {

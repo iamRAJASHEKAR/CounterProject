@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -64,6 +65,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
+import com.yalantis.phoenix.PullToRefreshView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -103,7 +105,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     NavigationView navigationView;
     public static MaterialDialog mProgress;
     GoogleApiClient googleApiClient;
-
+    PullToRefreshView mPullToRefreshView;
     public static String chantId;
 
     @Override
@@ -112,6 +114,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         setContentView(R.layout.acitvity_home);
         viewPager = findViewById(R.id.viewpager);
         tabLayout = findViewById(R.id.tabs);
+
         sessionsManager = new SessionsManager(this);
         navigationView = findViewById(R.id.navigation_view);
         imageView_profile = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
@@ -185,12 +188,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         getuserData();
         set_profile(imageView_profile, user_name);
         // publicchant_data();
-        requestforPhoneContacts();
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(AddChantBtn);
         FetchPublicChantController.getinstance().fillContext(HomeActivity.this);
+
     }
 
     public void set_profile(CircleImageView imageView, TextView textView) {
@@ -217,7 +220,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
     View.OnClickListener AddChantBtn = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            startActivity(new Intent(getApplicationContext(), AddChantActivity.class));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestforPhoneContacts();
+            } else {
+                Intent intent = new Intent(getApplicationContext(), AddChantActivity.class);
+                startActivity(intent);
+            }
         }
     };
 
@@ -260,7 +268,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
-
     public void logoutDialog() {
         TextViewRegular yes, no;
         final Dialog dialog = new Dialog(HomeActivity.this);
@@ -278,7 +285,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 ArrayList<Userdata> userdatadd = new ArrayList<>();
                 userdatadd = DatabaseManager.getInstance().getalluser();
 
-                DatabaseManager.getInstance().delete_allusers(userdatadd);
+                // DatabaseManager.getInstance().delete_allusers(userdatadd);
                 if (isConnected) {
 
                     Log.e("call", "dialog yes");
@@ -475,18 +482,17 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
         if (isConnected) {
             FetchPublicChantController.getinstance().publicchant_data(user_email, religion);
         } else {
             tryagain();
 
         }
-
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
         TestApplication.getInstance().setConnectionListener(this);
         EventBus.getDefault().register(this);
         super.onResume();
@@ -542,6 +548,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 new PermissionHandler() {
                     @Override
                     public void onGranted() {
+                        Intent intent = new Intent(getApplicationContext(), AddChantActivity.class);
+                        startActivity(intent);
 
                     }
 
@@ -607,6 +615,4 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         adapter.addFragment(new PrivateFragment(), "Private");
         viewPager.setAdapter(adapter);
     }
-
-
 }

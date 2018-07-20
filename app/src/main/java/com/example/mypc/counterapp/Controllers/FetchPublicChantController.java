@@ -49,11 +49,13 @@ public class FetchPublicChantController {
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
+/*
         if (pDialog != null && pDialog.isShowing()) {
             pDialog.dismiss();
         }
         pDialog.show();
-
+*/
+        pDialog.show();
         FetchingPublicChant logoutServerObjects = new FetchingPublicChant();
 
         logoutServerObjects.email = user_email;
@@ -68,31 +70,18 @@ public class FetchPublicChantController {
             @Override
             public void onResponse(Call<FetchingPublicChant> call, Response<FetchingPublicChant> response) {
                 if (response.body() != null) {
-
-
                     nepublicList.clear();
                     nepublicList = response.body().getPublicList();
                     publicList = response.body().getPublicList();
                     friendschant_data(user_email, religion);
                     Log.e("publicresponse", response.body().getResponse());
                     Log.e("arraypublicList", String.valueOf(nepublicList.size()));
-                    for (int i = 0; i < response.body().getPublicList().size(); i++) {
-                        Log.e("publicprofil" +
-                                "le", String.valueOf(
-                                response.body().getPublicList().get(i).chant_description) + "\n" +
-                                response.body().getPublicList().get(i).chant_id + "\n" +
-                                response.body().getPublicList().get(i).chant_name + "\n" +
-                                response.body().getPublicList().get(i).created_by + "\n" +
-                                response.body().getPublicList().get(i).created_email + "\n" +
-                                response.body().getPublicList().get(i).privacy + "\n");
-                    }
                 } else {
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.dismiss();
                     }
                     EventBus.getDefault().post(new LoginActivity.MessageEvent("error"));
                 }
-
             }
 
             @Override
@@ -120,30 +109,15 @@ public class FetchPublicChantController {
             public void onResponse(Call<FetchingFriendsChants> call, Response<FetchingFriendsChants> response) {
 
                 if (response.body() != null) {
-                    //Log.e("arrayfriends", String.valueOf(publicList.size()));
                     ArrayList<PublicList> publicaray = new ArrayList<>();
                     friendslist.clear();
                     friendslist = response.body().getPublicList();
                     EventBus.getDefault().post(new LoginActivity.MessageEvent("refreshchant"));
-
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.dismiss();
                     }
-                    //publicList.addAll(publicaray);
-                    Log.e("friends", response.body().getResponse());
-                    Log.e("arrayfriends", String.valueOf(friendslist.size()));
-                    for (int i = 0; i < response.body().getPublicList().size(); i++) {
-                        Log.e("friendARRAYprofile", String.valueOf
-                                (response.body().getPublicList().get(i).chant_description) + "\n" +
-                                response.body().getPublicList().get(i).chant_id + "\n" +
-                                response.body().getPublicList().get(i).chant_name + "\n" +
-                                response.body().getPublicList().get(i).created_by + "\n" +
-                                response.body().getPublicList().get(i).created_email + "\n" +
-                                response.body().getPublicList().get(i).privacy + "\n");
-                    }
                 } else {
                     EventBus.getDefault().post(new LoginActivity.MessageEvent("error"));
-
                     if (pDialog != null && pDialog.isShowing()) {
                         pDialog.dismiss();
                     }

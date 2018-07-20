@@ -125,7 +125,7 @@ public class HelpUsActivity extends AppCompatActivity implements ConnectionRecei
             editName.setError("Name Can'not be empty");
         } else if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editEmail.setError("Enter Valid Email");
-        } else if (phoneno.isEmpty()) {
+        } else if (phoneno.isEmpty() || phoneno.length() < 10) {
             editPhone.setError("Enter Valid Phone number");
         } else if (helpmsg.isEmpty()) {
             editHelpMsg.setError("Enter the message");
@@ -147,7 +147,6 @@ public class HelpUsActivity extends AppCompatActivity implements ConnectionRecei
     @Override
     public void onNetworkConnectionChanged(boolean connect) {
         isConnected = connect;
-
         if (!isConnected) {
             Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
         } else {
@@ -171,13 +170,13 @@ public class HelpUsActivity extends AppCompatActivity implements ConnectionRecei
         super.onResume();
     }
 
-    public void displayProgressDialog() {
+    public void displayProgressDialog()
+    {
         mProgress = new MaterialDialog.Builder(HelpUsActivity.this).content("Loading").canceledOnTouchOutside(false).progress(true, 0).show();
-
     }
 
-    private void hideProgressDialog() {
-
+    private void hideProgressDialog()
+    {
         if (mProgress != null && mProgress.isShowing()) {
             mProgress.dismiss();
         }
@@ -207,16 +206,16 @@ public class HelpUsActivity extends AppCompatActivity implements ConnectionRecei
 
                     Log.e("helpstatusCode", " " + response.body().response);
                     String statuscode = response.body().response;
-                    if (statuscode.equals("3")) {
+                    if (statuscode.equals("3"))
+                    {
+                        hideProgressDialog();
                         Toast toast = Toast.makeText(HelpUsActivity.this, "Message Sent", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
-
-                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        finish();
                     }
-                    hideProgressDialog();
-
-                } else {
+                } else
+                    {
                     Toast toast = Toast.makeText(HelpUsActivity.this, "Failed Try again", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
@@ -252,4 +251,5 @@ public class HelpUsActivity extends AppCompatActivity implements ConnectionRecei
         editEmail.setText(user_email);
 
     }
+
 }

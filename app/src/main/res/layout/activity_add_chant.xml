@@ -151,13 +151,14 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/addchant_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relativ_savebutn"
         android:layout_below="@+id/rl_name_email"
         android:visibility="gone">
-
     </android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
+        android:id="@+id/relativ_savebutn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">

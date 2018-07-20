@@ -61,17 +61,21 @@ public class FriendsFragment extends Fragment {
         return view;
     }
 
-    public void setdata() {
+    public void setdata()
+    {
         chantsArray = new ArrayList<>();
         chantsArray = FetchPublicChantController.getinstance().friendslist;
         Log.e("friendsfragment", String.valueOf(chantsArray.size()));
-        if (chantsArray.size() > 0) {
+        if (chantsArray.size() > 0)
+        {
             text_nodata.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
             adapter = new FriendAdapter();
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         } else {
+            recyclerView.setVisibility(View.GONE);
             text_nodata.setVisibility(View.VISIBLE);
         }
     }
@@ -117,8 +121,7 @@ public class FriendsFragment extends Fragment {
                 textCreated = itemView.findViewById(R.id.text_created);
                 rightarrow = itemView.findViewById(R.id.right_arrow);
 
-                itemView.setOnClickListener(new View.OnClickListener()
-                {
+                itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 

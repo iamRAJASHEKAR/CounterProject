@@ -106,8 +106,6 @@ public class Friends extends Fragment {
     ////////click on submit_count btn
 
     private class ChantsAdpater extends RecyclerView.Adapter<ViewHolder> {
-
-
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -123,7 +121,6 @@ public class Friends extends Fragment {
             holder.invite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    holder.invite.setBackgroundResource(R.color.colorOrange);
                     friendName = allFriendsArraylist.get(position).getName();
                     friendemail = allFriendsArraylist.get(position).getEmail();
                     inviteFriend();
@@ -205,17 +202,11 @@ public class Friends extends Fragment {
 
         set_data();
         /*       Log.e("hjhshjsv", String.valueOf(active.size() + "\n" + allFriendsArraylist.size()));
-
         HashSet hs = new HashSet();
         hs.addAll(allFriendsArraylist);
         allFriendsArraylist.clear();
-
         Log.e("checkclear", String.valueOf(allFriendsArraylist.size()));
-
-
         allFriendsArraylist.addAll(hs);
-
-
         Log.e("hashmap", String.valueOf(allFriendsArraylist.size()));
         set_data();*/
     }
@@ -233,8 +224,6 @@ public class Friends extends Fragment {
         } else if (active != null && contactsArraylist != null) {
             Log.e("hellwith", "takeaction");
             allFriendsArraylist.addAll(contactsArraylist);
-
-
             HashSet hs = new HashSet();
             hs.addAll(allFriendsArraylist);
             allFriendsArraylist.clear();
@@ -413,6 +402,7 @@ public class Friends extends Fragment {
             @Override
             public void onResponse(Call<InviteServerobject> call, Response<InviteServerobject> response) {
                 String invitestatus;
+
                 hide_progress();
                 if (response.body() != null) {
                     invitestatus = response.body().response;
@@ -421,16 +411,15 @@ public class Friends extends Fragment {
                         Toast toast = Toast.makeText(getActivity(), "Friend Invited", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
-
                         Chantfriendscontroller.getintance().fetch_chantFriends(chantid);
-
-                        //       startActivity(new Intent(getActivity(), HomeActivity.class));
-
-                    } else {
-                        Toast toast = Toast.makeText(getActivity(), "Friend Invitation Failed", Toast.LENGTH_SHORT);
+                    } else if (invitestatus.equals("1")) {
+                        Toast toast = Toast.makeText(getActivity(), "Friend already  Invited", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
-
+                    } else {
+                        Toast toast = Toast.makeText(getActivity(), "Failed to Invite Friend", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                     }
                 }
             }
@@ -441,7 +430,6 @@ public class Friends extends Fragment {
                 Toast toast = Toast.makeText(getActivity(), "Friend Invitation Failed", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER, 0, 0);
                 toast.show();
-
                 Log.e("inviteStatus", "failed");
             }
         });

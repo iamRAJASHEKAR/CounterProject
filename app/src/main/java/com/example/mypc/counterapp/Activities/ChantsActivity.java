@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -82,11 +83,10 @@ public class ChantsActivity extends AppCompatActivity {
         chantname = findViewById(R.id.the_mantra);
         btn_submit = findViewById(R.id.button_submit);
         chantdescr = findViewById(R.id.the_mantra_lines);
+        chantdescr.setMovementMethod(new ScrollingMovementMethod());
         toolbar_icon.setImageResource(R.drawable.ic_back_arrow);
-        toolbar_text.setText("Chants");
-
+        toolbar_text.setText("Friends Chants");
         relative_toolbar = findViewById(R.id.relative_back);
-
         radioGroup = findViewById(R.id.radioprofile);
         radioButton_friends = findViewById(R.id.radioFriends);
         radioButton_public = findViewById(R.id.radiopublic);
@@ -233,7 +233,6 @@ public class ChantsActivity extends AppCompatActivity {
     }
 
     public void submiting() {
-
         Intent intent = new Intent(getApplicationContext(), CounterActivity.class);
         intent.putExtra("chant_id", chant_id);
         intent.putExtra("chant_created_email", chant_created_email);
@@ -241,6 +240,7 @@ public class ChantsActivity extends AppCompatActivity {
         intent.putExtra("chant_decrp", chant_decr);
         Log.e("chgejhbj", chant_id + chant_created_email + chant_name + chant_decr);
         startActivity(intent);
+        finish();
     }
 
 
@@ -359,9 +359,12 @@ public class ChantsActivity extends AppCompatActivity {
             intent.putExtra("chant_dec", chant_decr);
             intent.putExtra("chant_id", chant_id);
             startActivity(intent);
-
         }
     };
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }
