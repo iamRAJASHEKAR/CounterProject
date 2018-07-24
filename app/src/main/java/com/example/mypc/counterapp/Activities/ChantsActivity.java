@@ -353,7 +353,8 @@ public class ChantsActivity extends AppCompatActivity {
 
     View.OnClickListener EditChantClick = new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
+        public void onClick(View view)
+        {
             Intent intent = new Intent(getApplicationContext(), EditChantActivity.class);
             intent.putExtra("chant_name", chant_name);
             intent.putExtra("chant_dec", chant_decr);
@@ -363,7 +364,8 @@ public class ChantsActivity extends AppCompatActivity {
     };
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         super.onBackPressed();
         this.finish();
     }

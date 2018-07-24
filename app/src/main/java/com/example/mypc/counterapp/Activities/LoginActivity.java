@@ -539,7 +539,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // CounterController.getInstance().fetchReligions();
     }
 
-    public static class MessageEvent {
+    public static class MessageEvent
+    {
         public final String message;
 
         public MessageEvent(String message) {
