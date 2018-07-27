@@ -143,8 +143,7 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
         });
         radioFriends.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 privacy = true;
                 radioButtonText = "Friend";
                 if (radioFriends.isChecked())
@@ -332,9 +331,8 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
                     Log.e("addchantStatuscode", " " + response.body().response);
                     String addchantStatuscode = response.body().response;
                     if (addchantStatuscode.equals("3")) {
-                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                        finish();
                         hideProgressDialog();
+                        finish();
                     }
                 }
             }
@@ -422,8 +420,6 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
                         }
                         Log.e("unselectedFreinds", " " + mSelectedFriendsEmail + " " + mSelectedFriendsEmail.size() + " " + mSelectedFriendsName + " " + mSelectedFriendsName.size());
                     }
-
-
                 }
             });
 
@@ -444,14 +440,12 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
                 name = itemView.findViewById(R.id.text_friend_name);
                 email = itemView.findViewById(R.id.text_friend_mail);
                 btninvite = itemView.findViewById(R.id.btn_invite);
-
             }
         }
     }
 
     public void displayProgressDialog() {
         mProgress = new MaterialDialog.Builder(AddChantActivity.this).content("Loading").canceledOnTouchOutside(false).progress(true, 0).show();
-
     }
 
     private void hideProgressDialog() {
@@ -461,7 +455,8 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
         hideProgressDialog();
     }
@@ -478,7 +473,6 @@ public class AddChantActivity extends AppCompatActivity implements ConnectionRec
         finish();
         hideProgressDialog();
     }
-
 
     public void getuserData() {
         SharedPreferences prefs = getSharedPreferences(LoginActivity.MY_PREFS_NAME, MODE_PRIVATE);

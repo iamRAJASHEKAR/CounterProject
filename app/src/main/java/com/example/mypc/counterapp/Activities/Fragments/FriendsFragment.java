@@ -142,6 +142,7 @@ public class FriendsFragment extends Fragment {
                         intent.putExtra("chant_created", chant_creted_email);
                         intent.putExtra("chant_created_email", chant_creted_email);
                         startActivity(intent);
+
                     }
                 });
             }

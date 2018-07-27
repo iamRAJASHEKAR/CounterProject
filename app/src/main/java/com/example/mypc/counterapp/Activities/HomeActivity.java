@@ -143,15 +143,30 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
                 Log.e("item", " " + item.getTitle());
                 switch (item.getItemId()) {
                     case R.id.rate_us:
-                        Log.e("rateus", "rateus");
+                        Intent rateIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
+                        startActivity(rateIntent);
                         break;
                     case R.id.share:
                         Log.e("share", "share");
-                        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                        try {
+                            Intent i = new Intent(Intent.ACTION_SEND);
+                            i.setType("text/plain");
+                            i.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                            String sAux = "\nI found an awesome app for chanting ..checkout the app here\n";
+                            sAux = sAux + "https://play.google.com/store/apps/details?id=vedas.android.counterapp \n";
+                            i.putExtra(Intent.EXTRA_TEXT, sAux);
+                            startActivity(Intent.createChooser(i, "Choose one"));
+                        } catch (Exception e) {
+                            //e.toString();
+                        }
+
+
+                        /* Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                         sharingIntent.setType("text/plain");
                         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Counter Application");
                         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Counter application used for counting the chants");
                         startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                      */
                         break;
 
                     case R.id.help:
@@ -512,7 +527,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.O
         religion = prefs.getString("religion", "No name defined");
         Log.e("fetchdetails", user_email + religion);
     }
-
     private void hideProgressDialog() {
         if (mProgress != null && mProgress.isShowing()) {
             mProgress.dismiss();

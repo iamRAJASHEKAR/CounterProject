@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Window;
 
@@ -34,6 +35,17 @@ public class SplashScreen extends AppCompatActivity {
         checksession();
         DatabaseManager.getInstance().fillContext(getApplicationContext());
         sample();
+
+   /*     byte[] sha1 = {
+                0x65, 0x5D, 0x66, (byte) 0xA1, (byte) 0xC9, 0x31, (byte) 0x85,
+                (byte) 0xAB, (byte) 0x92, (byte) 0xC6, (byte) 0xA2,
+                0x60, (byte) 0x87, 0x5B, 0x1A, (byte) 0xDA,
+                0x45, 0x6E, (byte) 0x97, (byte) 0xEA
+        };
+   *//*     System.out.println("keyhashGooglePlaySignIn:" + Base64.encodeToString(sha1, Base64.NO_WRAP));
+        Log.e("hsjsvsjv", "keyhashGooglePlaySignIn:" + Base64.encodeToString(sha1, Base64.NO_WRAP));
+   */
+
     }
 
 

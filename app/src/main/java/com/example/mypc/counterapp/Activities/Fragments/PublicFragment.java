@@ -141,6 +141,7 @@ public class PublicFragment extends Fragment {
                         intent.putExtra("chant_created", chant_creted_email);
                         intent.putExtra("chant_createmail", chant_created);
                         startActivity(intent);
+
                     }
                 });
             }
@@ -149,7 +150,8 @@ public class PublicFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         EventBus.getDefault().unregister(this);
         super.onPause();
     }
@@ -182,7 +184,6 @@ public class PublicFragment extends Fragment {
         Log.e("startTime", startTime);
         return startTime;
     }
-
 
     /* public static String getTimeDate(String timeStamp) {
      *//* Calendar cal = Calendar.getInstance();

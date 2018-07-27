@@ -5,6 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
@@ -13,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -149,7 +153,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-
+        try {
+            PackageInfo info = getApplicationContext().getPackageManager().getPackageInfo(
+                    getApplicationContext().getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+        } catch (NoSuchAlgorithmException e) {
+        }
     }
 
     @Override
@@ -539,8 +553,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // CounterController.getInstance().fetchReligions();
     }
 
-    public static class MessageEvent
-    {
+    public static class MessageEvent {
         public final String message;
 
         public MessageEvent(String message) {

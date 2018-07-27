@@ -239,11 +239,14 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
                 }
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                if (action == KeyEvent.ACTION_UP) {
-                    if (state == 1) {
+                if (action == KeyEvent.ACTION_UP)
+                {
+                    if (state == 1)
+                    {
                         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                         // Vibrate for 1000 milliseconds
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                        {
                             vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
                         } else {
                             //deprecated in API 26
@@ -260,8 +263,8 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
 
     @Override
     public void onBackPressed() {
-        //   finish();
         super.onBackPressed();
+        finish();
     }
 
     public void submit_count() {
@@ -397,12 +400,10 @@ public class CounterActivity extends AppCompatActivity implements ConnectionRece
 
     private void checkConnection() {
         isConnected = ConnectionReceiver.isConnected();
-        if (!isConnected)
-        {
+        if (!isConnected) {
             Toast.makeText(this, "check internet Connection", Toast.LENGTH_SHORT).show();
             Log.e("oncreate network status", " off");
-        } else
-            {
+        } else {
             Log.e("oncreate network status", " on");
         }
     }

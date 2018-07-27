@@ -23,6 +23,65 @@
           }
         },
         {
+          "client_id": "793696269873-773jvdm6c9ohu5essilurl6cuuup8l58.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mypc.counterapp",
+            "certificate_hash": "a8a7da80bac5efd10c78911a3fdbe9b8832e9d14"
+          }
+        },
+        {
+          "client_id": "793696269873-r19oc007stlqkfrhvb728ak96pde76gb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLmCimdrrHzBKuQXaYx7IAc2MrL-O_SqE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "793696269873-r19oc007stlqkfrhvb728ak96pde76gb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "793696269873-glimv28130no62ictle4qm54tjo057cr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.krishna.counterapp"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:793696269873:android:02ad70bc8c6b7e96",
+        "android_client_info": {
+          "package_name": "vedas.android.counterapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "793696269873-p1c4b52ms4tp5l6s3l79ievl4pspn23c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vedas.android.counterapp",
+            "certificate_hash": "64b01060af95169e0bfb4923853f6c0aeced17f1"
+          }
+        },
+        {
           "client_id": "793696269873-r19oc007stlqkfrhvb728ak96pde76gb.apps.googleusercontent.com",
           "client_type": 3
         }
